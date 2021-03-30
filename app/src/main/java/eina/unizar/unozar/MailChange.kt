@@ -23,7 +23,7 @@ class MailChange : AppCompatActivity() {
 
         // enviar datos al backend y esperar respuesta
 
-        if (password=="hola") {
+        if (true) {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Éxito")
             builder.setMessage("La dirección de correo electrónico ha sido cambiada correctamente")

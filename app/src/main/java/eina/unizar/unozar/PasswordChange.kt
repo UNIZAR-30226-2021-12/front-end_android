@@ -23,7 +23,7 @@ class PasswordChange : AppCompatActivity() {
 
         // enviar datos al backend y esperar respuesta
 
-        if (new_password=="hola") {
+        if (true) {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Éxito")
             builder.setMessage("La contraseña ha sido cambiada correctamente")
