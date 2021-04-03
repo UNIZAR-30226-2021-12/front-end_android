@@ -1,7 +1,7 @@
 package storage
 
 import android.content.Context
-import eina.unizar.eina.unozargame.loginUser
+import eina.unizar.unozar.loginUser
 
 class SharedPrefManager private constructor(private val mCtx: Context) {
 

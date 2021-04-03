@@ -27,7 +27,7 @@ class Login : AppCompatActivity() {
         val loginButton = findViewById<View>(R.id.login) as Button
         val toPerfilButton = findViewById<View>(R.id.registrase) as Button
         toPerfilButton.setOnClickListener {
-            goToPerfil();
+            goToPerfil()
         }
         loginButton.setOnClickListener {
             val name = editTextTextPersonName2.text.toString().trim()
@@ -79,7 +79,7 @@ class Login : AppCompatActivity() {
     }
 
     protected fun goToPerfil() {
-        val i = Intent(this, eina.unizar.eina.unozargame.Perfil::class.java)
+        val i = Intent(this, eina.unizar.unozar.Perfil::class.java)
         startActivityForResult(i, ACTIVITY_PERFIL)
     }
 }
