@@ -1,6 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".Register">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/register_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#2196F3"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="158dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/app_name"
+        android:textColor="#EA8E05"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/player_one"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="177dp"
+        android:background="@drawable/player_border"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/player_two"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_toolbar"
+        tools:srcCompat="@drawable/TestUser" />
+
+    <ImageView
+        android:id="@+id/player_two"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="177dp"
+        android:background="@drawable/player_border"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/player_one"
+        app:layout_constraintTop_toBottomOf="@+id/register_toolbar"
+        tools:srcCompat="@drawable/empty" />
+
+    <ImageView
+        android:id="@+id/player_three"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="268dp"
+        android:background="@drawable/player_border"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/player_four"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:srcCompat="@drawable/empty" />
+
+    <ImageView
+        android:id="@+id/player_four"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="268dp"
+        android:background="@drawable/player_border"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/player_three"
+        tools:srcCompat="@drawable/empty" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

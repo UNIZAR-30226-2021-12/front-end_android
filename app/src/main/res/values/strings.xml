@@ -15,4 +15,7 @@
     <string name="logout">Cerrar sesión</string>
     <string name="change">Cambiar</string>
     <string name="cancel">Cancelar</string>
+    <string name="two_players">2 jugadores</string>
+    <string name="three_players">3 jugadores</string>
+    <string name="four_players">4 jugadores</string>
 </resources>

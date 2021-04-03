@@ -1,19 +1,17 @@
 package eina.unizar.unozar
 
 import android.content.DialogInterface
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.os.Bundle
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 
 class MailChange : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.change_email)
+        setContentView(R.layout.activity_change_email)
     }
 
     fun changeMail(view: View) {

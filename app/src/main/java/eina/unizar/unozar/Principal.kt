@@ -5,12 +5,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.widget.Toolbar
-// Cambio origen
+
 class Principal : AppCompatActivity() {
+
+    private val TWO_PLAYERS = 2
+    private val THREE_PLAYERS = 3
+    private val FOUR_PLAYERS = 4
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.principal)
+        setContentView(R.layout.activity_principal)
         val toolbar = findViewById(R.id.toolbar) as Toolbar?
         setSupportActionBar(toolbar)
     }
@@ -35,4 +41,23 @@ class Principal : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
 
     }
+
+    fun createTwoPlayersGame(view: View) {
+        val intent = Intent(this, CreateGame::class.java)
+        intent.putExtra("numPlayers", TWO_PLAYERS)
+        startActivity(intent)
+    }
+
+    fun createThreePlayersGame(view: View) {
+        val intent = Intent(this, CreateGame::class.java)
+        intent.putExtra("numPlayers", THREE_PLAYERS)
+        startActivity(intent)
+    }
+
+    fun createFourPlayersGame(view: View) {
+        val intent = Intent(this, CreateGame::class.java)
+        intent.putExtra("numPlayers", FOUR_PLAYERS)
+        startActivity(intent)
+    }
+
 }
