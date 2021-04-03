@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">UNOZAR</string>
+    <string name="alias">Alias</string>
+    <string name="mail">Correo electrónico</string>
+    <string name="old_mail">Correo electrónico actual</string>
+    <string name="password">Contraseña</string>
+    <string name="old_password">Contraseña actual</string>
+    <string name="new_password">Nueva contraseña</string>
+    <string name="repeat_password">Repetir contraseña</string>
+    <string name="register">Registrarse</string>
+    <string name="registered">¿Ya está registrado?</string>
+    <string name="login">Login</string>
+    <string name="profile">Perfil</string>
+    <string name="menu">Menu</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="change">Cambiar</string>
+    <string name="cancel">Cancelar</string>
+</resources>
