@@ -27,7 +27,7 @@ class Login : AppCompatActivity() {
         val loginButton = findViewById<View>(R.id.login) as Button
         val toPerfilButton = findViewById<View>(R.id.registrase) as Button
         toPerfilButton.setOnClickListener {
-            goToPerfil()
+            goToRegister()
         }
         loginButton.setOnClickListener {
             val name = editTextTextPersonName2.text.toString().trim()
@@ -72,14 +72,14 @@ class Login : AppCompatActivity() {
     override fun onStart(){
         super.onStart()
         if(SharedPrefManager.getInstance(this).isLoggedIn){
-            val intent = Intent(applicationContext,Perfil::class.java/*Actividad*/)
+            val intent = Intent(applicationContext,Principal::class.java/*Actividad*/)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
     }
 
-    protected fun goToPerfil() {
-        val i = Intent(this, eina.unizar.unozar.Perfil::class.java)
-        startActivityForResult(i, ACTIVITY_PERFIL)
+    protected fun goToRegister() {
+        val i = Intent(this, Register::class.java)
+        startActivityForResult(i, ACTIVITY_REGISTER)
     }
 }

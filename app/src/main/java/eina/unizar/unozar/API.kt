@@ -10,4 +10,12 @@ interface API {
         @Field("nombre") nombre:String,
         @Field("password") password:String
     ): Call<LoginResponse>
+
+    @POST("userRegister")
+    fun userRegister(
+        @Field("alias") alias:String,
+        @Field("correo") correo:String,
+        @Field("password") password:String,
+        @Field("repeat_password") repeat_password:String
+    ): Call<RegisterResponse>
 }
