@@ -25,4 +25,10 @@ class CreateGame : AppCompatActivity() {
             imageView.visibility = View.VISIBLE
         }
     }
+
+
+
+    fun cancel(view: View) {
+        finish()
+    }
 }

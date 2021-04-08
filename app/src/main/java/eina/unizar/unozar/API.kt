@@ -20,4 +20,12 @@ interface API {
         @Field("alias") alias:String,
         @Field("password") password:String
     ): Call<RegisterResponse>
+
+    @FormUrlEncoded
+    @POST("player/changePassword")  // AÑADIR NOMBRE CORRECTO
+    fun userPasswordChange(
+        @Field("authorization") auth:String,        // Comprobar parámetros a enviar
+        @Field("old_password") old_password:String,
+        @Field("new_password") new_password:String
+    ): Call<PasswordChangeResponse>
 }

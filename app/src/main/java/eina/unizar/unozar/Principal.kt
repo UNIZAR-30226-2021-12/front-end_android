@@ -29,13 +29,13 @@ class Principal : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here.
         when (item.getItemId()) {
-            R.id.action_profile -> {            /*** Descomentar ***/
-                //val intent = Intent(this, Profile::class.java)
-                //startActivity(intent)
+            R.id.action_profile -> {
+                val intent = Intent(this, Perfil::class.java)
+                startActivity(intent)
             }
             R.id.action_logout -> {
-                //val intent = Intent(this, Login::class.java)
-                //startActivity(intent)
+                val intent = Intent(this, Login::class.java)
+                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)

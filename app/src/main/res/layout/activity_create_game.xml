@@ -34,23 +34,36 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/player_four"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="244dp"
+        android:background="@drawable/player_border"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/player_three"
+        tools:srcCompat="@drawable/empty" />
+
+    <ImageView
         android:id="@+id/player_one"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="177dp"
+        android:layout_marginTop="88dp"
         android:background="@drawable/player_border"
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/player_two"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_toolbar"
-        tools:srcCompat="@drawable/TestUser" />
+        tools:srcCompat="@drawable/test_user" />
 
     <ImageView
         android:id="@+id/player_two"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="177dp"
+        android:layout_marginTop="88dp"
         android:background="@drawable/player_border"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +76,7 @@
         android:id="@+id/player_three"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginBottom="268dp"
+        android:layout_marginBottom="244dp"
         android:background="@drawable/player_border"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -72,17 +85,42 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:srcCompat="@drawable/empty" />
 
-    <ImageView
-        android:id="@+id/player_four"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="268dp"
-        android:background="@drawable/player_border"
-        android:visibility="invisible"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/view5"
+        android:layout_width="match_parent"
+        android:layout_height="134dp"
+        android:layout_marginBottom="36dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/player_three"
-        tools:srcCompat="@drawable/empty" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view3">
 
+        <Button
+            android:id="@+id/register"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="128dp"
+            android:layout_height="50dp"
+            android:onClick="register"
+            android:text="@string/create"
+            app:layout_constraintBottom_toTopOf="@+id/login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/login"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="128dp"
+            android:layout_height="50dp"
+            android:onClick="cancel"
+            android:text="@string/cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/register" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
