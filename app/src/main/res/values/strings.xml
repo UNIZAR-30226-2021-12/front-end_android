@@ -2,7 +2,7 @@
     <string name="app_name">UNOZAR</string>
     <string name="alias">Alias</string>
     <string name="mail">Correo electrónico</string>
-    <string name="old_mail">Correo electrónico actual</string>
+    <string name="new_mail">Nuevo correo electrónico</string>
     <string name="password">Contraseña</string>
     <string name="old_password">Contraseña actual</string>
     <string name="new_password">Nueva contraseña</string>

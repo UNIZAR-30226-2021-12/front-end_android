@@ -20,7 +20,7 @@ class Login : AppCompatActivity() {
     private val ACTIVITY_REGISTER = 2
     private val ACTIVITY_PERFIL = 3
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -76,9 +76,60 @@ class Login : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
+    }*/
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
     }
 
-    protected fun goToRegister() {
+    fun login(view: View) {
+        val email = editTextTextPersonName2.text.toString().trim()
+        val password = editTextTextPassword.text.toString().trim()
+
+        if(email.isEmpty()){
+            editTextTextPersonName2.error = "Email required"
+            editTextTextPersonName2.requestFocus()
+            if(password.isEmpty()){
+                editTextTextPassword.error = "Password required"
+                editTextTextPassword.requestFocus()
+            }
+        } else if(password.isEmpty()){
+            editTextTextPassword.error = "Password required"
+            editTextTextPassword.requestFocus()
+        } else {
+            RetrofitClient.instance.userAuthentication(email, password)
+                .enqueue(object: Callback<BasicResponse> {
+                    override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onResponse(
+                        call: Call<BasicResponse>,
+                        response: Response<BasicResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Toast.makeText(
+                                applicationContext,
+                                response.body()?.message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                            //val intent = Intent(this@Login, Principal::class.java)
+                            //intent.putExtra("session", response.body()?.message)
+                            //startActivity(intent)
+                        } else {
+                            Toast.makeText(
+                                applicationContext,
+                                "error: " + response.body()?.message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+
+                })
+        }
+    }
+
+    fun goToRegister(view: View) {
         val i = Intent(this, Register::class.java)
         startActivityForResult(i, ACTIVITY_REGISTER)
     }

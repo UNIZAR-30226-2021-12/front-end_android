@@ -1,7 +1,7 @@
 package storage
 
 import android.content.Context
-import eina.unizar.unozar.loginUser
+import eina.unizar.unozar.LoginUser
 
 class SharedPrefManager private constructor(private val mCtx: Context) {
 
@@ -11,10 +11,10 @@ class SharedPrefManager private constructor(private val mCtx: Context) {
             return sharedPreferences.getInt("id", -1) != -1
         }
 
-    val user: loginUser
+    val user: LoginUser
         get() {
             val sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
-            return loginUser(sharedPreferences.getInt("user_id", -1),
+            return LoginUser(sharedPreferences.getInt("user_id", -1),
                 sharedPreferences.getString("user_name", null).toString(),
                 sharedPreferences.getString("user_email", null).toString(),
                 sharedPreferences.getString("user_age", null).toString(),
@@ -23,7 +23,7 @@ class SharedPrefManager private constructor(private val mCtx: Context) {
         }
 
 
-    fun saveUser(user: loginUser) {
+    fun saveUser(user: LoginUser) {
 
         val sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()

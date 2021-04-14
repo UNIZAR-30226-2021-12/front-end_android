@@ -7,11 +7,11 @@ import retrofit2.http.POST
 
 interface API {
     @FormUrlEncoded
-    @POST("userLogin")
-    fun userLogin(
-        @Field("nombre") nombre:String,
+    @POST("/player/authentication")
+    fun userAuthentication(
+        @Field("email") email:String,
         @Field("password") password:String
-    ): Call<LoginResponse>
+    ): Call<BasicResponse>
 
     @FormUrlEncoded
     @POST("player/createPlayer")
@@ -19,13 +19,33 @@ interface API {
         @Field("email") email:String,
         @Field("alias") alias:String,
         @Field("password") password:String
-    ): Call<RegisterResponse>
+    ): Call<BasicResponse>
 
     @FormUrlEncoded
-    @POST("player/changePassword")  // AÑADIR NOMBRE CORRECTO
+    @POST("player/updatePlayerPassword")
     fun userPasswordChange(
-        @Field("authorization") auth:String,        // Comprobar parámetros a enviar
-        @Field("old_password") old_password:String,
+        @Field("authorization") auth:String,
         @Field("new_password") new_password:String
-    ): Call<PasswordChangeResponse>
+    ): Call<BasicResponse>
+
+    @FormUrlEncoded
+    @POST("player/updatePlayerEmail")
+    fun userEmailChange(
+        @Field("authorization") auth:String,        // Comprobar parámetros a enviar
+        @Field("new_email") new_email:String
+    ): Call<BasicResponse>
+
+    @FormUrlEncoded
+    @POST("/player/deletePlayer")
+    fun userDeleteAccount(
+        @Field("session") session:String
+    ): Call<BasicResponse>
+
+    @FormUrlEncoded
+    @POST("/game/createGame")
+    fun userCreateGame(
+        @Field("session") session:String,
+        @Field("num_players") num_players:Int,
+        @Field("num_bots") num_bots:Int
+    ): Call<BasicResponse>
 }

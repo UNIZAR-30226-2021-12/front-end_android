@@ -42,23 +42,27 @@
                 android:layout_marginBottom="5dp"
                 android:gravity="center"
                 android:text="manzana@gmail.com"/>
+
             <Button
                 android:id="@+id/buttonCambiarEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="goToChangeEmail"
                 android:text="Cambiar correo electrónico" />
+
             <Button
                 android:id="@+id/buttonCambiarContraseña"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="goToChangePassword"
                 android:text="Cambiar contraseña" />
             <TextView
                 android:id="@+id/show1"
@@ -182,15 +186,17 @@
                         android:layout_weight="1"
                         android:text="2" />
             </LinearLayout>
-                    <Button
-                        android:id="@+id/buttonEliminarCuenta"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:gravity="center"
-                        android:text="Eliminar cuenta" />
+
+            <Button
+                android:id="@+id/buttonEliminarCuenta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="deleteAccount"
+                android:text="Eliminar cuenta" />
 
         </LinearLayout>
 </ScrollView>

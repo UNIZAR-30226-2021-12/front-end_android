@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".MailChange">
+    tools:context=".EmailChange">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view"
@@ -21,7 +21,7 @@
             android:id="@+id/textView"
             android:layout_width="340dp"
             android:layout_height="28dp"
-            android:text="@string/old_mail"
+            android:text="@string/new_mail"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/old_mail"
             app:layout_constraintEnd_toEndOf="parent"
@@ -129,7 +129,7 @@
         android:layout_height="wrap_content"
         android:background="#2196F3"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:theme="@style/AppTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
