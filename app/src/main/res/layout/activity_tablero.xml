@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TableroActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvGamer"
+            android:layout_width="300dp"
+            android:layout_height="209dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="-250dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <ImageView
+                android:id="@+id/image_record"
+                android:layout_width="48dp"
+                android:layout_height="48dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Elegido"
+                />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/image_cima"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="-150dp"
+        android:layout_marginTop="290dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCard"
+            android:layout_width="250dp"
+            android:layout_height="209dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="250dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/recordarButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Elegir Carta" />
+
+        <Button
+            android:id="@+id/buttonPoner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Poner Carta" />
+
+        <Button
+            android:id="@+id/buttonPedirUno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pedir Uno" />
+
+        <Button
+            android:id="@+id/buttonRobarCarta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Robar Carta" />
+
+        <Button
+            android:id="@+id/buttonPasar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pasar" />
+    </LinearLayout>
+</LinearLayout>
