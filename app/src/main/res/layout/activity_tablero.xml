@@ -20,25 +20,47 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="-300dp"
+        android:layout_marginTop="350dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/your_turn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tu turno" />
+
+        <TextView
+            android:id="@+id/your_cards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9 Cartas" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="-250dp"
+        android:layout_marginStart="-0dp"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
+
             <ImageView
                 android:id="@+id/image_record"
                 android:layout_width="48dp"
                 android:layout_height="48dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Elegido"
-                />
+                android:text="Elegido" />
         </LinearLayout>
+
         <ImageView
             android:id="@+id/image_cima"
             android:layout_width="48dp"
