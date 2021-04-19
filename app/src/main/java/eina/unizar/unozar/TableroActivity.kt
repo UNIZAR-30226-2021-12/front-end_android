@@ -8,6 +8,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import data.Card
@@ -22,19 +24,20 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 var recordCambiado = 0
+var nombreRecordado = ""
 var record = 0;
 
 class TableroActivity : AppCompatActivity(){
 
     val CardsList = listOf<Card>(
             Card(1, "inicio", R.drawable.inicio),
-            Card(1, "Carta amarillo 0", R.drawable.cambio_color_azul),
-            Card(1, "Carta rojo 1", R.drawable.dos_rojo),
+            Card(1, "cambio_color_base", R.drawable.cambio_color_base),
+            Card(1, "dos_rojo", R.drawable.dos_rojo),
             Card(1, "Carta negado amarillo", R.drawable.dos_verde),
-            Card(1, "Carta +2 verde", R.drawable.mas_cuatro_azul),
-            Card(1, "Carta +4", R.drawable.ocho_azul),
-            Card(1, "Carta verde +2", R.drawable.cinco_azul),
-            Card(1, "Carta +4", R.drawable.dos_azul),
+            Card(1, "mas_cuatro_base", R.drawable.mas_cuatro_base),
+            Card(1, "ocho_azul", R.drawable.ocho_azul),
+            Card(1, "cinco_azul", R.drawable.cinco_azul),
+            Card(1, "dos_azul", R.drawable.dos_azul),
             Card(1, "fin", R.drawable.fin)
     )
 
@@ -64,15 +67,28 @@ class TableroActivity : AppCompatActivity(){
         actualizar()
         //cambiarCima()
         /*val recicleView = findViewById<View>(R.id.rvCard) as Button*/
-        val loginButton = findViewById<View>(R.id.recordarButton) as Button
-        loginButton.setOnClickListener {
+        val recordButton = findViewById<View>(R.id.recordarButton) as Button
+        recordButton.setOnClickListener {
             val imageView = findViewById<ImageView>(R.id.image_record)
             imageView.setImageResource(record)
         }
-        /*recicleView.setOnClickListener {
-            val imageView = findViewById<ImageView>(R.id.image_record)
-            imageView.setImageResource(record)
-        }*/
+        val putButton = findViewById<View>(R.id.buttonPoner) as Button
+        putButton.setOnClickListener {
+            //Si es una +4 o un cambia color
+            if(nombreRecordado == "mas_cuatro_base" || nombreRecordado == "cambio_color_base") {
+                val builder = AlertDialog.Builder(this)
+                val items = arrayOf("Red", "Green", "Yellow", "Blue")
+                with(builder)
+                {
+                    setTitle("Elija un color")
+                    setItems(items) { dialog, which ->
+                        //Poner carta
+                        Toast.makeText(applicationContext, items[which] + " is clicked", Toast.LENGTH_SHORT).show()
+                    }
+                    show()
+                }
+            }
+        }
         //initRecycler()
     }
 

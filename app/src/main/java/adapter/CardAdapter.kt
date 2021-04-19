@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import data.Card
 import eina.unizar.unozar.R
+import eina.unizar.unozar.nombreRecordado
 import eina.unizar.unozar.record
 import eina.unizar.unozar.recordCambiado
 import kotlinx.android.synthetic.main.item_card.view.*
@@ -37,6 +38,7 @@ class CardAdapter(val cards: List<Card>):RecyclerView.Adapter<CardAdapter.CardHo
                 //Si la carta es válida, permite cogerla
                 if(card.name != "inicio" || card.name != "fin"){ //No se pueden coger las cartas del inicio y del fin
                     record = card.image
+                    nombreRecordado = card.name
                     recordCambiado=1
                 }
             }
