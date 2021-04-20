@@ -25,26 +25,26 @@ import kotlinx.coroutines.launch
 
 var recordCambiado = 0
 var nombreRecordado = ""
-var record = 0;
+var record = 0
 
 class TableroActivity : AppCompatActivity(){
 
     val CardsList = listOf<Card>(
-            Card(1, "inicio", R.drawable.inicio),
-            Card(1, "cambio_color_base", R.drawable.cambio_color_base),
-            Card(1, "dos_rojo", R.drawable.dos_rojo),
-            Card(1, "Carta negado amarillo", R.drawable.dos_verde),
-            Card(1, "mas_cuatro_base", R.drawable.mas_cuatro_base),
-            Card(1, "ocho_azul", R.drawable.ocho_azul),
-            Card(1, "cinco_azul", R.drawable.cinco_azul),
-            Card(1, "dos_azul", R.drawable.dos_azul),
-            Card(1, "fin", R.drawable.fin)
+        Card(1, "inicio", R.drawable.inicio),
+        Card(1, "cambio_color_base", R.drawable.cambio_color_base),
+        Card(1, "dos_rojo", R.drawable.dos_rojo),
+        Card(1, "Carta negado amarillo", R.drawable.dos_verde),
+        Card(1, "mas_cuatro_base", R.drawable.mas_cuatro_base),
+        Card(1, "ocho_azul", R.drawable.ocho_azul),
+        Card(1, "cinco_azul", R.drawable.cinco_azul),
+        Card(1, "dos_azul", R.drawable.dos_azul),
+        Card(1, "fin", R.drawable.fin)
     )
 
     val GamersList = listOf<Gamer>(
-            Gamer(1, R.drawable.jesica, "Nombre1", "su turno", "13  Cartas"),
-            Gamer(2, R.drawable.castor, "Nombre2", "", "4 Cartas"),
-            Gamer(3, R.drawable.larry, "Nombre3", "", "6 Cartas")
+        Gamer(1, R.drawable.jesica, "Nombre1", "su turno", "13  Cartas"),
+        Gamer(2, R.drawable.castor, "Nombre2", "", "4 Cartas"),
+        Gamer(3, R.drawable.larry, "Nombre3", "", "6 Cartas")
     )
 
     val Cards = mutableListOf<Card>()

@@ -31,7 +31,7 @@ interface API {
     @FormUrlEncoded
     @POST("player/updatePlayerEmail")
     fun userEmailChange(
-        @Field("authorization") auth:String,        // Comprobar parámetros a enviar
+        @Field("authorization") auth:String,
         @Field("new_email") new_email:String
     ): Call<BasicResponse>
 

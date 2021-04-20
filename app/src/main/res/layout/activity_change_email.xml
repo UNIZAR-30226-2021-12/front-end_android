@@ -11,7 +11,7 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/view2"
+        app:layout_constraintBottom_toTopOf="@id/change_password_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,28 +23,29 @@
             android:layout_height="28dp"
             android:text="@string/new_mail"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/old_mail"
+            app:layout_constraintBottom_toTopOf="@+id/new_email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/old_mail"
+            android:id="@+id/new_email"
             android:layout_width="340dp"
             android:layout_height="44dp"
             android:background="@drawable/edit_text_border"
             android:ems="10"
+            android:importantForAutofill="no"
             android:inputType="textPassword"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            android:importantForAutofill="no"
             tools:ignore="LabelFor" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+<!--
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view2"
         android:layout_width="match_parent"
@@ -53,7 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view">
+        app:layout_constraintTop_toBottomOf="@id/view">
 
         <TextView
             android:id="@+id/textView3"
@@ -73,13 +74,13 @@
             android:layout_height="44dp"
             android:background="@drawable/edit_text_border"
             android:ems="10"
+            android:importantForAutofill="no"
             android:inputType="textPassword"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3"
-            android:importantForAutofill="no"
             tools:ignore="LabelFor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -122,6 +123,7 @@
             tools:ignore="LabelFor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+-->
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/register_toolbar"
@@ -168,12 +170,12 @@
         style="@android:style/Widget.Holo.Button"
         android:layout_width="128dp"
         android:layout_height="50dp"
-        android:onClick="changeMail"
+        android:onClick="changeEmail"
         android:text="@string/change"
         app:layout_constraintBottom_toTopOf="@+id/cancel_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3" />
+        app:layout_constraintTop_toBottomOf="@id/view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

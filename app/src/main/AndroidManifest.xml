@@ -63,6 +63,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Principal" />
         </activity>
+        <activity android:name=".TableroActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".CreateGame" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CreateGame" />
+        </activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package eina.unizar.unozar
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -38,36 +39,43 @@ class CreateGame : AppCompatActivity() {
         }
     }
 
-    fun createGame(view: View) {
-        RetrofitClient.instance.userCreateGame(session, players, bots)
-            .enqueue(object: Callback<BasicResponse> {
-                override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
-                }
-
-                override fun onResponse(
-                    call: Call<BasicResponse>,
-                    response: Response<BasicResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(
-                            applicationContext,
-                            response.body()?.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                        //val intent = Intent(this, Tablero::class.java)
-                        //intent.putExtra("password", response.body()?.message)
-                        //startActivity(intent)
-                    } else {
-                        Toast.makeText(
-                            applicationContext,
-                            "error: " + response.body()?.message,
-                            Toast.LENGTH_LONG
-                        ).show()
+    public fun createGame(view: View) {
+        if (!true) {
+            RetrofitClient.instance.userCreateGame(session, players, bots)
+                .enqueue(object : Callback<BasicResponse> {
+                    override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
                     }
-                }
 
-            })
+                    override fun onResponse(
+                        call: Call<BasicResponse>,
+                        response: Response<BasicResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Toast.makeText(
+                                applicationContext,
+                                response.body()?.message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                            val intent = Intent(this@CreateGame, TableroActivity::class.java)
+                            intent.putExtra("session", response.body()?.message)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(
+                                applicationContext,
+                                "error: " + response.body()?.message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+
+                })
+        } else {
+            val test = TestCalls("test")
+            val intent = Intent(this@CreateGame, TableroActivity::class.java)
+            intent.putExtra("session", test.userCreateGameTest())
+            startActivity(intent)
+        }
     }
 
     fun cancel(view: View) {
