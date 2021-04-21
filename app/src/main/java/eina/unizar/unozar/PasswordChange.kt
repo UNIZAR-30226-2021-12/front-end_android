@@ -14,7 +14,8 @@ import retrofit2.Response
 
 class PasswordChange : AppCompatActivity() {
 
-    var session = ""
+    private val tested = false
+    private var session = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,16 +23,16 @@ class PasswordChange : AppCompatActivity() {
         session = intent.getStringExtra("session").toString()
     }
 
-    fun changePassword(view: View) {
+    fun changePassword(@Suppress("UNUSED_PARAMETER")view: View) {
         //val oldPassword = findViewById<EditText>(R.id.old_password).text.toString().trim()
         val newPassword = findViewById<EditText>(R.id.new_password).text.toString().trim()
         val repeatPassword = findViewById<EditText>(R.id.repeat_password).text.toString().trim()
         val check = AlertDialog.Builder(this)
         check.setTitle("Alerta!")
         check.setMessage("Va a cambiar la contraseña de su cuenta, ¿desea continuar?")
-        check.setPositiveButton("Sí") { dialogInterface: DialogInterface, i: Int ->
+        check.setPositiveButton("Sí") { _: DialogInterface, _: Int ->
             if (validateInput(newPassword, repeatPassword)) {
-                if (!true) {
+                if (tested) {
                     RetrofitClient.instance.userPasswordChange(session, newPassword)
                         .enqueue(object : Callback<BasicResponse> {
                             override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
@@ -56,22 +57,26 @@ class PasswordChange : AppCompatActivity() {
                 }
             }
         }
-        check.setNegativeButton("No") { dialogInterface: DialogInterface, i: Int -> }
+        check.setNegativeButton("No") { _: DialogInterface, _: Int -> }
         check.show()
     }
 
-    fun cancel(view: View) {
+    fun cancel(@Suppress("UNUSED_PARAMETER")view: View) {
         finish()
     }
 
     private fun validateInput (newPassword:String, repeatPassword:String) : Boolean {
-        if(newPassword.isEmpty()){
-            new_password.error = "Escriba una contraseña válida"
-        } else if (newPassword != repeatPassword) {
-            new_password.error = "Las contraseñas no coinciden"
-            repeat_password.error = "Las contraseñas no coinciden"
-        } else {
-            return true
+        when {
+            newPassword.isEmpty() -> {
+                new_password.error = "Escriba una contraseña válida"
+            }
+            newPassword != repeatPassword -> {
+                new_password.error = "Las contraseñas no coinciden"
+                repeat_password.error = "Las contraseñas no coinciden"
+            }
+            else -> {
+                return true
+            }
         }
         return false
     }

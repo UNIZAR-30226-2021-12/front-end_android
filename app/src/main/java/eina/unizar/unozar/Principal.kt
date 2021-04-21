@@ -10,11 +10,11 @@ import androidx.appcompat.widget.Toolbar
 
 class Principal : AppCompatActivity() {
 
-    private val TWO_PLAYERS = 2
-    private val THREE_PLAYERS = 3
-    private val FOUR_PLAYERS = 4
+    private val twoPlayers = 2
+    private val threePlayers = 3
+    private val fourPlayers = 4
 
-    var session = ""
+    private var session = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,7 @@ class Principal : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here.
-        when (item.getItemId()) {
+        when (item.itemId) {
             R.id.action_profile -> {
                 val intent = Intent(this, Profile::class.java)
                 intent.putExtra("session", session)
@@ -46,23 +46,23 @@ class Principal : AppCompatActivity() {
 
     }
 
-    fun createTwoPlayersGame(view: View) {
+    fun createTwoPlayersGame(@Suppress("UNUSED_PARAMETER")view: View) {
         val intent = Intent(this, CreateGame::class.java)
-        intent.putExtra("numPlayers", TWO_PLAYERS)
+        intent.putExtra("numPlayers", twoPlayers)
         intent.putExtra("session", session)
         startActivity(intent)
     }
 
-    fun createThreePlayersGame(view: View) {
+    fun createThreePlayersGame(@Suppress("UNUSED_PARAMETER")view: View) {
         val intent = Intent(this, CreateGame::class.java)
-        intent.putExtra("numPlayers", THREE_PLAYERS)
+        intent.putExtra("numPlayers", threePlayers)
         intent.putExtra("session", session)
         startActivity(intent)
     }
 
-    fun createFourPlayersGame(view: View) {
+    fun createFourPlayersGame(@Suppress("UNUSED_PARAMETER")view: View) {
         val intent = Intent(this, CreateGame::class.java)
-        intent.putExtra("numPlayers", FOUR_PLAYERS)
+        intent.putExtra("numPlayers", fourPlayers)
         intent.putExtra("session", session)
         startActivity(intent)
     }

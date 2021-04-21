@@ -1,6 +1,6 @@
 package eina.unizar.unozar
 
-class TestCalls (test:String) {
+class TestCalls (@Suppress("UNUSED_PARAMETER")test:String) {
     fun userRegisterTest() : String {
         return "sessionID1"
     }

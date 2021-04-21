@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -34,61 +33,69 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/player_four"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="244dp"
-        android:background="@drawable/player_border"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="291dp"
+        android:layout_marginTop="96dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/player_three"
-        tools:srcCompat="@drawable/AI"
-        android:contentDescription="Done" />
-
-    <ImageView
-        android:id="@+id/player_one"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="88dp"
-        android:background="@drawable/player_border"
-        android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/player_two"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_toolbar"
-        tools:srcCompat="@drawable/test_user" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/player_two"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="88dp"
-        android:background="@drawable/player_border"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/player_one"
-        app:layout_constraintTop_toBottomOf="@+id/register_toolbar"
-        tools:srcCompat="@drawable/AI" />
+        <ImageView
+            android:id="@+id/player_four"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/player_border"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/player_three"
+            tools:srcCompat="@drawable/ai" />
 
-    <ImageView
-        android:id="@+id/player_three"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="244dp"
-        android:background="@drawable/player_border"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/player_four"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:srcCompat="@drawable/AI" />
+        <ImageView
+            android:id="@+id/player_one"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/player_border"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/player_two"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/test_user" />
+
+        <ImageView
+            android:id="@+id/player_two"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/player_border"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/player_one"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/ai" />
+
+        <ImageView
+            android:id="@+id/player_three"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/player_border"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/player_four"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:srcCompat="@drawable/ai" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/view5"
+        android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="134dp"
         android:layout_marginBottom="36dp"

@@ -1,5 +1,6 @@
 package eina.unizar.unozar
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import retrofit2.Response
 
 class Profile : AppCompatActivity() {
 
+    private val tested = false
     private var session = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,34 +25,26 @@ class Profile : AppCompatActivity() {
         // getStatistics
     }
 
-    /*override fun onStart(){
-        super.onStart()
-        if(!SharedPrefManager.getInstance(this).isLoggedIn){
-            val intent = Intent(applicationContext,Login::class.java/*Actividad*/)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-        }
-    }*/
-
-    fun goToChangeEmail(view: View) {
+    @SuppressLint("SetTextI18n")
+    fun goToChangeEmail(@Suppress("UNUSED_PARAMETER")view: View) {
         val intent = Intent(this, EmailChange::class.java)
         intent.putExtra("session", session)
         startActivity(intent)
         showEmail2.text = "tomate@gmail.com"
     }
 
-    fun goToChangePassword(view: View) {
+    fun goToChangePassword(@Suppress("UNUSED_PARAMETER")view: View) {
         val intent = Intent(this, PasswordChange::class.java)
         intent.putExtra("session", session)
         startActivity(intent)
     }
 
-    fun deleteAccount(view: View) {
+    fun deleteAccount(@Suppress("UNUSED_PARAMETER")view: View) {
         val check = AlertDialog.Builder(this)
         check.setTitle("Alerta!")
         check.setMessage("Va a eliminar su cuenta de forma permanente, ¿desea continuar?")
         check.setPositiveButton("Sí") { _: DialogInterface, _: Int ->
-            if (!true) {
+            if (tested) {
                 RetrofitClient.instance.userDeleteAccount(session)
                     .enqueue(object : Callback<BasicResponse> {
                         override fun onFailure(call: Call<BasicResponse>, t: Throwable) {

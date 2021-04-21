@@ -1,4 +1,4 @@
-package storage
+/*package storage
 
 import android.content.Context
 import eina.unizar.unozar.LoginUser
@@ -55,4 +55,4 @@ class SharedPrefManager private constructor(private val mCtx: Context) {
         }
     }
 
-}
+}*/
