@@ -7,14 +7,18 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class Principal : AppCompatActivity() {
 
     private var n = 2
-    private var session = ""
-    private lateinit var players:AlertDialog.Builder
+    private lateinit var session: String
+    private lateinit var players: AlertDialog.Builder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +49,40 @@ class Principal : AppCompatActivity() {
             R.id.action_logout -> {
                 val intent = Intent(this, Login::class.java)
                 startActivity(intent)
+            }
+            R.id.action_refresh -> {
+                RetrofitClient.instance.userRefreshToken(RefreshRequest(session))
+                    .enqueue(object : Callback<BasicResponse> {
+                        override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Error: " + t.message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                        override fun onResponse(
+                            call: Call<BasicResponse>,
+                            response: Response<BasicResponse>
+                        ) {
+                            if (response.code() == 200) {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "ok: " + response.code(),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                /*val intent = Intent(this@Principal, Principal::class.java)
+                                intent.putExtra("session", response.body()?.token)
+                                startActivity(intent)*/
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Error: " + response.code(),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    })
             }
         }
         return super.onOptionsItemSelected(item)

@@ -18,7 +18,7 @@ import retrofit2.Response
 
 class Login : AppCompatActivity() {
 
-    private val tested = false
+    private val tested = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,14 +32,14 @@ class Login : AppCompatActivity() {
         if(validateInput(email, password)) {
             if (tested) {
                 RetrofitClient.instance.userAuthentication(LoginUser(email, password))
-                    .enqueue(object : Callback<LoginResponse> {
-                        override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                            Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                    .enqueue(object : Callback<BasicResponse> {
+                        override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+                            Toast.makeText(applicationContext, "1: " + t.message, Toast.LENGTH_LONG).show()
                         }
 
                         override fun onResponse(
-                            call: Call<LoginResponse>,
-                            response: Response<LoginResponse>
+                            call: Call<BasicResponse>,
+                            response: Response<BasicResponse>
                         ) {
                             if (response.code() == 200) {
                                 Toast.makeText(

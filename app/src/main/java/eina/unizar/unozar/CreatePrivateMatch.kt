@@ -15,7 +15,7 @@ class CreatePrivateMatch : AppCompatActivity() {
     private val tested = false
     private var players = 2
     private var bots = 1
-    private var session = ""
+    private lateinit var session: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val n:Int = intent.getIntExtra("numPlayers", 0)
@@ -60,7 +60,7 @@ class CreatePrivateMatch : AppCompatActivity() {
                     ) {
                         if (response.code() == 200) {
                             val intent = Intent(this@CreatePrivateMatch, TableroActivity::class.java)
-                            intent.putExtra("session", response.body()?.message)
+                            intent.putExtra("session", response.code())
                             startActivity(intent)
                         } else {
                             Toast.makeText(

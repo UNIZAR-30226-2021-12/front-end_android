@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/menu"
         android:title="@string/menu"
+        android:icon="@drawable/menu_icon"
         app:showAsAction="ifRoom">
-
         <menu>
             <item android:id="@+id/action_profile"
                 android:title="@string/profile"
                 app:showAsAction="never"/>
             <item android:id="@+id/action_logout"
                 android:title="@string/logout"
+                app:showAsAction="never"/>
+            <item android:id="@+id/action_refresh"
+                android:title="Refrescarse"
                 app:showAsAction="never"/>
         </menu>
     </item>

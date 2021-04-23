@@ -1,6 +1,7 @@
 package eina.unizar.unozar
 
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.os.Bundle
@@ -14,8 +15,8 @@ import retrofit2.Response
 
 class EmailChange : AppCompatActivity() {
 
-    private val tested = false
-    private var session = ""
+    private val tested = true
+    private lateinit var session: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,20 +26,18 @@ class EmailChange : AppCompatActivity() {
 
     fun changeEmail(@Suppress("UNUSED_PARAMETER")view: View) {
         val newEmail = new_email.text.toString().trim()
-        //val password = password.text.toString().trim()
-        //val repeatPassword = repeat_password.text.toString().trim()
         val check = AlertDialog.Builder(this)
         check.setTitle("Alerta!")
         check.setMessage("Va a cambiar el correo electrónico asociado a su cuenta, ¿desea continuar?")
         check.setPositiveButton("Sí") { _: DialogInterface, _: Int ->
             if (validateInput(newEmail)) {
                 if (tested) {
-                    RetrofitClient.instance.userEmailChange(session, newEmail)
+                    RetrofitClient.instance.userUpdatePlayer(session.substring(0,32), UpdateRequest(newEmail, null, null, session))
                         .enqueue(object : Callback<BasicResponse> {
                             override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                                 Toast.makeText(
                                     applicationContext,
-                                    "1: " + t.message,
+                                    "Error: " + t.message,
                                     Toast.LENGTH_LONG
                                 )
                                     .show()
@@ -48,12 +47,20 @@ class EmailChange : AppCompatActivity() {
                                 call: Call<BasicResponse>,
                                 response: Response<BasicResponse>
                             ) {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "2: " + response.body()?.message,
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                finish()
+                                if (response.code() == 200) {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Ha actualizado su disección de correo electrónico",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    finish()
+                                } else {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Error: " + response.code(),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
                             }
                         })
                 } else {

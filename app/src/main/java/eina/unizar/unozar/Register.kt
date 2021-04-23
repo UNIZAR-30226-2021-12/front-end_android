@@ -14,8 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class Register : AppCompatActivity() {
-
-    private val tested = false
+    private val tested = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +30,8 @@ class Register : AppCompatActivity() {
         if (validateInput(alias, email, password, passwordRepeat)) {
             if (tested) {
                 RetrofitClient.instance.userRegister(RegisterUser(email, alias, password))
-                    .enqueue(object : Callback<BasicResponse> {
-                        override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+                    .enqueue(object : Callback<RegisterResponse> {
+                        override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                             Toast.makeText(
                                 applicationContext,
                                 "1: " + t.message,
@@ -41,17 +40,16 @@ class Register : AppCompatActivity() {
                         }
 
                         override fun onResponse(
-                            call: Call<BasicResponse>,
-                            response: Response<BasicResponse>
+                            call: Call<RegisterResponse>,
+                            response: Response<RegisterResponse>
                         ) {
                             if (response.code() == 200) {
                                 val intent = Intent(this@Register, Principal::class.java)
-                                intent.putExtra("session", response.body()?.message)
+                                intent.putExtra("session", response.body()?.id)
                                 startActivity(intent)
                             } else {
                                 val check = AlertDialog.Builder(this@Register)
                                 check.setTitle("Error " + response.code())
-                                check.setMessage("No se ha podido realizar el registro")
                                 check.setPositiveButton("Volver") { _: DialogInterface, _: Int -> }
                                 check.show()
                             }

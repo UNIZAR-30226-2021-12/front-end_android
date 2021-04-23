@@ -15,7 +15,7 @@ class CreatePublicMatch : AppCompatActivity() {
     private val tested = false
     private var players = 2
     private var bots = 0
-    private var session = ""
+    private lateinit var session: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val n:Int = intent.getIntExtra("numPlayers", 0)
@@ -59,16 +59,16 @@ class CreatePublicMatch : AppCompatActivity() {
                         if (response.isSuccessful) {
                             Toast.makeText(
                                 applicationContext,
-                                response.body()?.message,
+                                response.code(),
                                 Toast.LENGTH_LONG
                             ).show()
                             val intent = Intent(this@CreatePublicMatch, TableroActivity::class.java)
-                            intent.putExtra("session", response.body()?.message)
+                            intent.putExtra("session", response.code())
                             startActivity(intent)
                         } else {
                             Toast.makeText(
                                 applicationContext,
-                                "error: " + response.body()?.message,
+                                "error: " + response.code(),
                                 Toast.LENGTH_LONG
                             ).show()
                         }

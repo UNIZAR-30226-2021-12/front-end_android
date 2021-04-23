@@ -15,7 +15,7 @@ import retrofit2.Response
 class PasswordChange : AppCompatActivity() {
 
     private val tested = false
-    private var session = ""
+    private lateinit var session: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,23 +33,33 @@ class PasswordChange : AppCompatActivity() {
         check.setPositiveButton("Sí") { _: DialogInterface, _: Int ->
             if (validateInput(newPassword, repeatPassword)) {
                 if (tested) {
-                    RetrofitClient.instance.userPasswordChange(session, newPassword)
+                    RetrofitClient.instance.userUpdatePlayer(session.substring(0,32), UpdateRequest(null, null, newPassword, session))
                         .enqueue(object : Callback<BasicResponse> {
                             override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                                Toast.makeText(applicationContext, "1: " + t.message, Toast.LENGTH_LONG)
-                                    .show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Error: " + t.message,
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
-
                             override fun onResponse(
                                 call: Call<BasicResponse>,
                                 response: Response<BasicResponse>
                             ) {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "2: " + response.body()?.message,
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                finish()
+                                if (response.code() == 200) {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Ha actualizado su contraseña",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    finish()
+                                } else {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Error: " + response.code(),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
                             }
                         })
                 } else {

@@ -1,37 +1,39 @@
 package eina.unizar.unozar
 
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface API {
     @POST("/player/authentication")
     fun userAuthentication(
         @Body login: LoginUser
-    ): Call<LoginResponse>
+    ): Call<BasicResponse>
 
     @POST("/player/createPlayer")
     fun userRegister(
         @Body register: RegisterUser
+    ): Call<RegisterResponse>
+
+    @POST("/player/readPlayer/{id}")
+    fun userRead(
+        @Path("id") id: String
+    ): Call<RegisterResponse>
+
+    @POST("/player/updatePlayer/{id}")
+    fun userUpdatePlayer(
+        @Path("id") id: String,
+        @Body updateRequest: UpdateRequest
     ): Call<BasicResponse>
 
-    @POST("/player/updatePlayerPassword")
-    fun userPasswordChange(
-        @Field("authorization") auth:String,
-        @Field("new_password") new_password:String
-    ): Call<BasicResponse>
-
-    @POST("/player/updatePlayerEmail")
-    fun userEmailChange(
-        @Field("authorization") auth:String,
-        @Field("new_email") new_email:String
-    ): Call<BasicResponse>
-
-    @POST("/player/deletePlayer")
+    @HTTP(method = "DELETE", path = "/player/deletePlayer/{id}", hasBody = true)
     fun userDeleteAccount(
-        @Field("session") session:String
+        @Path("id") id: String,
+        @Body delete: DeleteRequest
+    ): Call<BasicResponse>
+
+    @GET("/player/refreshToken")
+    fun userRefreshToken(
+        @Body refreshRequest: RefreshRequest
     ): Call<BasicResponse>
 
     @POST("/game/createGame")
