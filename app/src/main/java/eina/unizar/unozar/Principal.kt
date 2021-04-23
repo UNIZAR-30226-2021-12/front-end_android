@@ -78,14 +78,28 @@ class Principal : AppCompatActivity() {
         choose.setTitle("Elija")
         choose.setMessage("¿Quiere crear una nueva partida privada o unirse a una ya creada?")
         choose.setPositiveButton("crear") {_: DialogInterface, _: Int ->
-            players.show()
-            val bots = AlertDialog.Builder(this)
-            val numBots = arrayOf("0", "1", "2", "3")
-            bots.setTitle("Número de Inteligencias Artificiales")
-            bots.setItems(numBots) { _: DialogInterface, i: Int ->
-                b = numBots[i].toInt()
+            val numP = AlertDialog.Builder(this)
+            val numPlayers = arrayOf("2", "3", "4")
+            numP.setTitle("Número de jugadores")
+            numP.setItems(numPlayers) { _: DialogInterface, i: Int ->
+                n = numPlayers[i].toInt()
+                val bots = AlertDialog.Builder(this)
+                var numBots:Array<String>
+                if (n > 2) {
+                    numBots = arrayOf("0", "1", "2")
+                    if (n > 3)
+                        numBots = arrayOf("0", "1", "2", "3")
+                } else {
+                    numBots = arrayOf("0", "1")
+                }
+                bots.setTitle("Número de Inteligencias Artificiales")
+                bots.setItems(numBots) { _: DialogInterface, i: Int ->
+                    b = numBots[i].toInt()
+                }
+                bots.show()
             }
-            bots.show()
+            numP.show()
+
             /*val intent = Intent(this, CreatePrivateMatch::class.java)
             intent.putExtra("numPlayers", n)
             intent.putExtra("numBots", b)
