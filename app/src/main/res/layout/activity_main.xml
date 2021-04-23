@@ -5,14 +5,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/register_toolbar"
+            android:id="@+id/private_match_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#2196F3"
@@ -31,7 +32,8 @@
             android:layout_marginBottom="5dp"
             android:gravity="center"
             android:text="Login"
-            android:textSize="30sp"/>
+            android:textSize="30sp" />
+
         <TextView
             android:id="@+id/Nombre"
             android:layout_width="wrap_content"
@@ -40,20 +42,22 @@
             android:layout_marginBottom="5dp"
             android:gravity="center"
             android:text="Correo electrónico"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
+
         <EditText
             android:id="@+id/editTextTextPersonName2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:gravity="center"
             android:backgroundTint="#9C1010"
             android:ems="10"
             android:foregroundTint="#0AE41717"
-            android:inputType="textEmailAddress"
+            android:gravity="center"
             android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
             tools:ignore="LabelFor" />
+
         <TextView
             android:id="@+id/Password"
             android:layout_width="wrap_content"
@@ -62,18 +66,19 @@
             android:layout_marginBottom="5dp"
             android:gravity="center"
             android:text="Password"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
+
         <EditText
             android:id="@+id/editTextTextPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:gravity="center"
             android:backgroundTint="#EA0D0D"
             android:ems="10"
-            android:inputType="textPassword"
+            android:gravity="center"
             android:importantForAutofill="no"
+            android:inputType="textPassword"
             tools:ignore="LabelFor" />
 
         <Button
@@ -85,6 +90,7 @@
             android:gravity="center"
             android:onClick="login"
             android:text="Login" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"

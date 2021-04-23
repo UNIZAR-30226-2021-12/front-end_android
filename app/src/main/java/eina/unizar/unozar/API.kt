@@ -17,31 +17,33 @@ interface API {
         @Body register: RegisterUser
     ): Call<BasicResponse>
 
-    @FormUrlEncoded
     @POST("/player/updatePlayerPassword")
     fun userPasswordChange(
         @Field("authorization") auth:String,
         @Field("new_password") new_password:String
     ): Call<BasicResponse>
 
-    @FormUrlEncoded
     @POST("/player/updatePlayerEmail")
     fun userEmailChange(
         @Field("authorization") auth:String,
         @Field("new_email") new_email:String
     ): Call<BasicResponse>
 
-    @FormUrlEncoded
     @POST("/player/deletePlayer")
     fun userDeleteAccount(
         @Field("session") session:String
     ): Call<BasicResponse>
 
-    @FormUrlEncoded
     @POST("/game/createGame")
     fun userCreateGame(
         @Field("session") session:String,
         @Field("num_players") num_players:Int,
         @Field("num_bots") num_bots:Int
+    ): Call<BasicResponse>
+
+    @POST("/game/createGame")
+    fun joinPrivateMatch(
+        @Field("session") session:String,
+        @Field("code") code:Int
     ): Call<BasicResponse>
 }

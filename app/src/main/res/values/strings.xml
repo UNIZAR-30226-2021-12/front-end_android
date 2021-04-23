@@ -16,7 +16,8 @@
     <string name="change">Cambiar</string>
     <string name="cancel">Cancelar</string>
     <string name="create">Crear partida</string>
-    <string name="two_players">2 jugadores</string>
-    <string name="three_players">3 jugadores</string>
-    <string name="four_players">4 jugadores</string>
+    <string name="public_game">Partida pública</string>
+    <string name="private_game">Partida privada</string>
+    <string name="cash">5500</string>
+    <string name="exit">Salir</string>
 </resources>

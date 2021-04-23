@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".Login">
+        <activity android:name=".Principal">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-        android:name=".Principal"
+        android:name=".Login"
         android:label="@string/app_name"
         android:parentActivityName=".Login" >
         <meta-data
@@ -56,7 +56,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Profile" />
         </activity>
-        <activity android:name=".CreateGame"
+        <activity android:name=".CreatePrivateMatch"
             android:label="@string/app_name"
             android:parentActivityName=".Principal" >
             <meta-data
@@ -65,10 +65,10 @@
         </activity>
         <activity android:name=".TableroActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".CreateGame" >
+            android:parentActivityName=".CreatePrivateMatch" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".CreateGame" />
+                android:value=".CreatePrivateMatch" />
         </activity>
     </application>
 

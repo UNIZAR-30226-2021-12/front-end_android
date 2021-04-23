@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/private_match_toolbar">
 
         <TextView
             android:id="@+id/textView"
@@ -126,7 +126,7 @@
 -->
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/register_toolbar"
+        android:id="@+id/private_match_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#2196F3"
@@ -157,13 +157,13 @@
         style="@android:style/Widget.Holo.Button"
         android:layout_width="128dp"
         android:layout_height="50dp"
+        android:onClick="cancel"
         android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/change_password_button"
-        android:onClick="cancel"/>
+        app:layout_constraintTop_toBottomOf="@+id/change_password_button" />
 
     <Button
         android:id="@+id/change_password_button"

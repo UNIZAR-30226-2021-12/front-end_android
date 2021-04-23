@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".CreateGame">
+    tools:context=".CreatePrivateMatch">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/register_toolbar"
+        android:id="@+id/match_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#2196F3"
@@ -103,14 +103,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3">
+        app:layout_constraintTop_toBottomOf="@+id/view1">
 
         <Button
-            android:id="@+id/register"
+            android:id="@+id/create"
             style="@android:style/Widget.Holo.Button"
             android:layout_width="128dp"
             android:layout_height="50dp"
-            android:onClick="createGame"
             android:text="@string/create"
             app:layout_constraintBottom_toTopOf="@+id/login"
             app:layout_constraintEnd_toEndOf="parent"
@@ -119,11 +118,23 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/login"
+            android:id="@+id/exit"
             style="@android:style/Widget.Holo.Button"
             android:layout_width="128dp"
             android:layout_height="50dp"
-            android:onClick="cancel"
+            android:text="@string/exit"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/cancel"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="128dp"
+            android:layout_height="50dp"
             android:text="@string/cancel"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

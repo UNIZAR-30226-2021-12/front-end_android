@@ -15,7 +15,7 @@ import retrofit2.Response
 
 class Register : AppCompatActivity() {
 
-    private val tested = true
+    private val tested = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +52,7 @@ class Register : AppCompatActivity() {
                                 val check = AlertDialog.Builder(this@Register)
                                 check.setTitle("Error " + response.code())
                                 check.setMessage("No se ha podido realizar el registro")
-                                check.setPositiveButton("Volver") { dialogInterface: DialogInterface, i: Int -> }
+                                check.setPositiveButton("Volver") { _: DialogInterface, _: Int -> }
                                 check.show()
                             }
                         }

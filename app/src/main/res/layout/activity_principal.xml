@@ -21,8 +21,8 @@
         android:id="@+id/button"
         android:layout_width="200dp"
         android:layout_height="100dp"
-        android:onClick="createTwoPlayersGame"
-        android:text="@string/two_players"
+        android:onClick="publicMatch"
+        android:text="@string/public_game"
         app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -33,24 +33,26 @@
         android:id="@+id/button4"
         android:layout_width="200dp"
         android:layout_height="100dp"
-        android:onClick="createThreePlayersGame"
-        android:text="@string/three_players"
-        app:layout_constraintBottom_toTopOf="@+id/button5"
+        android:onClick="privateMatch"
+        android:text="@string/private_game"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button" />
 
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:onClick="createFourPlayersGame"
-        android:text="@string/four_players"
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cash_border"
+        android:text="@string/cash"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.118" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

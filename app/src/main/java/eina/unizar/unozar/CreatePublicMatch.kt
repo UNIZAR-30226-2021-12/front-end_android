@@ -11,10 +11,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CreateGame : AppCompatActivity() {
+class CreatePublicMatch : AppCompatActivity() {
     private val tested = false
     private var players = 2
-    private var bots = 1
+    private var bots = 0
     private var session = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,18 +29,22 @@ class CreateGame : AppCompatActivity() {
         if (n > 2) {
             player_three.setImageResource(R.drawable.ai)
             player_three.visibility = View.VISIBLE
-            bots++
             players++
+            if (n > 3) {
+                player_four.setImageResource(R.drawable.ai)
+                players++
+            } else {
+                player_four.visibility = View.INVISIBLE
+            }
+        } else {
+            player_three.visibility = View.INVISIBLE
+            player_four.visibility = View.INVISIBLE
         }
-        if (n > 3) {
-            player_four.setImageResource(R.drawable.ai)
-            player_four.visibility = View.VISIBLE
-            bots++
-            players++
-        }
+        cancel.setOnClickListener{ finish() }
+        create.setOnClickListener{ createGame() }
     }
 
-    fun createGame(@Suppress("UNUSED_PARAMETER")view: View) {
+    private fun createGame() {
         if (tested) {
             RetrofitClient.instance.userCreateGame(session, players, bots)
                 .enqueue(object : Callback<BasicResponse> {
@@ -58,7 +62,7 @@ class CreateGame : AppCompatActivity() {
                                 response.body()?.message,
                                 Toast.LENGTH_LONG
                             ).show()
-                            val intent = Intent(this@CreateGame, TableroActivity::class.java)
+                            val intent = Intent(this@CreatePublicMatch, TableroActivity::class.java)
                             intent.putExtra("session", response.body()?.message)
                             startActivity(intent)
                         } else {
@@ -73,13 +77,9 @@ class CreateGame : AppCompatActivity() {
                 })
         } else {
             val test = TestCalls("test")
-            val intent = Intent(this@CreateGame, TableroActivity::class.java)
+            val intent = Intent(this@CreatePublicMatch, TableroActivity::class.java)
             intent.putExtra("session", test.userCreateGameTest())
             startActivity(intent)
         }
-    }
-
-    fun cancel(@Suppress("UNUSED_PARAMETER")view: View) {
-        finish()
     }
 }
