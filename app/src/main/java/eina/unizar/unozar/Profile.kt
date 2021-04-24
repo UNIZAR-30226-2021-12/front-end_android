@@ -15,7 +15,6 @@ import retrofit2.Response
 
 class Profile : AppCompatActivity() {
 
-    private val tested = true
     private lateinit var session: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,36 +42,19 @@ class Profile : AppCompatActivity() {
         check.setTitle("Alerta!")
         check.setMessage("Va a eliminar su cuenta de forma permanente, ¿desea continuar?")
         check.setPositiveButton("Sí") { _: DialogInterface, _: Int ->
-            if (tested) {
-                RetrofitClient.instance.userDeleteAccount(session.substring(0,32), DeleteRequest(session))
-                    .enqueue(object : Callback<BasicResponse> {
-                        override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                            Toast.makeText(applicationContext, "1: " + t.message, Toast.LENGTH_LONG)
-                                .show()
+            RetrofitClient.instance.userDeleteAccount(session.substring(0,32), DeleteRequest(session))
+                .enqueue(object : Callback<Void> {
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                    } override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.code() == 200) {
+                            val intent = Intent(this@Profile, Register::class.java)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(applicationContext, "Error! No se pudo eliminar su cuenta" + response.code(), Toast.LENGTH_LONG).show()
                         }
-
-                        override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
-                            if (response.code() == 200) {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "ok: " + response.code(),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                val intent = Intent(this@Profile, Register::class.java)
-                                startActivity(intent)
-                            } else {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Error: " + response.code(),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                    })
-            } else {
-                val intent = Intent(this, Register::class.java)
-                startActivity(intent)
-            }
+                    }
+                })
         }
         check.setNegativeButton("No") { _: DialogInterface, _: Int -> }
         check.show()

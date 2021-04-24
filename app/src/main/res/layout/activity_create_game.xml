@@ -54,7 +54,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/player_three"
-            tools:srcCompat="@drawable/ai" />
+            tools:srcCompat="@drawable/ai"
+            android:contentDescription="@string/alias" />
 
         <ImageView
             android:id="@+id/player_one"
@@ -66,7 +67,8 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/test_user" />
+            tools:srcCompat="@drawable/test_user"
+            android:contentDescription="@string/alias" />
 
         <ImageView
             android:id="@+id/player_two"
@@ -78,7 +80,8 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/player_one"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ai" />
+            tools:srcCompat="@drawable/ai"
+            android:contentDescription="@string/alias" />
 
         <ImageView
             android:id="@+id/player_three"
@@ -91,7 +94,8 @@
             app:layout_constraintEnd_toStartOf="@+id/player_four"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            tools:srcCompat="@drawable/ai" />
+            tools:srcCompat="@drawable/ai"
+            android:contentDescription="@string/alias" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -111,7 +115,7 @@
             android:layout_width="128dp"
             android:layout_height="50dp"
             android:text="@string/create"
-            app:layout_constraintBottom_toTopOf="@+id/login"
+            app:layout_constraintBottom_toTopOf="@+id/exit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -140,7 +144,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register" />
+            app:layout_constraintTop_toBottomOf="@+id/exit" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

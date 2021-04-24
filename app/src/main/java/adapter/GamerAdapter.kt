@@ -11,7 +11,6 @@ import data.Gamer
 import eina.unizar.unozar.R
 import kotlinx.android.synthetic.main.item_card.view.*
 import kotlinx.android.synthetic.main.item_gamer.view.*
-import java.lang.reflect.Array.get
 
 class GamerAdapter (val gamers:List<Gamer>): RecyclerView.Adapter<GamerAdapter.GamerHolder>(){
 

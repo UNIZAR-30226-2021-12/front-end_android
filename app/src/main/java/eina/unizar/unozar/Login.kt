@@ -1,24 +1,18 @@
 package eina.unizar.unozar
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import retrofit2.Callback
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Response
-//import storage.SharedPrefManager
 
 class Login : AppCompatActivity() {
-
-    private val tested = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,44 +24,20 @@ class Login : AppCompatActivity() {
         val password = editTextTextPassword.text.toString().trim()
 
         if(validateInput(email, password)) {
-            if (tested) {
-                RetrofitClient.instance.userAuthentication(LoginUser(email, password))
-                    .enqueue(object : Callback<BasicResponse> {
-                        override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                            Toast.makeText(applicationContext, "1: " + t.message, Toast.LENGTH_LONG).show()
+            RetrofitClient.instance.userAuthentication(LoginUser(email, password))
+                .enqueue(object : Callback<BasicResponse> {
+                    override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+                        Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                    } override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
+                        if (response.code() == 200) {
+                            val intent = Intent(this@Login, Principal::class.java)
+                            intent.putExtra("session", response.body()?.token)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(applicationContext, "Error! Revise los datos introducidos", Toast.LENGTH_LONG).show()
                         }
-
-                        override fun onResponse(
-                            call: Call<BasicResponse>,
-                            response: Response<BasicResponse>
-                        ) {
-                            if (response.code() == 200) {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "ok: " + response.body()?.token,
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                finish()
-                                val intent = Intent(this@Login, Principal::class.java)
-                                intent.putExtra("session", response.body()?.token)
-                                startActivity(intent)
-                            } else {
-                                val check = AlertDialog.Builder(this@Login)
-                                check.setTitle("Error " + response.code())
-                                //check.setMessage("No se ha podido iniciar sesión")
-                                check.setMessage(response.message())
-                                check.setPositiveButton("Volver") { _: DialogInterface, _: Int -> }
-                                check.show()
-                            }
-                        }
-
-                    })
-            } else {
-                val test = TestCalls("test")
-                val intent = Intent(this, Principal::class.java)
-                intent.putExtra("session", test.userAuthenticationTest())
-                startActivity(intent)
-            }
+                    }
+                })
         }
     }
 
@@ -77,13 +47,11 @@ class Login : AppCompatActivity() {
     }
 
     private fun validateInput (email:String, password:String) : Boolean {
-        if(email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editTextTextPersonName2.error = "Escriba un email válido"
-        } else if(password.isEmpty()){
+        } else if (password.isEmpty()) {
             editTextTextPassword.error = "Escriba una contraseña válida"
-        } else {
-            return true
-        }
+        } else return true
         return false
     }
 }

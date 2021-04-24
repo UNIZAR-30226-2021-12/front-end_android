@@ -54,39 +54,19 @@ class Principal : AppCompatActivity() {
                 RetrofitClient.instance.userRefreshToken(RefreshRequest(session))
                     .enqueue(object : Callback<BasicResponse> {
                         override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                            Toast.makeText(
-                                applicationContext,
-                                "Error: " + t.message,
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-
-                        override fun onResponse(
-                            call: Call<BasicResponse>,
-                            response: Response<BasicResponse>
-                        ) {
+                            Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
                             if (response.code() == 200) {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "ok: " + response.code(),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                /*val intent = Intent(this@Principal, Principal::class.java)
-                                intent.putExtra("session", response.body()?.token)
-                                startActivity(intent)*/
+                                session = response.body()?.token.toString()
+                                Toast.makeText(applicationContext, "Sesión actualizada", Toast.LENGTH_LONG).show()
                             } else {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Error: " + response.code(),
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                Toast.makeText(applicationContext, "No se pudo actualizar la sesión", Toast.LENGTH_LONG).show()
                             }
                         }
                     })
             }
         }
         return super.onOptionsItemSelected(item)
-
     }
 
     fun publicMatch(@Suppress("UNUSED_PARAMETER")view: View) {
@@ -111,7 +91,7 @@ class Principal : AppCompatActivity() {
     }
 
     fun privateMatch(@Suppress("UNUSED_PARAMETER")view: View) {
-        var b = 0;
+        var b = 0
         val choose = AlertDialog.Builder(this)
         choose.setTitle("Elija")
         choose.setMessage("¿Quiere crear una nueva partida privada o unirse a una ya creada?")
@@ -131,22 +111,22 @@ class Principal : AppCompatActivity() {
                     numBots = arrayOf("0", "1")
                 }
                 bots.setTitle("Número de Inteligencias Artificiales")
-                bots.setItems(numBots) { _: DialogInterface, i: Int ->
-                    b = numBots[i].toInt()
+                bots.setItems(numBots) { _: DialogInterface, j: Int ->
+                    b = numBots[j].toInt()
                 }
                 bots.show()
             }
             numP.show()
 
-            /*val intent = Intent(this, CreatePrivateMatch::class.java)
+            val intent = Intent(this, CreatePrivateMatch::class.java)
             intent.putExtra("numPlayers", n)
             intent.putExtra("numBots", b)
             intent.putExtra("session", session)
-            startActivity(intent)*/
+            startActivity(intent)
         }
         choose.setNegativeButton("Unirse") { _: DialogInterface, _: Int ->
             val code = AlertDialog.Builder(this)
-            val customLayout: View = getLayoutInflater().inflate(R.layout.custom_alertdialog, null)
+            val customLayout: View = layoutInflater.inflate(R.layout.custom_alertdialog, null)
             code.setView(customLayout)
             code.setTitle("Escriba aquí el código de la partida")
             code.setPositiveButton("Unirse") { _: DialogInterface, _: Int ->

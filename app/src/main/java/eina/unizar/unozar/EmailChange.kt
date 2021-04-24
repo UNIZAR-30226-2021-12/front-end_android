@@ -1,7 +1,6 @@
 package eina.unizar.unozar
 
 import android.content.DialogInterface
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.os.Bundle
@@ -15,7 +14,6 @@ import retrofit2.Response
 
 class EmailChange : AppCompatActivity() {
 
-    private val tested = true
     private lateinit var session: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,41 +29,19 @@ class EmailChange : AppCompatActivity() {
         check.setMessage("Va a cambiar el correo electrónico asociado a su cuenta, ¿desea continuar?")
         check.setPositiveButton("Sí") { _: DialogInterface, _: Int ->
             if (validateInput(newEmail)) {
-                if (tested) {
-                    RetrofitClient.instance.userUpdatePlayer(session.substring(0,32), UpdateRequest(newEmail, null, null, session))
-                        .enqueue(object : Callback<BasicResponse> {
-                            override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Error: " + t.message,
-                                    Toast.LENGTH_LONG
-                                )
-                                    .show()
+                RetrofitClient.instance.userUpdatePlayer(session.substring(0,32), UpdateRequest(newEmail, null, null, session))
+                    .enqueue(object : Callback<Void> {
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.code() == 200) {
+                                Toast.makeText(applicationContext, "Ha actualizado su dirección de correo electrónico con éxito", Toast.LENGTH_LONG).show()
+                                finish()
+                            } else {
+                                Toast.makeText(applicationContext, "Error! No se pudo realizar el cambio" + response.code(), Toast.LENGTH_LONG).show()
                             }
-
-                            override fun onResponse(
-                                call: Call<BasicResponse>,
-                                response: Response<BasicResponse>
-                            ) {
-                                if (response.code() == 200) {
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "Ha actualizado su disección de correo electrónico",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    finish()
-                                } else {
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "Error: " + response.code(),
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                            }
-                        })
-                } else {
-                    finish()
-                }
+                        }
+                    })
             }
         }
         check.setNegativeButton("No") { _: DialogInterface, _: Int -> }
@@ -79,9 +55,7 @@ class EmailChange : AppCompatActivity() {
     private fun validateInput (newEmail:String) : Boolean {
         if(newEmail.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(newEmail).matches()) {
             new_email.error = "Escriba un email válido"
-        } else {
-            return true
-        }
+        } else return true
         return false
     }
 }

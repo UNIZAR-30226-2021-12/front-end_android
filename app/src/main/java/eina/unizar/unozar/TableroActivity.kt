@@ -81,7 +81,7 @@ class TableroActivity : AppCompatActivity(){
                 with(builder)
                 {
                     setTitle("Elija un color")
-                    setItems(items) { dialog, which ->
+                    setItems(items) { _, which ->
                         //Poner carta
                         Toast.makeText(applicationContext, items[which] + " is clicked", Toast.LENGTH_SHORT).show()
                     }
@@ -154,7 +154,7 @@ class TableroActivity : AppCompatActivity(){
             while(true){
                 if(cimaCambiada == 1){
                     cambiarCima()
-                    cimaCambiada = 0;
+                    cimaCambiada = 0
                 }
                 if(recordCambiado == 1){
                     cambiarElegido()

@@ -13,8 +13,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class PasswordChange : AppCompatActivity() {
-
-    private val tested = false
     private lateinit var session: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +22,6 @@ class PasswordChange : AppCompatActivity() {
     }
 
     fun changePassword(@Suppress("UNUSED_PARAMETER")view: View) {
-        //val oldPassword = findViewById<EditText>(R.id.old_password).text.toString().trim()
         val newPassword = findViewById<EditText>(R.id.new_password).text.toString().trim()
         val repeatPassword = findViewById<EditText>(R.id.repeat_password).text.toString().trim()
         val check = AlertDialog.Builder(this)
@@ -32,39 +29,19 @@ class PasswordChange : AppCompatActivity() {
         check.setMessage("Va a cambiar la contraseña de su cuenta, ¿desea continuar?")
         check.setPositiveButton("Sí") { _: DialogInterface, _: Int ->
             if (validateInput(newPassword, repeatPassword)) {
-                if (tested) {
-                    RetrofitClient.instance.userUpdatePlayer(session.substring(0,32), UpdateRequest(null, null, newPassword, session))
-                        .enqueue(object : Callback<BasicResponse> {
-                            override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Error: " + t.message,
-                                    Toast.LENGTH_LONG
-                                ).show()
+                RetrofitClient.instance.userUpdatePlayer(session.substring(0,32), UpdateRequest(null, null, newPassword, session))
+                    .enqueue(object : Callback<Void> {
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.code() == 200) {
+                                Toast.makeText(applicationContext, "Ha actualizado su contraseña con éxito", Toast.LENGTH_LONG).show()
+                                finish()
+                            } else {
+                                Toast.makeText(applicationContext, "Error! No se pudo realizar el cambio" + response.code(), Toast.LENGTH_LONG).show()
                             }
-                            override fun onResponse(
-                                call: Call<BasicResponse>,
-                                response: Response<BasicResponse>
-                            ) {
-                                if (response.code() == 200) {
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "Ha actualizado su contraseña",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    finish()
-                                } else {
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "Error: " + response.code(),
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                            }
-                        })
-                } else {
-                    finish()
-                }
+                        }
+                    })
             }
         }
         check.setNegativeButton("No") { _: DialogInterface, _: Int -> }
@@ -76,18 +53,12 @@ class PasswordChange : AppCompatActivity() {
     }
 
     private fun validateInput (newPassword:String, repeatPassword:String) : Boolean {
-        when {
-            newPassword.isEmpty() -> {
-                new_password.error = "Escriba una contraseña válida"
-            }
-            newPassword != repeatPassword -> {
-                new_password.error = "Las contraseñas no coinciden"
-                repeat_password.error = "Las contraseñas no coinciden"
-            }
-            else -> {
-                return true
-            }
-        }
+       if (newPassword.isEmpty()) {
+           new_password.error = "Escriba una contraseña válida"
+       } else if (newPassword != repeatPassword) {
+           new_password.error = "Las contraseñas no coinciden"
+           repeat_password.error = "Las contraseñas no coinciden"
+       } else return true
         return false
     }
 }

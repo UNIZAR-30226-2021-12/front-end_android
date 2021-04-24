@@ -19,19 +19,19 @@ interface API {
         @Path("id") id: String
     ): Call<RegisterResponse>
 
-    @POST("/player/updatePlayer/{id}")
+    @PATCH("/player/updatePlayer/{id}")
     fun userUpdatePlayer(
         @Path("id") id: String,
         @Body updateRequest: UpdateRequest
-    ): Call<BasicResponse>
+    ): Call<Void>
 
     @HTTP(method = "DELETE", path = "/player/deletePlayer/{id}", hasBody = true)
     fun userDeleteAccount(
         @Path("id") id: String,
         @Body delete: DeleteRequest
-    ): Call<BasicResponse>
+    ): Call<Void>
 
-    @GET("/player/refreshToken")
+    @POST("/player/refreshToken")
     fun userRefreshToken(
         @Body refreshRequest: RefreshRequest
     ): Call<BasicResponse>
