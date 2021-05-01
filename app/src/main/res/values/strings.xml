@@ -9,7 +9,7 @@
     <string name="repeat_password">Repetir contraseña</string>
     <string name="register">Registrarse</string>
     <string name="registered">¿Ya está registrado?</string>
-    <string name="login">Login</string>
+    <string name="login">Iniciar Sesión</string>
     <string name="profile">Perfil</string>
     <string name="menu">Menu</string>
     <string name="logout">Cerrar sesión</string>
@@ -19,7 +19,7 @@
     <string name="public_game">Partida pública</string>
     <string name="private_game">Partida privada</string>
     <string name="choose_friend">Escoja un amigo</string>
-    <string name="cash">5500</string>
+    <!--<string name="cash">5500</string>-->
     <string name="exit">Salir</string>
     <!-- DIALOG MESSAGES -->
     <string name="alert">¡Cuidado!</string>
