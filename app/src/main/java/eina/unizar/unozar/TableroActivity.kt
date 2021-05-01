@@ -2,6 +2,7 @@ package eina.unizar.unozar
 
 import adapter.CardAdapter
 import adapter.GamerAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -22,6 +23,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 var recordCambiado = 0
 var nombreRecordado = ""
@@ -73,24 +77,101 @@ class TableroActivity : AppCompatActivity(){
             imageView.setImageResource(record)
         }
         val putButton = findViewById<View>(R.id.buttonPoner) as Button
+        val pedirUnoButton = findViewById<View>(R.id.buttonPedirUno) as Button
+        val robarButton = findViewById<View>(R.id.buttonRobarCarta) as Button
+        val pasarButton = findViewById<View>(R.id.buttonPasar) as Button
         putButton.setOnClickListener {
-            //Si es una +4 o un cambia color
-            if(nombreRecordado == "mas_cuatro_base" || nombreRecordado == "cambio_color_base") {
-                val builder = AlertDialog.Builder(this)
-                val items = arrayOf("Red", "Green", "Yellow", "Blue")
-                with(builder)
-                {
-                    setTitle("Elija un color")
-                    setItems(items) { _, which ->
-                        //Poner carta
-                        Toast.makeText(applicationContext, items[which] + " is clicked", Toast.LENGTH_SHORT).show()
+            ponerCarta()
+        }
+        pedirUnoButton.setOnClickListener{
+            pedirUno()
+        }
+        robarButton.setOnClickListener{
+            robarCarta()
+        }
+        pasarButton.setOnClickListener{
+            pasarTurno()
+        }
+    }
+
+    fun pedirUno(){
+        //Pedir uno al servidor
+        /*RetrofitClient.instance.userPlayCard(PutCardRequest(/*Que tengo que enviar*/))
+            .enqueue(object : Callback<PutCardResponse> {
+                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                    Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                    if (response.code() == 200) {
+                        //Se ha pedido uno con éxito
+                    } else {
+                        Toast.makeText(applicationContext, "Quizás se haya caido el servidor", Toast.LENGTH_LONG).show()
                     }
-                    show()
                 }
+            })*/
+    }
+
+    fun robarCarta(){
+        //Pedir robar carta al servidor
+        /*RetrofitClient.instance.userPlayCard(PutCardRequest(/*Que tengo que enviar*/))
+            .enqueue(object : Callback<PutCardResponse> {
+                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                    Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                    if (response.code() == 200) {
+                        //La carta se ha puesto con éxito
+                    } else {
+                        Toast.makeText(applicationContext, "Quizás se haya caido el servidor", Toast.LENGTH_LONG).show()
+                    }
+                }
+            })*/
+    }
+
+    fun pasarTurno(){
+        //Pedir pasarTurno al servidor
+        /*RetrofitClient.instance.userPlayCard(PutCardRequest(/*Que tengo que enviar*/))
+            .enqueue(object : Callback<PutCardResponse> {
+                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                    Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                    if (response.code() == 200) {
+                        //Se ha pasado el tuno con éxito
+                    } else {
+                        Toast.makeText(applicationContext, "Quizás se haya caido el servidor", Toast.LENGTH_LONG).show()
+                    }
+                }
+            })*/
+    }
+
+    fun ponerCarta(){
+        //Si es una +4 o un cambia color
+        if(nombreRecordado == "mas_cuatro_base" || nombreRecordado == "cambio_color_base") {
+            val builder = AlertDialog.Builder(this)
+            val items = arrayOf("Red", "Green", "Yellow", "Blue")
+            with(builder)
+            {
+                setTitle("Elija un color")
+                setItems(items) { _, which ->
+                    //Poner carta
+                    Toast.makeText(applicationContext, items[which] + " is clicked", Toast.LENGTH_SHORT).show()
+                }
+                show()
             }
         }
-        //initRecycler()
+        //Mandar carta al servidor
+        /*RetrofitClient.instance.userPlayCard(PutCardRequest(/*Que tengo que enviar*/))
+            .enqueue(object : Callback<PutCardResponse> {
+                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                    Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                    if (response.code() == 200) {
+                        //La carta se ha puesto con éxito
+                    } else {
+                        Toast.makeText(applicationContext, "Quizás se haya caido el servidor", Toast.LENGTH_LONG).show()
+                    }
+                }
+            })*/
     }
+
 
     fun initRecycler(){
         rvCard.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -137,8 +218,6 @@ class TableroActivity : AppCompatActivity(){
     suspend fun cambiarCima(){
         val imageView1 = findViewById<ImageView>(R.id.image_cima)
         imageView1.setImageResource(cima)
-        /*val imageView2 = findViewById<ImageView>(R.id.image_record)
-        imageView2.setImageResource(record)*/
     }
 
     suspend fun cambiarElegido(){
@@ -152,6 +231,7 @@ class TableroActivity : AppCompatActivity(){
     private fun actualizar(){
         CoroutineScope(Dispatchers.IO).launch {
             while(true){
+                //Pedir estado juego, mis cartas, los rivales, de quien es el turno
                 if(cimaCambiada == 1){
                     cambiarCima()
                     cimaCambiada = 0
@@ -159,11 +239,7 @@ class TableroActivity : AppCompatActivity(){
                 if(recordCambiado == 1){
                     cambiarElegido()
                 }
-                //cambiarElegido()
-                //selectedCard += 1
-                /*runOnUiThread {
-                 imageView1.setImageResource(cima)
-                }*/
+
                 delay(200)
             }
 

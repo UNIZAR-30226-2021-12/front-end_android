@@ -60,4 +60,14 @@ interface API {
     fun userStartMatch(
         @Field("session") session:String
     ): Call<BasicResponse>
+
+    @POST("/game/playCard")
+    fun userPlayCard(
+        @Field("session") session:String
+    ): Call<PutCardResponse>
+
+    @POST("/game/drawCards")
+    fun userDrawCards(
+        @Field("session") session:String
+    ): Call<PutCardResponse>
 }
