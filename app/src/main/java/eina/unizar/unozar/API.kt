@@ -38,25 +38,21 @@ interface API {
 
     @POST("/game/createGame")
     fun userCreateMatch(
-        @Field("session") session:String,
-        @Body createPrivateRequest: CreatePrivateRequest
+        @Body createMatchRequest: CreateMatchRequest
     ): Call<BasicResponse>
 
     @POST("/game/join")
     fun userJoinPrivateMatch(
-        @Field("session") session:String,
         @Body joinPrivateRequest: JoinPrivateRequest
     ): Call<BasicResponse>
 
     @POST("/player/addFriend")
     fun userAddFriend(
-        @Field("session") session:String,
         @Body addFriendRequest: AddFriendRequest
     ): Call<BasicResponse>
 
     @POST("/player/addFriend")
     fun userGetFriendsList(
-        @Field("session") session:String,
         @Body friendsListRequest: FriendsListRequest
     ): Call<FriendsListResponse>
 

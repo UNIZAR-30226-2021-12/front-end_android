@@ -32,18 +32,17 @@ class Friends : AppCompatActivity() {
         session = intent.getStringExtra("session").toString()
         code = intent.getStringExtra("code").toString()
 
-        val friends: Array<String> = getFriendsRequest()
-
+        /*val friends: Array<String> = getFriendsRequest()
         val adapter = ArrayAdapter(this, R.layout.activity_friends, friends)
         add_friend_list.adapter = adapter
 
-        registerForContextMenu(add_friend_list)
+        registerForContextMenu(add_friend_list)*/
 
         /*add_friend_list.onItemClickListener=
             AdapterView.OnItemClickListener { parent, view, position, id -> addFriend() }*/
     }
 
-    private fun getFriendsRequest(): Array<String> {
+    /*private fun getFriendsRequest(): Array<String> {
         lateinit var r: Response<FriendsListResponse>
         RetrofitClient.instance.userGetFriendsList(session.substring(0, 32), FriendsListRequest(session))
             .enqueue(object : Callback<FriendsListResponse> {
@@ -62,7 +61,7 @@ class Friends : AppCompatActivity() {
                 }
             })
         return r.body()!!.friends
-    }
+    }*/
 
     @SuppressLint("SetTextI18n")
     fun goToChangeEmail(@Suppress("UNUSED_PARAMETER") view: View) {

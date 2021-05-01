@@ -123,7 +123,7 @@ class Principal : AppCompatActivity() {
             numP.setNegativeButton(getString(R.string.cancel)) {_: DialogInterface, _: Int ->}
             numP.show()
 
-            RetrofitClient.instance.userCreateMatch(session.substring(0,32), CreatePrivateRequest(session, n, b))
+            RetrofitClient.instance.userCreateMatch(CreateMatchRequest(true, n, b, session))
                 .enqueue(object : Callback<BasicResponse> {
                     override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                         //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
@@ -149,7 +149,7 @@ class Principal : AppCompatActivity() {
             code.setView(customLayout)
             code.setTitle(getString(R.string.code))
             code.setPositiveButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->
-                RetrofitClient.instance.userJoinPrivateMatch(session.substring(0,32), JoinPrivateRequest(session, inputCode.text.toString().trim()))
+                RetrofitClient.instance.userJoinPrivateMatch(JoinPrivateRequest(inputCode.text.toString().trim(), session))
                     .enqueue(object : Callback<BasicResponse> {
                         override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                             //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
@@ -158,6 +158,7 @@ class Principal : AppCompatActivity() {
                             if (response.code() == 200) {
                                 Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
                                 val intent = Intent(this@Principal, JoinMatch::class.java)
+                                intent.putExtra("session", session)
                                 startActivity(intent)
                             } else {
                                 //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
