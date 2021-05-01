@@ -8,6 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_principal.*
+import kotlinx.android.synthetic.main.custom_alertdialog.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import retrofit2.Call
@@ -28,7 +30,7 @@ class Principal : AppCompatActivity() {
         session = intent.getStringExtra("session").toString()
         val numPlayers = arrayOf("2", "3", "4")
         players = AlertDialog.Builder(this)
-        players.setTitle("Número de jugadores")
+        players.setTitle(getString(R.string.number_of_players))
         players.setItems(numPlayers) { _: DialogInterface, i: Int ->
             n = numPlayers[i].toInt()
         }
@@ -54,13 +56,13 @@ class Principal : AppCompatActivity() {
                 RetrofitClient.instance.userRefreshToken(RefreshRequest(session))
                     .enqueue(object : Callback<BasicResponse> {
                         override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                            Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                         } override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
                             if (response.code() == 200) {
                                 session = response.body()?.token.toString()
-                                Toast.makeText(applicationContext, "Sesión actualizada", Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, getString(R.string.refresh_success), Toast.LENGTH_LONG).show()
                             } else {
-                                Toast.makeText(applicationContext, "No se pudo actualizar la sesión", Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, getString(R.string.bad_refresh_response), Toast.LENGTH_LONG).show()
                             }
                         }
                     })
@@ -71,16 +73,16 @@ class Principal : AppCompatActivity() {
 
     fun publicMatch(@Suppress("UNUSED_PARAMETER")view: View) {
         val choose = AlertDialog.Builder(this)
-        choose.setTitle("Elija")
-        choose.setMessage("¿Quiere crear una nueva partida pública o unirse a una ya creada?")
-        choose.setPositiveButton("crear") {_: DialogInterface, _: Int ->
+        choose.setTitle(getString(R.string.choose))
+        choose.setMessage(getString(R.string.public_match_dialog))
+        choose.setPositiveButton(getString(R.string.create_button)) { _: DialogInterface, _: Int ->
             players.show()
             /*val intent = Intent(this, CreatePublicMatch::class.java)
             intent.putExtra("numPlayers", n)
             intent.putExtra("session", session)
             startActivity(intent)*/
         }
-        choose.setNegativeButton("Unirse") { _: DialogInterface, _: Int ->
+        choose.setNegativeButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->
             players.show()
             /*val intent = Intent(this, JoinMatch::class.java)
             intent.putExtra("numPlayers", n)
@@ -93,12 +95,12 @@ class Principal : AppCompatActivity() {
     fun privateMatch(@Suppress("UNUSED_PARAMETER")view: View) {
         var b = 0
         val choose = AlertDialog.Builder(this)
-        choose.setTitle("Elija")
-        choose.setMessage("¿Quiere crear una nueva partida privada o unirse a una ya creada?")
-        choose.setPositiveButton("crear") {_: DialogInterface, _: Int ->
+        choose.setTitle(getString(R.string.choose))
+        choose.setMessage(getString(R.string.private_match_dialog))
+        choose.setPositiveButton(getString(R.string.create_button)) {_: DialogInterface, _: Int ->
             val numP = AlertDialog.Builder(this)
             val numPlayers = arrayOf("2", "3", "4")
-            numP.setTitle("Número de jugadores")
+            numP.setTitle(getString(R.string.number_of_players))
             numP.setItems(numPlayers) { _: DialogInterface, i: Int ->
                 n = numPlayers[i].toInt()
                 val bots = AlertDialog.Builder(this)
@@ -110,31 +112,61 @@ class Principal : AppCompatActivity() {
                 } else {
                     numBots = arrayOf("0", "1")
                 }
-                bots.setTitle("Número de Inteligencias Artificiales")
+                bots.setTitle(getString(R.string.number_of_bots))
                 bots.setItems(numBots) { _: DialogInterface, j: Int ->
                     b = numBots[j].toInt()
                 }
+                bots.setNegativeButton(getString(R.string.cancel)) {_: DialogInterface, _: Int ->}
                 bots.show()
             }
+
+            numP.setNegativeButton(getString(R.string.cancel)) {_: DialogInterface, _: Int ->}
             numP.show()
 
-            val intent = Intent(this, CreatePrivateMatch::class.java)
-            intent.putExtra("numPlayers", n)
-            intent.putExtra("numBots", b)
-            intent.putExtra("session", session)
-            startActivity(intent)
+            RetrofitClient.instance.userCreateMatch(session.substring(0,32), CreatePrivateRequest(session, n, b))
+                .enqueue(object : Callback<BasicResponse> {
+                    override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+                        //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                    } override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
+                        if (response.code() == 200) {
+                            Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                            val intent = Intent(this@Principal, CreatePrivateMatch::class.java)
+                            intent.putExtra("numPlayers", n)
+                            intent.putExtra("numBots", b)
+                            intent.putExtra("session", session)
+                            startActivity(intent)
+                        } else {
+                            //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                        }
+                    }
+                })
         }
-        choose.setNegativeButton("Unirse") { _: DialogInterface, _: Int ->
+        choose.setNegativeButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->
             val code = AlertDialog.Builder(this)
             val customLayout: View = layoutInflater.inflate(R.layout.custom_alertdialog, null)
             code.setView(customLayout)
-            code.setTitle("Escriba aquí el código de la partida")
-            code.setPositiveButton("Unirse") { _: DialogInterface, _: Int ->
-                /*val intent = Intent(this, JoinMatch::class.java)
-                intent.putExtra("numPlayers", n)
-                intent.putExtra("session", session)
-                startActivity(intent)*/
+            code.setTitle(getString(R.string.code))
+            code.setPositiveButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->
+                RetrofitClient.instance.userJoinPrivateMatch(session.substring(0,32), JoinPrivateRequest(session, inputCode.text.toString().trim()))
+                    .enqueue(object : Callback<BasicResponse> {
+                        override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+                            //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
+                            if (response.code() == 200) {
+                                Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                                val intent = Intent(this@Principal, JoinMatch::class.java)
+                                startActivity(intent)
+                            } else {
+                                //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    })
             }
+            code.setNegativeButton(getString(R.string.cancel)) {_: DialogInterface, _: Int ->}
             code.show()
         }
         choose.show()

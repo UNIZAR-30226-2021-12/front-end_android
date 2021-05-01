@@ -27,14 +27,14 @@ class Login : AppCompatActivity() {
             RetrofitClient.instance.userAuthentication(LoginUser(email, password))
                 .enqueue(object : Callback<BasicResponse> {
                     override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                        Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                     } override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
                         if (response.code() == 200) {
                             val intent = Intent(this@Login, Principal::class.java)
                             intent.putExtra("session", response.body()?.token)
                             startActivity(intent)
                         } else {
-                            Toast.makeText(applicationContext, "Error! Revise los datos introducidos", Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, getString(R.string.bad_login_response), Toast.LENGTH_LONG).show()
                         }
                     }
                 })
@@ -48,9 +48,9 @@ class Login : AppCompatActivity() {
 
     private fun validateInput (email:String, password:String) : Boolean {
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            editTextTextPersonName2.error = "Escriba un email válido"
+            editTextTextPersonName2.error = getString(R.string.email_format_error)
         } else if (password.isEmpty()) {
-            editTextTextPassword.error = "Escriba una contraseña válida"
+            editTextTextPassword.error = getString(R.string.password_format_error)
         } else return true
         return false
     }
