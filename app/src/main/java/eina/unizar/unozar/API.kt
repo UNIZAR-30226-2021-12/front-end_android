@@ -9,23 +9,23 @@ interface API {
         @Body login: LoginUser
     ): Call<BasicResponse>
 
-    @POST("/player/createPlayer")
+    @POST("/player/create")
     fun userRegister(
         @Body register: RegisterUser
     ): Call<RegisterResponse>
 
-    @POST("/player/readPlayer/{id}")
+    @POST("/player/read/{id}")
     fun userRead(
         @Path("id") id: String
     ): Call<RegisterResponse>
 
-    @PATCH("/player/updatePlayer/{id}")
+    @PATCH("/player/update/{id}")
     fun userUpdatePlayer(
         @Path("id") id: String,
         @Body updateRequest: UpdateRequest
     ): Call<Void>
 
-    @HTTP(method = "DELETE", path = "/player/deletePlayer/{id}", hasBody = true)
+    @HTTP(method = "DELETE", path = "/player/delete/{id}", hasBody = true)
     fun userDeleteAccount(
         @Path("id") id: String,
         @Body delete: DeleteRequest
@@ -36,15 +36,25 @@ interface API {
         @Body refreshRequest: RefreshRequest
     ): Call<BasicResponse>
 
-    @POST("/game/createGame")
+    @POST("/game/create")
     fun userCreateMatch(
         @Body createMatchRequest: CreateMatchRequest
-    ): Call<BasicResponse>
+    ): Call<Void>
 
     @POST("/game/join")
     fun userJoinPrivateMatch(
         @Body joinPrivateRequest: JoinPrivateRequest
     ): Call<BasicResponse>
+
+    @POST("/player/quit")
+    fun userQuitMatch(
+        @Body delete: DeleteRequest
+    ): Call<Void>
+
+    @POST("/game/read")
+    fun userReadGame(
+        @Body delete: DeleteRequest
+    ): Call<GameInfoResponse>
 
     @POST("/player/addFriend")
     fun userAddFriend(

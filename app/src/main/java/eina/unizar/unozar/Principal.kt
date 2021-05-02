@@ -2,19 +2,21 @@ package eina.unizar.unozar
 
 import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log.d
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_principal.*
 import kotlinx.android.synthetic.main.custom_alertdialog.*
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class Principal : AppCompatActivity() {
 
@@ -34,6 +36,49 @@ class Principal : AppCompatActivity() {
         players.setItems(numPlayers) { _: DialogInterface, i: Int ->
             n = numPlayers[i].toInt()
         }
+
+        RetrofitClient.instance.userQuitMatch(DeleteRequest(session))
+            .enqueue(object : Callback<Void> {
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.code() == 200) {
+                        RetrofitClient.instance.userReadGame(DeleteRequest(session))
+                            .enqueue(object : Callback<GameInfoResponse> {
+                                override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
+                                    //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                                } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
+                                    if (response.code() == 200) {
+                                        Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                                    } else {
+                                        //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                    }
+                                }
+                            })
+                    } else {
+                        //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                    }
+                }
+            })
+
+        RetrofitClient.instance.userQuitMatch(DeleteRequest(session))
+            .enqueue(object : Callback<Void> {
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.code() == 200) {
+                        Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                    } else {
+                        //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                    }
+                }
+            })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -56,13 +101,30 @@ class Principal : AppCompatActivity() {
                 RetrofitClient.instance.userRefreshToken(RefreshRequest(session))
                     .enqueue(object : Callback<BasicResponse> {
                         override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                        } override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
+                            Toast.makeText(
+                                applicationContext,
+                                getString(R.string.no_response),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                        override fun onResponse(
+                            call: Call<BasicResponse>,
+                            response: Response<BasicResponse>
+                        ) {
                             if (response.code() == 200) {
                                 session = response.body()?.token.toString()
-                                Toast.makeText(applicationContext, getString(R.string.refresh_success), Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    getString(R.string.refresh_success),
+                                    Toast.LENGTH_LONG
+                                ).show()
                             } else {
-                                Toast.makeText(applicationContext, getString(R.string.bad_refresh_response), Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    getString(R.string.bad_refresh_response),
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         }
                     })
@@ -71,7 +133,7 @@ class Principal : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun publicMatch(@Suppress("UNUSED_PARAMETER")view: View) {
+    fun publicMatch(@Suppress("UNUSED_PARAMETER") view: View) {
         val choose = AlertDialog.Builder(this)
         choose.setTitle(getString(R.string.choose))
         choose.setMessage(getString(R.string.public_match_dialog))
@@ -92,12 +154,12 @@ class Principal : AppCompatActivity() {
         choose.show()
     }
 
-    fun privateMatch(@Suppress("UNUSED_PARAMETER")view: View) {
-        var b = 0
+    fun privateMatch(@Suppress("UNUSED_PARAMETER") view: View) {
+        var b: Int
         val choose = AlertDialog.Builder(this)
         choose.setTitle(getString(R.string.choose))
         choose.setMessage(getString(R.string.private_match_dialog))
-        choose.setPositiveButton(getString(R.string.create_button)) {_: DialogInterface, _: Int ->
+        choose.setPositiveButton(getString(R.string.create_button)) { _: DialogInterface, _: Int ->
             val numP = AlertDialog.Builder(this)
             val numPlayers = arrayOf("2", "3", "4")
             numP.setTitle(getString(R.string.number_of_players))
@@ -109,39 +171,37 @@ class Principal : AppCompatActivity() {
                     numBots = arrayOf("0", "1", "2")
                     if (n > 3)
                         numBots = arrayOf("0", "1", "2", "3")
-                } else {
+                } else
                     numBots = arrayOf("0", "1")
-                }
                 bots.setTitle(getString(R.string.number_of_bots))
                 bots.setItems(numBots) { _: DialogInterface, j: Int ->
                     b = numBots[j].toInt()
+                    d("Test", "numPlayers: $n, numBots: $b")
+                    RetrofitClient.instance.userCreateMatch(CreateMatchRequest(true, n, b, session))
+                        .enqueue(object : Callback<Void> {
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                            } override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                if (response.code() == 200) {
+                                    Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                                    val intent = Intent(this@Principal, CreatePrivateMatch::class.java)
+                                    intent.putExtra("numPlayers", n)
+                                    intent.putExtra("numBots", b)
+                                    intent.putExtra("session", session)
+                                    startActivity(intent)
+                                } else {
+                                    //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                                    Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        })
                 }
-                bots.setNegativeButton(getString(R.string.cancel)) {_: DialogInterface, _: Int ->}
+                bots.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
                 bots.show()
             }
-
-            numP.setNegativeButton(getString(R.string.cancel)) {_: DialogInterface, _: Int ->}
+            numP.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
             numP.show()
-
-            RetrofitClient.instance.userCreateMatch(CreateMatchRequest(true, n, b, session))
-                .enqueue(object : Callback<BasicResponse> {
-                    override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                        //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
-                    } override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
-                        if (response.code() == 200) {
-                            Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
-                            val intent = Intent(this@Principal, CreatePrivateMatch::class.java)
-                            intent.putExtra("numPlayers", n)
-                            intent.putExtra("numBots", b)
-                            intent.putExtra("session", session)
-                            startActivity(intent)
-                        } else {
-                            //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                            Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                        }
-                    }
-                })
         }
         choose.setNegativeButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->
             val code = AlertDialog.Builder(this)
@@ -149,25 +209,39 @@ class Principal : AppCompatActivity() {
             code.setView(customLayout)
             code.setTitle(getString(R.string.code))
             code.setPositiveButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->
-                RetrofitClient.instance.userJoinPrivateMatch(JoinPrivateRequest(inputCode.text.toString().trim(), session))
+                RetrofitClient.instance.userJoinPrivateMatch(
+                    JoinPrivateRequest(
+                        inputCode.text.toString().trim(), session
+                    )
+                )
                     .enqueue(object : Callback<BasicResponse> {
                         override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                             //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                             Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
-                        } override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
+                        }
+
+                        override fun onResponse(
+                            call: Call<BasicResponse>,
+                            response: Response<BasicResponse>
+                        ) {
                             if (response.code() == 200) {
-                                Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG)
+                                    .show()
                                 val intent = Intent(this@Principal, JoinMatch::class.java)
                                 intent.putExtra("session", session)
                                 startActivity(intent)
                             } else {
                                 //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    response.code(),
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         }
                     })
             }
-            code.setNegativeButton(getString(R.string.cancel)) {_: DialogInterface, _: Int ->}
+            code.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
             code.show()
         }
         choose.show()

@@ -19,7 +19,7 @@
     <string name="public_game">Partida pública</string>
     <string name="private_game">Partida privada</string>
     <string name="choose_friend">Escoja un amigo</string>
-    <!--<string name="cash">5500</string>-->
+    <string name="cash">5500</string>
     <string name="exit">Salir</string>
     <!-- DIALOG MESSAGES -->
     <string name="alert">¡Cuidado!</string>
@@ -39,11 +39,13 @@
     <string name="number_of_players">Número de jugadores</string>
     <string name="number_of_bots">Número de bots</string>
     <!-- INPUT ERRORS -->
+    <string name="alias_format_error">Escriba un alias válido</string>
     <string name="email_format_error">Escriba un email válido</string>
     <string name="password_format_error">Escriba una contraseña válida</string>
     <string name="different_passwords">Las contraseñas no coinciden</string>
     <!-- SERVER CALL ERRORS -->
     <string name="no_response">El servidor no responde</string>
+    <string name="bad_register_response">"Quizás se haya caido el servidor"</string>
     <string name="bad_delete_response">Error! No se pudo eliminar su cuenta</string>
     <string name="bad_update_response">Error! No se pudo realizar el cambio</string>
     <string name="bad_login_response">Error! Revise los datos introducidos</string>

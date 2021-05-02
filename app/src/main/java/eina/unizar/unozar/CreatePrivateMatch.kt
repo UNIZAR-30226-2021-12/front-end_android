@@ -91,4 +91,22 @@ class CreatePrivateMatch : AppCompatActivity() {
             return true }}
         return super.onContextItemSelected(item)
     }
+
+    fun quit(@Suppress("UNUSED_PARAMETER") view: View) {
+        RetrofitClient.instance.userQuitMatch(DeleteRequest(session))
+            .enqueue(object : Callback<Void> {
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.code() == 200) {
+                        Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                        finish()
+                    } else {
+                        //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                    }
+                }
+            })
+    }
 }

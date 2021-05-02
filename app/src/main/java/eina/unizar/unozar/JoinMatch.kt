@@ -36,6 +36,6 @@ class JoinMatch : AppCompatActivity() {
             bots++
             players++
         }
-        exit.setOnClickListener{ finish() }
+        cancel.setOnClickListener{ finish() }
     }
 }

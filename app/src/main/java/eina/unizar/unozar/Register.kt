@@ -28,14 +28,14 @@ class Register : AppCompatActivity() {
             RetrofitClient.instance.userRegister(RegisterUser(email, alias, password))
                 .enqueue(object : Callback<RegisterResponse> {
                     override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                        Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                     } override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                         if (response.code() == 200) {
                             val intent = Intent(this@Register, Principal::class.java)
                             intent.putExtra("session", response.body()?.id)
                             startActivity(intent)
                         } else {
-                            Toast.makeText(applicationContext, "Quizás se haya caido el servidor", Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, getString(R.string.bad_register_response), Toast.LENGTH_LONG).show()
                         }
                     }
                 })
@@ -47,16 +47,16 @@ class Register : AppCompatActivity() {
     }
 
     private fun validateInput (alias: String, email:String, password:String, password_repeat:String) : Boolean {
-        if(alias.isEmpty()) register_alias.error = "Escriba un alias válido"
+        if(alias.isEmpty()) register_alias.error = getString(R.string.alias_format_error)
         else if(email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            register_email.error = "Escriba un email válido"
+            register_email.error = getString(R.string.email_format_error)
             register_email.requestFocus()
         } else if(password.isEmpty()){
-            register_password.error = "Escriba una contraseña válida"
+            register_password.error = getString(R.string.password_format_error)
             register_password.requestFocus()
         } else if (password != password_repeat) {
-            register_password.error = "Las contraseñas no coinciden"
-            register_password_repeat.error = "Las contraseñas no coinciden"
+            register_password.error = getString(R.string.different_passwords)
+            register_password_repeat.error = getString(R.string.different_passwords)
             register_password.requestFocus()
             register_password_repeat.requestFocus()
         } else return true

@@ -46,7 +46,7 @@ class CreatePublicMatch : AppCompatActivity() {
 
     private fun createGame() {
         if (tested) {
-            RetrofitClient.instance.userCreateMatch(CreateMatchRequest(false, players, bots, session))
+            /*RetrofitClient.instance.userCreateMatch(CreateMatchRequest(false, players, bots, session))
                 .enqueue(object : Callback<BasicResponse> {
                     override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                         Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
@@ -74,7 +74,7 @@ class CreatePublicMatch : AppCompatActivity() {
                         }
                     }
 
-                })
+                })*/
         } else {
             /*val intent = Intent(this@CreatePublicMatch, TableroActivity::class.java)
             intent.putExtra("session", test.userCreateGameTest())
