@@ -36,49 +36,6 @@ class Principal : AppCompatActivity() {
         players.setItems(numPlayers) { _: DialogInterface, i: Int ->
             n = numPlayers[i].toInt()
         }
-
-        RetrofitClient.instance.userQuitMatch(DeleteRequest(session))
-            .enqueue(object : Callback<Void> {
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
-                } override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.code() == 200) {
-                        RetrofitClient.instance.userReadGame(DeleteRequest(session))
-                            .enqueue(object : Callback<GameInfoResponse> {
-                                override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
-                                    //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
-                                } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
-                                    if (response.code() == 200) {
-                                        Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
-                                    } else {
-                                        //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                                    }
-                                }
-                            })
-                    } else {
-                        //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                    }
-                }
-            })
-
-        RetrofitClient.instance.userQuitMatch(DeleteRequest(session))
-            .enqueue(object : Callback<Void> {
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
-                } override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.code() == 200) {
-                        Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
-                    } else {
-                        //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                    }
-                }
-            })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -101,7 +101,6 @@ class CreatePrivateMatch : AppCompatActivity() {
                 } override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.code() == 200) {
                         Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
-                        finish()
                     } else {
                         //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
                         Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()

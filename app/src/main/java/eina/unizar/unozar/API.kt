@@ -12,12 +12,12 @@ interface API {
     @POST("/player/create")
     fun userRegister(
         @Body register: RegisterUser
-    ): Call<RegisterResponse>
+    ): Call<PlayerInfo>
 
-    @POST("/player/read/{id}")
-    fun userRead(
+    @GET("/player/read/{id}")
+    fun userReadPlayer(
         @Path("id") id: String
-    ): Call<RegisterResponse>
+    ): Call<PlayerInfo>
 
     @PATCH("/player/update/{id}")
     fun userUpdatePlayer(
@@ -46,7 +46,7 @@ interface API {
         @Body joinPrivateRequest: JoinPrivateRequest
     ): Call<BasicResponse>
 
-    @POST("/player/quit")
+    @POST("/game/quit")
     fun userQuitMatch(
         @Body delete: DeleteRequest
     ): Call<Void>

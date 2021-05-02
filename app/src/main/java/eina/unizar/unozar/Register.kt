@@ -26,10 +26,10 @@ class Register : AppCompatActivity() {
 
         if (validateInput(alias, email, password, passwordRepeat)) {
             RetrofitClient.instance.userRegister(RegisterUser(email, alias, password))
-                .enqueue(object : Callback<RegisterResponse> {
-                    override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                .enqueue(object : Callback<PlayerInfo> {
+                    override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                    } override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                    } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                         if (response.code() == 200) {
                             val intent = Intent(this@Register, Principal::class.java)
                             intent.putExtra("session", response.body()?.id)

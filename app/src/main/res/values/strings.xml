@@ -19,7 +19,6 @@
     <string name="public_game">Partida pública</string>
     <string name="private_game">Partida privada</string>
     <string name="choose_friend">Escoja un amigo</string>
-    <string name="cash">5500</string>
     <string name="exit">Salir</string>
     <!-- DIALOG MESSAGES -->
     <string name="alert">¡Cuidado!</string>
@@ -55,4 +54,5 @@
     <string name="email_change_success">Ha actualizado su dirección de correo electrónico con éxito</string>
     <string name="password_change_success">Ha actualizado su contraseña con éxito</string>
     <string name="refresh_success">Sesión actualizada</string>
+    <string name="cash">5500</string>
 </resources>
