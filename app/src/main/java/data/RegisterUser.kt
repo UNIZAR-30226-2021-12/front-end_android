@@ -1,4 +1,4 @@
-package eina.unizar.unozar
+package data
 
 import com.google.gson.annotations.SerializedName
 

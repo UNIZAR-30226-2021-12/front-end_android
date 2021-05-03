@@ -399,7 +399,18 @@ class TableroActivity : AppCompatActivity(){
     private fun actualizar(){
         CoroutineScope(Dispatchers.IO).launch {
             while(true){
-                //Pedir estado juego, mis cartas, los rivales, de quien es el turno
+                /*RetrofitClient.instance.userPlayCard(PutCardRequest(/*Que tengo que enviar*/))
+                    .enqueue(object : Callback<PutCardResponse> {
+                        override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                            Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                            if (response.code() == 200) {
+                                //La carta se ha puesto con éxito
+                            } else {
+                                Toast.makeText(applicationContext, "Quizás se haya caido el servidor", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    })*/
                 if(cimaCambiada == 1){
                     cambiarCima()
                     cimaCambiada = 0

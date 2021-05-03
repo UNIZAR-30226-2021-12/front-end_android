@@ -7,10 +7,12 @@ import android.view.View
 import retrofit2.Callback
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import data.LoginUser
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Response
+import server.response.TokenResponse
 
 class Login : AppCompatActivity() {
 
@@ -24,11 +26,11 @@ class Login : AppCompatActivity() {
         val password = editTextTextPassword.text.toString().trim()
 
         if(validateInput(email, password)) {
-            RetrofitClient.instance.userAuthentication(LoginUser(email, password))
-                .enqueue(object : Callback<BasicResponse> {
-                    override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+            RetrofitClient.instance.authentication(LoginUser(email, password))
+                .enqueue(object : Callback<TokenResponse> {
+                    override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                    } override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
+                    } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                         if (response.code() == 200) {
                             val intent = Intent(this@Login, Principal::class.java)
                             intent.putExtra("session", response.body()?.token)

@@ -6,6 +6,8 @@ import android.view.View
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
+import data.PlayerInfo
+import data.RegisterUser
 import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,7 +27,7 @@ class Register : AppCompatActivity() {
         val passwordRepeat = register_password_repeat.text.toString().trim()
 
         if (validateInput(alias, email, password, passwordRepeat)) {
-            RetrofitClient.instance.userRegister(RegisterUser(email, alias, password))
+            RetrofitClient.instance.register(RegisterUser(email, alias, password))
                 .enqueue(object : Callback<PlayerInfo> {
                     override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()

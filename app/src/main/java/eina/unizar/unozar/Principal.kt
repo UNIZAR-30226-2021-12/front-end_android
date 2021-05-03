@@ -16,6 +16,10 @@ import kotlinx.android.synthetic.main.custom_alertdialog.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import server.request.CreateMatchRequest
+import server.request.JoinPrivateRequest
+import server.request.TokenRequest
+import server.response.TokenResponse
 
 
 class Principal : AppCompatActivity() {
@@ -55,33 +59,30 @@ class Principal : AppCompatActivity() {
                 startActivity(intent)
             }
             R.id.action_refresh -> {
-                RetrofitClient.instance.userRefreshToken(RefreshRequest(session))
-                    .enqueue(object : Callback<BasicResponse> {
-                        override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                            Toast.makeText(
-                                applicationContext,
-                                getString(R.string.no_response),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-
-                        override fun onResponse(
-                            call: Call<BasicResponse>,
-                            response: Response<BasicResponse>
-                        ) {
+                RetrofitClient.instance.refreshToken(TokenRequest(session))
+                    .enqueue(object : Callback<TokenResponse> {
+                        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                             if (response.code() == 200) {
                                 session = response.body()?.token.toString()
-                                Toast.makeText(
-                                    applicationContext,
-                                    getString(R.string.refresh_success),
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                Toast.makeText(applicationContext, getString(R.string.refresh_success), Toast.LENGTH_LONG).show()
                             } else {
-                                Toast.makeText(
-                                    applicationContext,
-                                    getString(R.string.bad_refresh_response),
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                Toast.makeText(applicationContext, getString(R.string.bad_refresh_response), Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    })
+            }
+            R.id.action_delete_game -> {
+                RetrofitClient.instance.quitMatch(TokenRequest(session))
+                    .enqueue(object : Callback<Void> {
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.code() == 200) {
+                                Toast.makeText(applicationContext, "Ha salido de la partida", Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(applicationContext, "Error del sistema", Toast.LENGTH_LONG).show()
                             }
                         }
                     })
@@ -134,7 +135,7 @@ class Principal : AppCompatActivity() {
                 bots.setItems(numBots) { _: DialogInterface, j: Int ->
                     b = numBots[j].toInt()
                     d("Test", "numPlayers: $n, numBots: $b")
-                    RetrofitClient.instance.userCreateMatch(CreateMatchRequest(true, n, b, session))
+                    RetrofitClient.instance.createMatch(CreateMatchRequest(true, n, b, session))
                         .enqueue(object : Callback<Void> {
                             override fun onFailure(call: Call<Void>, t: Throwable) {
                                 //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
@@ -166,20 +167,20 @@ class Principal : AppCompatActivity() {
             code.setView(customLayout)
             code.setTitle(getString(R.string.code))
             code.setPositiveButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->
-                RetrofitClient.instance.userJoinPrivateMatch(
+                RetrofitClient.instance.joinPrivate(
                     JoinPrivateRequest(
                         inputCode.text.toString().trim(), session
                     )
                 )
-                    .enqueue(object : Callback<BasicResponse> {
-                        override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+                    .enqueue(object : Callback<TokenResponse> {
+                        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                             //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                             Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
                         }
 
                         override fun onResponse(
-                            call: Call<BasicResponse>,
-                            response: Response<BasicResponse>
+                            call: Call<TokenResponse>,
+                            response: Response<TokenResponse>
                         ) {
                             if (response.code() == 200) {
                                 Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG)

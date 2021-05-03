@@ -11,8 +11,9 @@ import kotlinx.android.synthetic.main.activity_change_email.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import server.request.UpdateRequest
 
-class EmailChange : AppCompatActivity() {
+ class EmailChange : AppCompatActivity() {
 
     private lateinit var session: String
 
@@ -29,7 +30,7 @@ class EmailChange : AppCompatActivity() {
         check.setMessage(getString(R.string.email_update_alert_message))
         check.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int ->
             if (validateInput(newEmail)) {
-                RetrofitClient.instance.userUpdatePlayer(session.substring(0,32), UpdateRequest(newEmail, null, null, session))
+                RetrofitClient.instance.updatePlayer(session.substring(0,32), UpdateRequest(newEmail, null, null, session))
                     .enqueue(object : Callback<Void> {
                         override fun onFailure(call: Call<Void>, t: Throwable) {
                             Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()

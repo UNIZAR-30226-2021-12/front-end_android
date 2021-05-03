@@ -12,9 +12,11 @@ import kotlinx.android.synthetic.main.activity_create_game.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import server.request.TokenRequest
+import server.response.GameInfoResponse
+import server.response.TokenResponse
 
 class CreatePrivateMatch : AppCompatActivity() {
-    private val tested = true
     private var players = 2
     private var bots = 1
     private lateinit var session: String
@@ -48,18 +50,31 @@ class CreatePrivateMatch : AppCompatActivity() {
         }
         cancel.setOnClickListener{ finish() }
         create.setOnClickListener{ createGame(View(this)) }
+        RetrofitClient.instance.readGame(TokenRequest(session))
+            .enqueue(object : Callback<GameInfoResponse> {
+                override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
+                    Toast.makeText(applicationContext, "Hola", Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
+                    if (response.code() == 200) {
+                        Toast.makeText(applicationContext, response.body()?.maxPlayers.toString(), Toast.LENGTH_LONG).show()
+                        //La carta se ha puesto con éxito
+                    } else {
+                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                    }
+                }
+            })
     }
 
     private fun createGame(@Suppress("UNUSED_PARAMETER")view: View) {
-        RetrofitClient.instance.userStartMatch(session)
-            .enqueue(object : Callback<BasicResponse> {
-                override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+        RetrofitClient.instance.startMatch(session)
+            .enqueue(object : Callback<TokenResponse> {
+                override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                     Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
                 }
 
                 override fun onResponse(
-                    call: Call<BasicResponse>,
-                    response: Response<BasicResponse>
+                    call: Call<TokenResponse>,
+                    response: Response<TokenResponse>
                 ) {
                     if (response.code() == 200) {
                         val intent = Intent(this@CreatePrivateMatch, TableroActivity::class.java)
@@ -93,7 +108,7 @@ class CreatePrivateMatch : AppCompatActivity() {
     }
 
     fun quit(@Suppress("UNUSED_PARAMETER") view: View) {
-        RetrofitClient.instance.userQuitMatch(DeleteRequest(session))
+        RetrofitClient.instance.quitMatch(TokenRequest(session))
             .enqueue(object : Callback<Void> {
                 override fun onFailure(call: Call<Void>, t: Throwable) {
                     //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()

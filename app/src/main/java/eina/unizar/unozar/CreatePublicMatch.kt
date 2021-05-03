@@ -12,9 +12,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class CreatePublicMatch : AppCompatActivity() {
-    private val tested = false
     private var players = 2
-    private var bots = 0
     private lateinit var session: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,40 +43,34 @@ class CreatePublicMatch : AppCompatActivity() {
     }
 
     private fun createGame() {
-        if (tested) {
-            /*RetrofitClient.instance.userCreateMatch(CreateMatchRequest(false, players, bots, session))
-                .enqueue(object : Callback<BasicResponse> {
-                    override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
-                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
-                    }
+        /*RetrofitClient.instance.userCreateMatch(CreateMatchRequest(false, players, 0, session))
+            .enqueue(object : Callback<BasicResponse> {
+                override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                }
 
-                    override fun onResponse(
-                        call: Call<BasicResponse>,
-                        response: Response<BasicResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            Toast.makeText(
-                                applicationContext,
-                                response.code(),
-                                Toast.LENGTH_LONG
-                            ).show()
-                            val intent = Intent(this@CreatePublicMatch, TableroActivity::class.java)
-                            intent.putExtra("session", response.code())
-                            startActivity(intent)
-                        } else {
-                            Toast.makeText(
-                                applicationContext,
-                                "error: " + response.code(),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
+                override fun onResponse(
+                    call: Call<BasicResponse>,
+                    response: Response<BasicResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(
+                            applicationContext,
+                            response.code(),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        val intent = Intent(this@CreatePublicMatch, TableroActivity::class.java)
+                        intent.putExtra("session", response.code())
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            "error: " + response.code(),
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
+                }
 
-                })*/
-        } else {
-            /*val intent = Intent(this@CreatePublicMatch, TableroActivity::class.java)
-            intent.putExtra("session", test.userCreateGameTest())
-            startActivity(intent)*/
-        }
+            })*/
     }
 }

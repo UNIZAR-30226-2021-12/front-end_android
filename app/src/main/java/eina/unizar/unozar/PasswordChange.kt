@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_change_password.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import server.request.UpdateRequest
 
 class PasswordChange : AppCompatActivity() {
     private lateinit var session: String
@@ -29,7 +30,7 @@ class PasswordChange : AppCompatActivity() {
         check.setMessage(getString(R.string.password_update_alert_message))
         check.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int ->
             if (validateInput(newPassword, repeatPassword)) {
-                RetrofitClient.instance.userUpdatePlayer(session.substring(0,32), UpdateRequest(null, null, newPassword, session))
+                RetrofitClient.instance.updatePlayer(session.substring(0,32), UpdateRequest(null, null, newPassword, session))
                     .enqueue(object : Callback<Void> {
                         override fun onFailure(call: Call<Void>, t: Throwable) {
                             Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()

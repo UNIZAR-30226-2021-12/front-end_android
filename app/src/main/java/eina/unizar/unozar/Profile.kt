@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_perfil.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import server.request.TokenRequest
 
 class Profile : AppCompatActivity() {
 
@@ -38,7 +39,7 @@ class Profile : AppCompatActivity() {
     }
 
     fun goToChangeAvatar(@Suppress("UNUSED_PARAMETER")view: View) {
-        val i = Intent(this, changeAvatar::class.java)
+        val i = Intent(this, ChangeAvatar::class.java)
         //Falta enviar la sesión
         startActivity(i)
     }
@@ -48,7 +49,7 @@ class Profile : AppCompatActivity() {
         check.setTitle(getString(R.string.alert))
         check.setMessage(getString(R.string.delete_account_alert_message))
         check.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int ->
-            RetrofitClient.instance.userDeleteAccount(session.substring(0,32), DeleteRequest(session))
+            RetrofitClient.instance.deleteAccount(session.substring(0,32), TokenRequest(session))
                 .enqueue(object : Callback<Void> {
                     override fun onFailure(call: Call<Void>, t: Throwable) {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
