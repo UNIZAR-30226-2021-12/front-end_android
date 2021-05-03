@@ -37,6 +37,12 @@ class Profile : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun goToChangeAvatar(@Suppress("UNUSED_PARAMETER")view: View) {
+        val i = Intent(this, changeAvatar::class.java)
+        //Falta enviar la sesión
+        startActivity(i)
+    }
+
     fun deleteAccount(@Suppress("UNUSED_PARAMETER")view: View) {
         val check = AlertDialog.Builder(this)
         check.setTitle(getString(R.string.alert))
