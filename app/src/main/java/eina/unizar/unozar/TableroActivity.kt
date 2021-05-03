@@ -51,9 +51,178 @@ class TableroActivity : AppCompatActivity(){
         Gamer(3, R.drawable.larry, "Nombre3", "", "6 Cartas")
     )
 
+    fun traductorCartasToInt(carta: String): Int {
+        if(carta[1] == 'R'){
+            if(carta[2] == 'X'){
+                if(carta[0] == '0'){ return R.drawable.cero_rojo}
+                if(carta[0] == '1'){ return R.drawable.uno_rojo}
+                if(carta[0] == '2'){ return R.drawable.dos_rojo}
+                if(carta[0] == '3'){ return R.drawable.tres_rojo}
+                if(carta[0] == '4'){ return R.drawable.cuatro_rojo}
+                if(carta[0] == '5'){ return R.drawable.cinco_rojo}
+                if(carta[0] == '6'){ return R.drawable.seis_rojo}
+                if(carta[0] == '7'){ return R.drawable.siete_rojo}
+                if(carta[0] == '8'){ return R.drawable.ocho_rojo}
+                if(carta[0] == '9'){ return R.drawable.nueve_rojo}
+            }
+            else if(carta[2] == 'S'){return R.drawable.saltar_turno_rojo}
+            else if(carta[2] == '2') {return R.drawable.mas_dos_rojo}
+            else if(carta[2] == 'R') {return R.drawable.cambio_color_rojo}
+            else if(carta[2] == '4') {return R.drawable.mas_cuatro_rojo}
+            else{return 0}
+        }
+        else if(carta[1] == 'Y'){
+            if(carta[2] == 'X'){
+                if(carta[0] == '0'){ return R.drawable.cero_amarillo}
+                if(carta[0] == '1'){ return R.drawable.uno_amarillo}
+                if(carta[0] == '2'){ return R.drawable.dos_amarillo}
+                if(carta[0] == '3'){ return R.drawable.tres_amarillo}
+                if(carta[0] == '4'){ return R.drawable.cuatro_amarillo}
+                if(carta[0] == '5'){ return R.drawable.cinco_amarillo}
+                if(carta[0] == '6'){ return R.drawable.seis_amarillo}
+                if(carta[0] == '7'){ return R.drawable.siete_amarillo}
+                if(carta[0] == '8'){ return R.drawable.ocho_amarillo}
+                if(carta[0] == '9'){ return R.drawable.nueve_amarillo}
+            }
+            else if(carta[2] == 'S'){return R.drawable.saltar_turno_amarillo}
+            else if(carta[2] == '2') {return R.drawable.mas_dos_amarillo}
+            else if(carta[2] == 'R') {return R.drawable.cambio_color_amarillo}
+            else if(carta[2] == '4') {return R.drawable.mas_cuatro_amarillo}
+            else{return 0}
+        }
+        else if(carta[1] == 'B'){
+                if(carta[2] == 'X'){
+                    if(carta[0] == '0'){ return R.drawable.cero_azul}
+                    if(carta[0] == '1'){ return R.drawable.uno_azul}
+                    if(carta[0] == '2'){ return R.drawable.dos_azul}
+                    if(carta[0] == '3'){ return R.drawable.tres_azul}
+                    if(carta[0] == '4'){ return R.drawable.cuatro_azul}
+                    if(carta[0] == '5'){ return R.drawable.cinco_azul}
+                    if(carta[0] == '6'){ return R.drawable.seis_azul}
+                    if(carta[0] == '7'){ return R.drawable.siete_azul}
+                    if(carta[0] == '8'){ return R.drawable.ocho_azul}
+                    if(carta[0] == '9'){ return R.drawable.nueve_azul}
+                }
+                else if(carta[2] == 'S'){return R.drawable.saltar_turno_azul}
+                else if(carta[2] == '2') {return R.drawable.mas_dos_azul}
+                else if(carta[2] == 'R') {return R.drawable.cambio_color_azul}
+                else if(carta[2] == '4') {return R.drawable.mas_cuatro_azul}
+                else{return 0}
+            }
+        else if(carta[1] == 'G') {
+                if(carta[2] == 'X'){
+                    if(carta[0] == '0'){ return R.drawable.cero_verde}
+                    if(carta[0] == '1'){ return R.drawable.uno_verde}
+                    if(carta[0] == '2'){ return R.drawable.dos_verde}
+                    if(carta[0] == '3'){ return R.drawable.tres_verde}
+                    if(carta[0] == '4'){ return R.drawable.cuatro_verde}
+                    if(carta[0] == '5'){ return R.drawable.cinco_verde}
+                    if(carta[0] == '6'){ return R.drawable.seis_verde}
+                    if(carta[0] == '7'){ return R.drawable.siete_verde}
+                    if(carta[0] == '8'){ return R.drawable.ocho_verde}
+                    if(carta[0] == '9'){ return R.drawable.nueve_verde}
+                }
+                else if(carta[2] == 'S'){return R.drawable.saltar_turno_verde}
+                else if(carta[2] == '2') {return R.drawable.mas_dos_verde}
+                else if(carta[2] == 'R') {return R.drawable.cambio_color_verde}
+                else if(carta[2] == '4') {return R.drawable.mas_cuatro_verde}
+                else{return 0}
+        }
+        else if((carta[0] == 'X') && (carta[1] == 'X')){
+            if(carta[2] == 'C'){return R.drawable.cambio_color_base}
+            else if(carta[2] == '4'){return R.drawable.mas_cuatro_base}
+            else{return 0}
+        }
+        return 0
+    }
+
+    /*fun traductorCartasToString(carta: Int): String {
+        if(carta == R.drawable.cero_rojo){return "0RX"}
+        if(carta == R.drawable.uno_rojo){return "1RX"}
+        if(carta == R.drawable.dos_rojo){return "2RX"}
+        if(carta == R.drawable.tres_rojo){return "3RX"}
+        if(carta == R.drawable.cuatro_rojo){return "4RX"}
+        if(carta == R.drawable.cinco_rojo){return "5RX"}
+        if(carta == R.drawable.seis_rojo){return "6RX"}
+        if(carta == R.drawable.siete_rojo){return "7RX"}
+        if(carta == R.drawable.ocho_rojo){return "8RX"}
+        if(carta == R.drawable.nueve_rojo){return "9RX"}
+        if(carta == R.drawable.saltar_turno_rojo){return "XRS"}
+        if(carta == R.drawable.mas_dos_rojo){return "XR2"}
+        if(carta == R.drawable.cambio_color_rojo){return "XRR"}
+        if(carta == R.drawable.mas_cuatro_rojo){return "XR4"}
+
+        if(carta == R.drawable.cero_amarillo){return "0AX"}
+        if(carta == R.drawable.uno_amarillo){return "1AX"}
+        if(carta == R.drawable.dos_amarillo){return "2AX"}
+        if(carta == R.drawable.tres_amarillo){return "3AX"}
+        if(carta == R.drawable.cuatro_amarillo){return "4AX"}
+        if(carta == R.drawable.cinco_amarillo){return "5AX"}
+        if(carta == R.drawable.seis_amarillo){return "6AX"}
+        if(carta == R.drawable.siete_amarillo){return "7AX"}
+        if(carta == R.drawable.ocho_amarillo){return "8AX"}
+        if(carta == R.drawable.nueve_amarillo){return "9AX"}
+        if(carta == R.drawable.saltar_turno_amarillo){return "XAS"}
+        if(carta == R.drawable.mas_dos_amarillo){return "XA2"}
+        if(carta == R.drawable.cambio_color_amarillo){return "XAR"}
+        if(carta == R.drawable.mas_cuatro_amarillo){return "XA4"}
+
+        if(carta == R.drawable.cero_azul){return "0BX"}
+        if(carta == R.drawable.uno_azul){return "1BX"}
+        if(carta == R.drawable.dos_azul){return "2BX"}
+        if(carta == R.drawable.tres_azul){return "3BX"}
+        if(carta == R.drawable.cuatro_azul){return "4BX"}
+        if(carta == R.drawable.cinco_azul){return "5BX"}
+        if(carta == R.drawable.seis_azul){return "6BX"}
+        if(carta == R.drawable.siete_azul){return "7BX"}
+        if(carta == R.drawable.ocho_azul){return "8BX"}
+        if(carta == R.drawable.nueve_azul){return "9BX"}
+        if(carta == R.drawable.saltar_turno_azul){return "XBS"}
+        if(carta == R.drawable.mas_dos_azul){return "XB2"}
+        if(carta == R.drawable.cambio_color_azul){return "XBR"}
+        if(carta == R.drawable.mas_cuatro_azul){return "XB4"}
+
+        if(carta == R.drawable.cero_verde){return "0GX"}
+        if(carta == R.drawable.uno_verde){return "1GX"}
+        if(carta == R.drawable.dos_verde){return "2GX"}
+        if(carta == R.drawable.tres_verde){return "3GX"}
+        if(carta == R.drawable.cuatro_verde){return "4GX"}
+        if(carta == R.drawable.cinco_verde){return "5GX"}
+        if(carta == R.drawable.seis_verde){return "6GX"}
+        if(carta == R.drawable.siete_verde){return "7GX"}
+        if(carta == R.drawable.ocho_verde){return "8GX"}
+        if(carta == R.drawable.nueve_verde){return "9GX"}
+        if(carta == R.drawable.saltar_turno_verde){return "XGS"}
+        if(carta == R.drawable.mas_dos_verde){return "XG2"}
+        if(carta == R.drawable.cambio_color_verde){return "XGR"}
+        if(carta == R.drawable.mas_cuatro_verde){return "XG4"}
+
+        if(carta == R.drawable.cambio_color_base){return "XXR"}
+        if(carta == R.drawable.mas_cuatro_base){return "XX4"}
+        return ""
+    }*/
+
     val Cards = mutableListOf<Card>()
-    val Gamers = mutableListOf<Gamer>()
-    var cima = R.drawable.cambio_sentido_azul
+    val listaJugadores = mutableListOf<Gamer>()
+
+    var cimaActual = R.drawable.cambio_sentido_azul
+    var cimaCambiada = 1
+    var cimaNueva = 0
+
+    val manoActual = mutableListOf<String>()
+    var manoCambiada = 0
+    val manoNueva = mutableListOf<String>()
+
+    val jugadoresActuales = mutableListOf<String>()
+    var jugadoresCambiados = 0
+    val jugadoresNuevos = mutableListOf<String>()
+
+    val numCartasJugadoresActuales  = mutableListOf<Int>()
+    var numCartasJugadoresCambiados = 0
+    val numCartasJugadoresNuevos  = mutableListOf<Int>()
+
+    var miTurno = 0
+
     //var record = 0
     public var selectedCard = 0
 
@@ -217,7 +386,7 @@ class TableroActivity : AppCompatActivity(){
 
     suspend fun cambiarCima(){
         val imageView1 = findViewById<ImageView>(R.id.image_cima)
-        imageView1.setImageResource(cima)
+        imageView1.setImageResource(cimaActual)
     }
 
     suspend fun cambiarElegido(){
@@ -226,7 +395,6 @@ class TableroActivity : AppCompatActivity(){
         //imageView2.setImageResource(record)
         recordCambiado = 0
     }
-    var cimaCambiada = 1
     //var recordCambiado = 0;
     private fun actualizar(){
         CoroutineScope(Dispatchers.IO).launch {
@@ -267,4 +435,6 @@ class TableroActivity : AppCompatActivity(){
         }
         return super.onOptionsItemSelected(item)
     }
+
+
 }
