@@ -1,8 +1,8 @@
 package eina.unizar.unozar
 
-import data.LoginUser
-import data.PlayerInfo
-import data.RegisterUser
+import server.response.LoginUser
+import server.response.PlayerInfo
+import server.response.RegisterUser
 import retrofit2.Call
 import retrofit2.http.*
 import server.request.*
@@ -22,20 +22,18 @@ interface API {
         @Body register: RegisterUser
     ): Call<PlayerInfo>
 
-    @GET("/player/read/{id}")
+    @POST("/player/read")
     fun readPlayer(
-        @Path("id") id: String
+        @Body idRequest: IdRequest
     ): Call<PlayerInfo>
 
-    @PATCH("/player/update/{id}")
+    @PATCH("/player/update")
     fun updatePlayer(
-        @Path("id") id: String,
         @Body updateRequest: UpdateRequest
-    ): Call<Void>
+    ): Call<TokenResponse>
 
-    @HTTP(method = "DELETE", path = "/player/delete/{id}", hasBody = true)
+    @HTTP(method = "DELETE", path = "/player/delete", hasBody = true)
     fun deleteAccount(
-        @Path("id") id: String,
         @Body delete: TokenRequest
     ): Call<Void>
 
@@ -47,7 +45,7 @@ interface API {
     @POST("/game/create")
     fun createMatch(
         @Body createMatchRequest: CreateMatchRequest
-    ): Call<Void>
+    ): Call<TokenResponse>
 
     @POST("/game/join")
     fun joinPrivate(
@@ -57,7 +55,7 @@ interface API {
     @POST("/game/quit")
     fun quitMatch(
         @Body delete: TokenRequest
-    ): Call<Void>
+    ): Call<TokenResponse>
 
     @POST("/game/read")
     fun readGame(

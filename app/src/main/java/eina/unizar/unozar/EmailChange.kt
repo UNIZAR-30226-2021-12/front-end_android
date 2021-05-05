@@ -12,6 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import server.request.UpdateRequest
+import server.response.TokenResponse
 
  class EmailChange : AppCompatActivity() {
 
@@ -30,16 +31,18 @@ import server.request.UpdateRequest
         check.setMessage(getString(R.string.email_update_alert_message))
         check.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int ->
             if (validateInput(newEmail)) {
-                RetrofitClient.instance.updatePlayer(session.substring(0,32), UpdateRequest(newEmail, null, null, session))
-                    .enqueue(object : Callback<Void> {
-                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                RetrofitClient.instance.updatePlayer(UpdateRequest(newEmail, null, null, session))
+                    .enqueue(object : Callback<TokenResponse> {
+                        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                             Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                        } override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                             if (response.code() == 200) {
+                                session = response.body()!!.token
                                 Toast.makeText(applicationContext, getString(R.string.email_change_success), Toast.LENGTH_LONG).show()
                                 finish()
                             } else {
-                                Toast.makeText(applicationContext, getString(R.string.bad_update_response) + response.code(), Toast.LENGTH_LONG).show()
+                                //Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                             }
                         }
                     })

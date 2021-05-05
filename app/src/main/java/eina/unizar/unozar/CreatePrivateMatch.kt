@@ -1,5 +1,6 @@
 package eina.unizar.unozar
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.ContextMenu
@@ -7,8 +8,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_create_game.*
+import kotlinx.android.synthetic.main.custom_alertdialog.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,16 +51,19 @@ class CreatePrivateMatch : AppCompatActivity() {
             player_three.visibility = View.INVISIBLE
             player_four.visibility = View.INVISIBLE
         }
-        cancel.setOnClickListener{ finish() }
+        exit.setOnClickListener{ quit(View(this)) }
         create.setOnClickListener{ createGame(View(this)) }
         RetrofitClient.instance.readGame(TokenRequest(session))
             .enqueue(object : Callback<GameInfoResponse> {
                 override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
-                    Toast.makeText(applicationContext, "Hola", Toast.LENGTH_LONG).show()
+                    val code = AlertDialog.Builder(this@CreatePrivateMatch)
+                    code.setTitle("Error")
+                    code.setMessage(t.message)
+                    code.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int -> }
+                    code.show()
                 } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
                     if (response.code() == 200) {
-                        Toast.makeText(applicationContext, response.body()?.maxPlayers.toString(), Toast.LENGTH_LONG).show()
-                        //La carta se ha puesto con éxito
+                        Toast.makeText(applicationContext, "Sala creada", Toast.LENGTH_LONG).show()
                     } else {
                         Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                     }
@@ -70,22 +76,13 @@ class CreatePrivateMatch : AppCompatActivity() {
             .enqueue(object : Callback<TokenResponse> {
                 override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                     Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
-                }
-
-                override fun onResponse(
-                    call: Call<TokenResponse>,
-                    response: Response<TokenResponse>
-                ) {
+                } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                     if (response.code() == 200) {
                         val intent = Intent(this@CreatePrivateMatch, TableroActivity::class.java)
                         intent.putExtra("session", response.code())
                         startActivity(intent)
                     } else {
-                        Toast.makeText(
-                            applicationContext,
-                            "Error " + response.code(),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        Toast.makeText(applicationContext, "Error " + response.code(), Toast.LENGTH_LONG).show()
                     }
                 }
 
@@ -109,13 +106,15 @@ class CreatePrivateMatch : AppCompatActivity() {
 
     fun quit(@Suppress("UNUSED_PARAMETER") view: View) {
         RetrofitClient.instance.quitMatch(TokenRequest(session))
-            .enqueue(object : Callback<Void> {
-                override fun onFailure(call: Call<Void>, t: Throwable) {
+            .enqueue(object : Callback<TokenResponse> {
+                override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                     //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                     Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
-                } override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                     if (response.code() == 200) {
+                        session = response.body()!!.token
                         Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                        finish()
                     } else {
                         //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
                         Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()

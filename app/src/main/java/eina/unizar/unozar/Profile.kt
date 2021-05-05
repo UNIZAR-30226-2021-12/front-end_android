@@ -3,53 +3,87 @@ package eina.unizar.unozar
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import kotlinx.android.synthetic.main.activity_perfil.*
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_profile.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import server.request.IdRequest
 import server.request.TokenRequest
+import server.response.PlayerInfo
 
 class Profile : AppCompatActivity() {
 
+    private val emailupdate = 1
+    private val passwordupdate = 2
+    private val avatarupdate = 3
     private lateinit var session: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_perfil)
+        setContentView(R.layout.activity_profile)
         session = intent.getStringExtra("session").toString()
-        // getStatistics
+        updateInfo()
+    }
+
+    private fun updateInfo() {
+        RetrofitClient.instance.readPlayer(IdRequest(session.substring(0, 32)))
+            .enqueue(object : Callback<PlayerInfo> {
+                override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
+                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                }
+
+                override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
+                    if (response.code() == 200) {
+                        showAlias.text = response.body()?.alias
+                        showEmail2.text = response.body()?.email
+                        showJugadasTotales.text = response.body()?.publicTotal.toString()
+                        showGanadasTotales.text = response.body()?.publicWins.toString()
+                        showJugadas.text = response.body()?.privateTotal.toString()
+                        showGanadas.text = response.body()?.privateWins.toString()
+                    } else {
+                        //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                    }
+                }
+            })
     }
 
     @SuppressLint("SetTextI18n")
-    fun goToChangeEmail(@Suppress("UNUSED_PARAMETER")view: View) {
+    fun goToChangeEmail(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent(this, EmailChange::class.java)
         intent.putExtra("session", session)
-        startActivity(intent)
+        startActivityForResult(intent, emailupdate)
     }
 
-    fun goToChangePassword(@Suppress("UNUSED_PARAMETER")view: View) {
+    fun goToChangePassword(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent(this, PasswordChange::class.java)
         intent.putExtra("session", session)
-        startActivity(intent)
+        startActivityForResult(intent, passwordupdate)
     }
 
-    fun goToChangeAvatar(@Suppress("UNUSED_PARAMETER")view: View) {
-        val i = Intent(this, ChangeAvatar::class.java)
-        //Falta enviar la sesión
-        startActivity(i)
+    fun goToChangeAvatar(@Suppress("UNUSED_PARAMETER") view: View) {
+        val intent = Intent(this, ChangeAvatar::class.java)
+        intent.putExtra("session", session)
+        startActivityForResult(intent, avatarupdate)
     }
 
-    fun deleteAccount(@Suppress("UNUSED_PARAMETER")view: View) {
+    fun changeAlias(@Suppress("UNUSED_PARAMETER") view: View) {
+        val intent = Intent(this, ChangeAvatar::class.java)
+        intent.putExtra("session", session)
+        startActivityForResult(intent, avatarupdate)
+    }
+
+    fun deleteAccount(@Suppress("UNUSED_PARAMETER") view: View) {
         val check = AlertDialog.Builder(this)
         check.setTitle(getString(R.string.alert))
         check.setMessage(getString(R.string.delete_account_alert_message))
         check.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int ->
-            RetrofitClient.instance.deleteAccount(session.substring(0,32), TokenRequest(session))
+            RetrofitClient.instance.deleteAccount(TokenRequest(session))
                 .enqueue(object : Callback<Void> {
                     override fun onFailure(call: Call<Void>, t: Throwable) {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
@@ -65,5 +99,10 @@ class Profile : AppCompatActivity() {
         }
         check.setNegativeButton(getString(R.string.alert_negative_button)) { _: DialogInterface, _: Int -> }
         check.show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        updateInfo()
     }
 }

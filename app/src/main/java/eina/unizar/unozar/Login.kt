@@ -7,7 +7,7 @@ import android.view.View
 import retrofit2.Callback
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import data.LoginUser
+import server.response.LoginUser
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
@@ -36,7 +36,8 @@ class Login : AppCompatActivity() {
                             intent.putExtra("session", response.body()?.token)
                             startActivity(intent)
                         } else {
-                            Toast.makeText(applicationContext, getString(R.string.bad_login_response), Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                            //Toast.makeText(applicationContext, getString(R.string.bad_login_response), Toast.LENGTH_LONG).show()
                         }
                     }
                 })

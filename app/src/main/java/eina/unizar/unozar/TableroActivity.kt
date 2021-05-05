@@ -2,7 +2,6 @@ package eina.unizar.unozar
 
 import adapter.CardAdapter
 import adapter.GamerAdapter
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -15,10 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import data.Card
 import data.Gamer
-import eina.unizar.unozar.R
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_tablero.*
-import kotlinx.android.synthetic.main.item_card.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -26,6 +22,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import server.request.TokenRequest
+import server.response.TokenResponse
 
 var recordCambiado = 0
 var nombreRecordado = ""
@@ -33,7 +31,8 @@ var record = 0
 
 class TableroActivity : AppCompatActivity(){
 
-    val CardsList = listOf<Card>(
+    private lateinit var session: String
+    private val cardsList = listOf(
         Card(1, "inicio", R.drawable.inicio),
         Card(1, "cambio_color_base", R.drawable.cambio_color_base),
         Card(1, "dos_rojo", R.drawable.dos_rojo),
@@ -45,15 +44,15 @@ class TableroActivity : AppCompatActivity(){
         Card(1, "fin", R.drawable.fin)
     )
 
-    val GamersList = listOf<Gamer>(
+    private val gamersList = listOf(
         Gamer(1, R.drawable.jesica, "Nombre1", "su turno", "13  Cartas"),
         Gamer(2, R.drawable.castor, "Nombre2", "", "4 Cartas"),
         Gamer(3, R.drawable.larry, "Nombre3", "", "6 Cartas")
     )
 
     fun traductorCartasToInt(carta: String): Int {
-        if(carta[1] == 'R'){
-            if(carta[2] == 'X'){
+        if(carta[1] == 'R') {
+            if(carta[2] == 'X') {
                 if(carta[0] == '0'){ return R.drawable.cero_rojo}
                 if(carta[0] == '1'){ return R.drawable.uno_rojo}
                 if(carta[0] == '2'){ return R.drawable.dos_rojo}
@@ -71,8 +70,8 @@ class TableroActivity : AppCompatActivity(){
             else if(carta[2] == '4') {return R.drawable.mas_cuatro_rojo}
             else{return 0}
         }
-        else if(carta[1] == 'Y'){
-            if(carta[2] == 'X'){
+        else if(carta[1] == 'Y') {
+            if(carta[2] == 'X') {
                 if(carta[0] == '0'){ return R.drawable.cero_amarillo}
                 if(carta[0] == '1'){ return R.drawable.uno_amarillo}
                 if(carta[0] == '2'){ return R.drawable.dos_amarillo}
@@ -90,8 +89,8 @@ class TableroActivity : AppCompatActivity(){
             else if(carta[2] == '4') {return R.drawable.mas_cuatro_amarillo}
             else{return 0}
         }
-        else if(carta[1] == 'B'){
-                if(carta[2] == 'X'){
+        else if(carta[1] == 'B') {
+                if(carta[2] == 'X') {
                     if(carta[0] == '0'){ return R.drawable.cero_azul}
                     if(carta[0] == '1'){ return R.drawable.uno_azul}
                     if(carta[0] == '2'){ return R.drawable.dos_azul}
@@ -110,7 +109,7 @@ class TableroActivity : AppCompatActivity(){
                 else{return 0}
             }
         else if(carta[1] == 'G') {
-                if(carta[2] == 'X'){
+                if(carta[2] == 'X') {
                     if(carta[0] == '0'){ return R.drawable.cero_verde}
                     if(carta[0] == '1'){ return R.drawable.uno_verde}
                     if(carta[0] == '2'){ return R.drawable.dos_verde}
@@ -128,10 +127,12 @@ class TableroActivity : AppCompatActivity(){
                 else if(carta[2] == '4') {return R.drawable.mas_cuatro_verde}
                 else{return 0}
         }
-        else if((carta[0] == 'X') && (carta[1] == 'X')){
-            if(carta[2] == 'C'){return R.drawable.cambio_color_base}
-            else if(carta[2] == '4'){return R.drawable.mas_cuatro_base}
-            else{return 0}
+        else if((carta[0] == 'X') && (carta[1] == 'X')) {
+            return when {
+                carta[2] == 'C' -> { R.drawable.cambio_color_base }
+                carta[2] == '4' -> { R.drawable.mas_cuatro_base }
+                else -> { 0 }
+            }
         }
         return 0
     }
@@ -202,12 +203,12 @@ class TableroActivity : AppCompatActivity(){
         return ""
     }*/
 
-    val Cards = mutableListOf<Card>()
+    private val cards = mutableListOf<Card>()
     val listaJugadores = mutableListOf<Gamer>()
 
-    var cimaActual = R.drawable.cambio_sentido_azul
-    var cimaCambiada = 1
-    var cimaNueva = 0
+    private var cimaActual = R.drawable.cambio_sentido_azul
+    private var cimaCambiada = 1
+    /*var cimaNueva = 0
 
     val manoActual = mutableListOf<String>()
     var manoCambiada = 0
@@ -224,12 +225,13 @@ class TableroActivity : AppCompatActivity(){
     var miTurno = 0
 
     //var record = 0
-    public var selectedCard = 0
-
+    var selectedCard = 0
+    */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tablero)
+        session = intent.getStringExtra("session").toString()
         //Picasso.get().load(R.drawable.cero_verde).into(R.id.image_record)
 
         /*val imageView1 = findViewById<ImageView>(R.id.image_cima)
@@ -239,13 +241,13 @@ class TableroActivity : AppCompatActivity(){
         actualizarJuego()
         actualizar()
         //cambiarCima()
-        /*val recicleView = findViewById<View>(R.id.rvCard) as Button*/
-        val recordButton = findViewById<View>(R.id.recordarButton) as Button
-        recordButton.setOnClickListener {
-            val imageView = findViewById<ImageView>(R.id.image_record)
-            imageView.setImageResource(record)
+        //val recicleView = findViewById<View>(R.id.rvCard) as Button
+        //val recordButton = findViewById<View>(R.id.recordarButton) as Button
+        recordarButton.setOnClickListener {
+            //val imageView = findViewById<ImageView>(R.id.image_record)
+            image_record.setImageResource(record)
         }
-        val putButton = findViewById<View>(R.id.buttonPoner) as Button
+        /*val putButton = findViewById<View>(R.id.buttonPoner) as Button
         val pedirUnoButton = findViewById<View>(R.id.buttonPedirUno) as Button
         val robarButton = findViewById<View>(R.id.buttonRobarCarta) as Button
         val pasarButton = findViewById<View>(R.id.buttonPasar) as Button
@@ -260,10 +262,10 @@ class TableroActivity : AppCompatActivity(){
         }
         pasarButton.setOnClickListener{
             pasarTurno()
-        }
+        }*/
     }
 
-    fun pedirUno(){
+    fun pedirUno(@Suppress("UNUSED_PARAMETER")view: View){
         //Pedir uno al servidor
         /*RetrofitClient.instance.userPlayCard(PutCardRequest(/*Que tengo que enviar*/))
             .enqueue(object : Callback<PutCardResponse> {
@@ -279,7 +281,7 @@ class TableroActivity : AppCompatActivity(){
             })*/
     }
 
-    fun robarCarta(){
+    fun robarCarta(@Suppress("UNUSED_PARAMETER")view: View){
         //Pedir robar carta al servidor
         /*RetrofitClient.instance.userPlayCard(PutCardRequest(/*Que tengo que enviar*/))
             .enqueue(object : Callback<PutCardResponse> {
@@ -295,7 +297,7 @@ class TableroActivity : AppCompatActivity(){
             })*/
     }
 
-    fun pasarTurno(){
+    fun pasarTurno(@Suppress("UNUSED_PARAMETER")view: View){
         //Pedir pasarTurno al servidor
         /*RetrofitClient.instance.userPlayCard(PutCardRequest(/*Que tengo que enviar*/))
             .enqueue(object : Callback<PutCardResponse> {
@@ -311,7 +313,7 @@ class TableroActivity : AppCompatActivity(){
             })*/
     }
 
-    fun ponerCarta(){
+    fun ponerCarta(@Suppress("UNUSED_PARAMETER")view: View){
         //Si es una +4 o un cambia color
         if(nombreRecordado == "mas_cuatro_base" || nombreRecordado == "cambio_color_base") {
             val builder = AlertDialog.Builder(this)
@@ -344,34 +346,34 @@ class TableroActivity : AppCompatActivity(){
 
     fun initRecycler(){
         rvCard.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val adapter = CardAdapter(Cards)
+        val adapter = CardAdapter(cards)
         rvCard.adapter = adapter
     }
 
-    fun actualizarJuego(){
+    private fun actualizarJuego(){
         anyadirCartas()
         anyadirGamers()
     }
 
     var listaCartas = ArrayList<Card>()
 
-    fun anyadirCartas(){
+    private fun anyadirCartas(){
         //Cards.removeAll(Cards)
         var nCartas = 1
         //Realizar consulta de las cartas al servidor
         var i = 0
-        Cards.add(Card(1, "inicio", R.drawable.inicio))
+        cards.add(Card(1, "inicio", R.drawable.inicio))
         for(i in 1..nCartas) {
-            Cards.add(Card(1, "Carta +4", R.drawable.cuatro_verde))
+            cards.add(Card(1, "Carta +4", R.drawable.cuatro_verde))
         }
-        Cards.add(Card(1, "fin", R.drawable.fin))
+        cards.add(Card(1, "fin", R.drawable.fin))
 
         rvCard.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val adapter = CardAdapter(CardsList)
+        val adapter = CardAdapter(cardsList)
         rvCard.adapter = adapter
     }
 
-    fun anyadirGamers(){
+    private fun anyadirGamers(){
         //GamersList.removeAll(GamersList)
         var nGamers = 1
         //Realizar consulta de los otros juegadores al servidor
@@ -380,16 +382,16 @@ class TableroActivity : AppCompatActivity(){
             Gamers.add(Gamer(1, "Carta +4", R.drawable.cuatro_verde))
         }*/
         rvGamer.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val adapter = GamerAdapter(GamersList)
+        val adapter = GamerAdapter(gamersList)
         rvGamer.adapter = adapter
     }
 
-    suspend fun cambiarCima(){
+    private fun cambiarCima(){
         val imageView1 = findViewById<ImageView>(R.id.image_cima)
         imageView1.setImageResource(cimaActual)
     }
 
-    suspend fun cambiarElegido(){
+    private fun cambiarElegido(){
         /*val imageView2 = findViewById<ImageView>(R.id.image_record)
         Picasso.get().load(record).into(imageView2)*/
         //imageView2.setImageResource(record)
@@ -441,6 +443,18 @@ class TableroActivity : AppCompatActivity(){
                 return true
             }
             EXIT_ID -> {
+                RetrofitClient.instance.quitMatch(TokenRequest(session))
+                    .enqueue(object : Callback<TokenResponse> {
+                        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                            if (response.code() == 200) {
+                                Toast.makeText(applicationContext, "Ha salido de la partida", Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(applicationContext, getString(R.string.bad_quit_response), Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    })
                 return true
             }
         }

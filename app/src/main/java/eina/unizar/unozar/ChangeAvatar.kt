@@ -4,37 +4,53 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
+import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_change_avatar.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import server.request.UpdateRequest
 
 class ChangeAvatar : AppCompatActivity() {
-    var nameAvatar = ""
+
+    private lateinit var session: String
+    private lateinit var nameAvatar: String
     override fun onCreate(savedInstanceState: Bundle?) {
+        session = intent.getStringExtra("session").toString()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_avatar)
-        var img = findViewById<View>(R.id.imageButton) as ImageButton
-        img.setOnClickListener{
+        imageButton.setOnClickListener{
             nameAvatar = "oso"
             cambiarAvatar(nameAvatar)
         }
-        var img1 = findViewById<View>(R.id.imageButton2) as ImageButton
-        img1.setOnClickListener{
+        imageButton2.setOnClickListener{
             nameAvatar = "castor"
             cambiarAvatar(nameAvatar)
         }
-        var img2 = findViewById<View>(R.id.imageButton3) as ImageButton
-        img2.setOnClickListener{
+        imageButton3.setOnClickListener{
             nameAvatar = "larry"
             cambiarAvatar(nameAvatar)
         }
-        var img3 = findViewById<View>(R.id.imageButton4) as ImageButton
-        img3.setOnClickListener{
+        imageButton4.setOnClickListener{
             nameAvatar = "jesica"
             cambiarAvatar(nameAvatar)
         }
     }
 
-
-    fun cambiarAvatar(avatar: String){
-        //Solicitud cambiar avatar
+    private fun cambiarAvatar(avatar: String){
+        /*RetrofitClient.instance.updatePlayer(session.substring(0,32), UpdateRequest(null, null, null, nameAvatar, session))
+            .enqueue(object : Callback<TokenResponsepacomerle.yeah> {
+                override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                    if (response.code() == 200) {
+                        Toast.makeText(applicationContext, getString(R.string.avatar_change_success), Toast.LENGTH_LONG).show()
+                        finish()
+                    } else {
+                        Toast.makeText(applicationContext, getString(R.string.bad_update_response) + response.code(), Toast.LENGTH_LONG).show()
+                    }
+                }
+            })*/
         finish()
     }
 }

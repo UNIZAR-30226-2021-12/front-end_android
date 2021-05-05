@@ -12,6 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import server.request.UpdateRequest
+import server.response.TokenResponse
 
 class PasswordChange : AppCompatActivity() {
     private lateinit var session: String
@@ -30,11 +31,11 @@ class PasswordChange : AppCompatActivity() {
         check.setMessage(getString(R.string.password_update_alert_message))
         check.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int ->
             if (validateInput(newPassword, repeatPassword)) {
-                RetrofitClient.instance.updatePlayer(session.substring(0,32), UpdateRequest(null, null, newPassword, session))
-                    .enqueue(object : Callback<Void> {
-                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                RetrofitClient.instance.updatePlayer(UpdateRequest(null, null, newPassword, session))
+                    .enqueue(object : Callback<TokenResponse> {
+                        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                             Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                        } override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                             if (response.code() == 200) {
                                 Toast.makeText(applicationContext, getString(R.string.password_change_success), Toast.LENGTH_LONG).show()
                                 finish()

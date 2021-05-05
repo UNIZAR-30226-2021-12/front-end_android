@@ -20,23 +20,24 @@
     <string name="private_game">Partida privada</string>
     <string name="choose_friend">Escoja un amigo</string>
     <string name="exit">Salir</string>
-    <!-- DIALOG MESSAGES -->
+    <!-- DIALOG TEXT -->
     <string name="alert">¡Cuidado!</string>
     <string name="choose">Elija</string>
     <string name="code">Escriba aquí el código de la partida</string>
     <string name="friend">¿Quiere añadir a este amigo a la partida?</string>
     <string name="delete_account_alert_message">Va a eliminar su cuenta de forma permanente, ¿desea continuar?</string>
     <string name="email_update_alert_message">Va a cambiar el correo electrónico asociado a su cuenta, ¿desea continuar?</string>
-    <string name="password_update_alert_message">"Va a cambiar la contraseña de su cuenta, ¿desea continuar?"</string>
+    <string name="password_update_alert_message">Va a cambiar la contraseña de su cuenta, ¿desea continuar?</string>
     <string name="public_match_dialog">¿Quiere crear una nueva partida pública o unirse a una ya creada?</string>
     <string name="private_match_dialog">¿Quiere crear una nueva partida privada o unirse a una ya creada?</string>
+    <string name="number_of_players">Número de jugadores</string>
+    <string name="number_of_bots">Número de bots</string>
+    <!-- DIALOG BUTTONS -->
     <string name="alert_possitive_button">Sí</string>
     <string name="alert_negative_button">No</string>
     <string name="add_button">Añadir</string>
     <string name="create_button">Crear</string>
     <string name="join_button">Unirme</string>
-    <string name="number_of_players">Número de jugadores</string>
-    <string name="number_of_bots">Número de bots</string>
     <!-- INPUT ERRORS -->
     <string name="alias_format_error">Escriba un alias válido</string>
     <string name="email_format_error">Escriba un email válido</string>
@@ -44,15 +45,18 @@
     <string name="different_passwords">Las contraseñas no coinciden</string>
     <!-- SERVER CALL ERRORS -->
     <string name="no_response">El servidor no responde</string>
-    <string name="bad_register_response">"Quizás se haya caido el servidor"</string>
+    <string name="bad_register_response">Quizás se haya caido el servidor</string>
     <string name="bad_delete_response">Error! No se pudo eliminar su cuenta</string>
     <string name="bad_update_response">Error! No se pudo realizar el cambio</string>
     <string name="bad_login_response">Error! Revise los datos introducidos</string>
     <string name="bad_refresh_response">No se pudo actualizar la sesión</string>
     <string name="bad_creation_response">No se pudo crear la partida</string>
+    <string name="bad_quit_response">No es posible salir de la partida</string>
+    <string name="bad_read_response">No se han podido cargar los datos de su cuenta</string>
     <!-- SERVER CALL SUCCESS -->
     <string name="email_change_success">Ha actualizado su dirección de correo electrónico con éxito</string>
     <string name="password_change_success">Ha actualizado su contraseña con éxito</string>
+    <string name="avatar_change_success">Ha actualizado su avatar con éxito</string>
     <string name="refresh_success">Sesión actualizada</string>
     <string name="cash">5500</string>
 </resources>

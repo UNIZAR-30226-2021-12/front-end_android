@@ -1,15 +1,10 @@
 package eina.unizar.unozar
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_create_game.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class CreatePublicMatch : AppCompatActivity() {
     private var players = 2
@@ -38,7 +33,7 @@ class CreatePublicMatch : AppCompatActivity() {
             player_three.visibility = View.INVISIBLE
             player_four.visibility = View.INVISIBLE
         }
-        cancel.setOnClickListener{ finish() }
+        exit.setOnClickListener{ finish() }
         create.setOnClickListener{ createGame() }
     }
 

@@ -2,8 +2,15 @@ package eina.unizar.unozar
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_create_game.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import server.request.TokenRequest
+import server.response.TokenResponse
+
 /*import android.content.Intent
 import android.widget.Toast
 import retrofit2.Call
@@ -36,6 +43,25 @@ class JoinMatch : AppCompatActivity() {
             bots++
             players++
         }
-        cancel.setOnClickListener{ finish() }
+        exit.setOnClickListener{ quit(View(this)) }
+    }
+
+    fun quit(@Suppress("UNUSED_PARAMETER") view: View) {
+        RetrofitClient.instance.quitMatch(TokenRequest(session))
+            .enqueue(object : Callback<TokenResponse> {
+                override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                    //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                    if (response.code() == 200) {
+                        session = response.body()!!.token
+                        Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                        finish()
+                    } else {
+                        //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                    }
+                }
+            })
     }
 }

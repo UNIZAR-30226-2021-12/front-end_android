@@ -121,7 +121,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/cancel"
+            android:id="@+id/exit"
             style="@android:style/Widget.Holo.Button"
             android:layout_width="128dp"
             android:layout_height="50dp"
