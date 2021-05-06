@@ -1,5 +1,6 @@
 package eina.unizar.unozar
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -24,6 +25,7 @@ import server.response.TokenResponse
 
 
 class Principal : AppCompatActivity() {
+    private var CODE = 73
     private var n = 2
     private lateinit var session: String
     private lateinit var players: AlertDialog.Builder
@@ -52,11 +54,16 @@ class Principal : AppCompatActivity() {
             R.id.action_profile -> {
                 val intent = Intent(this, Profile::class.java)
                 intent.putExtra("session", session)
-                startActivity(intent)
+                startActivityForResult(intent, CODE)
             }
             R.id.action_logout -> {
                 val intent = Intent(this, Login::class.java)
                 startActivity(intent)
+            }
+            R.id.action_friends -> {
+                val intent = Intent(this, Friends::class.java)
+                intent.putExtra("session", session)
+                startActivityForResult(intent, CODE)
             }
             R.id.action_refresh -> {
                 RetrofitClient.instance.refreshToken(TokenRequest(session))
@@ -101,14 +108,14 @@ class Principal : AppCompatActivity() {
             /*val intent = Intent(this, CreatePublicMatch::class.java)
             intent.putExtra("numPlayers", n)
             intent.putExtra("session", session)
-            startActivity(intent)*/
+            startActivityForResult(intent, CODE)*/
         }
         choose.setNegativeButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->
             players.show()
             /*val intent = Intent(this, JoinMatch::class.java)
             intent.putExtra("numPlayers", n)
             intent.putExtra("session", session)
-            startActivity(intent)*/
+            startActivityForResult(intent, CODE)*/
         }
         choose.show()
     }
@@ -148,7 +155,7 @@ class Principal : AppCompatActivity() {
                                     intent.putExtra("numPlayers", n)
                                     intent.putExtra("numBots", b)
                                     intent.putExtra("session", response.body()?.token)
-                                    startActivity(intent)
+                                    startActivityForResult(intent, CODE)
                                 } else {
                                     //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
                                     Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
@@ -179,7 +186,7 @@ class Principal : AppCompatActivity() {
                                     .show()
                                 val intent = Intent(this@Principal, JoinMatch::class.java)
                                 intent.putExtra("session", response.body()?.token)
-                                startActivity(intent)
+                                startActivityForResult(intent, CODE)
                             } else {
                                 //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
                                 Toast.makeText(
@@ -195,5 +202,11 @@ class Principal : AppCompatActivity() {
             code.show()
         }
         choose.show()
+    }
+
+    override fun onActivityResult (requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && requestCode == CODE) {
+            session = data!!.getStringExtra("session").toString()
+        } else { super.onActivityResult(requestCode, resultCode, data) }
     }
 }

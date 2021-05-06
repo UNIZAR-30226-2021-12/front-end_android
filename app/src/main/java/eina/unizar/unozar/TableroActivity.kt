@@ -22,7 +22,9 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import server.request.PlayCardRequest
 import server.request.TokenRequest
+import server.response.GameInfoResponse
 import server.response.TokenResponse
 
 var recordCambiado = 0
@@ -206,7 +208,7 @@ class TableroActivity : AppCompatActivity(){
     private val cards = mutableListOf<Card>()
     val listaJugadores = mutableListOf<Gamer>()
 
-    private var cimaActual = R.drawable.cambio_sentido_azul
+    private var cimaActual = 0
     private var cimaCambiada = 1
     /*var cimaNueva = 0
 
@@ -314,6 +316,7 @@ class TableroActivity : AppCompatActivity(){
     }
 
     fun ponerCarta(@Suppress("UNUSED_PARAMETER")view: View){
+
         //Si es una +4 o un cambia color
         if(nombreRecordado == "mas_cuatro_base" || nombreRecordado == "cambio_color_base") {
             val builder = AlertDialog.Builder(this)
@@ -329,12 +332,14 @@ class TableroActivity : AppCompatActivity(){
             }
         }
         //Mandar carta al servidor
-        /*RetrofitClient.instance.userPlayCard(PutCardRequest(/*Que tengo que enviar*/))
-            .enqueue(object : Callback<PutCardResponse> {
-                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+        /*RetrofitClient.instance.userPlayCard(PlayCardRequest(session, ))
+            .enqueue(object : Callback<TokenResponse> {
+                override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                     Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
-                } override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                     if (response.code() == 200) {
+                        Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                        session = response.body()!!.token
                         //La carta se ha puesto con éxito
                     } else {
                         Toast.makeText(applicationContext, "Quizás se haya caido el servidor", Toast.LENGTH_LONG).show()
@@ -387,8 +392,7 @@ class TableroActivity : AppCompatActivity(){
     }
 
     private fun cambiarCima(){
-        val imageView1 = findViewById<ImageView>(R.id.image_cima)
-        imageView1.setImageResource(cimaActual)
+        image_cima.setImageResource(cimaActual)
     }
 
     private fun cambiarElegido(){
@@ -401,25 +405,27 @@ class TableroActivity : AppCompatActivity(){
     private fun actualizar(){
         CoroutineScope(Dispatchers.IO).launch {
             while(true){
-                /*RetrofitClient.instance.userPlayCard(PutCardRequest(/*Que tengo que enviar*/))
-                    .enqueue(object : Callback<PutCardResponse> {
-                        override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                            Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
-                        } override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                RetrofitClient.instance.readGame(TokenRequest(session))
+                    .enqueue(object : Callback<GameInfoResponse> {
+                        override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
+                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
                             if (response.code() == 200) {
-                                //La carta se ha puesto con éxito
+                                Toast.makeText(applicationContext, "Actualización", Toast.LENGTH_LONG).show()
+                                image_cima.setImageResource(traductorCartasToInt(response.body()!!.topDiscard))
+                                //cimaActual = traductorCartasToInt(response.body()!!.topDiscard)
                             } else {
-                                Toast.makeText(applicationContext, "Quizás se haya caido el servidor", Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                             }
                         }
-                    })*/
-                if(cimaCambiada == 1){
+                    })
+                /*if(cimaCambiada == 1){
                     cambiarCima()
                     cimaCambiada = 0
                 }
                 if(recordCambiado == 1){
                     cambiarElegido()
-                }
+                }*/
 
                 delay(200)
             }
@@ -460,6 +466,4 @@ class TableroActivity : AppCompatActivity(){
         }
         return super.onOptionsItemSelected(item)
     }
-
-
 }

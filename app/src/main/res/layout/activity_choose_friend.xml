@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".Friends">
+    tools:context=".CreatePrivateMatch">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/match_toolbar"
@@ -24,7 +24,7 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="144dp"
+        android:layout_marginStart="158dp"
         android:layout_marginTop="16dp"
         android:text="@string/app_name"
         android:textColor="#EA8E05"
@@ -35,17 +35,18 @@
 
     <ListView
         android:id="@+id/add_friend_list"
-        android:layout_width="360dp"
-        android:layout_height="326dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="375dp"
+        android:layout_height="394dp"
         app:layout_constraintBottom_toTopOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/match_toolbar"
+        app:layout_constraintVertical_bias="0.822" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="101dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,24 +54,12 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/cancel_button"
+            android:id="@+id/exit"
             style="@android:style/Widget.Holo.Button"
             android:layout_width="128dp"
             android:layout_height="50dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="28dp"
             android:text="@string/cancel"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/add_friend"
-            style="@android:style/Widget.Holo.Button"
-            android:layout_width="128dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="64dp"
-            android:text="@string/add_friend"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -80,16 +69,16 @@
 
     <TextView
         android:id="@+id/textView8"
-        android:layout_width="wrap_content"
+        android:layout_width="160dp"
         android:layout_height="29dp"
-        android:text="@string/friends"
+        android:text="@string/choose_friend"
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/add_friend_list"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/match_toolbar"
-        app:layout_constraintVertical_bias="0.555" />
+        app:layout_constraintTop_toBottomOf="@+id/match_toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

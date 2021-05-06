@@ -1,5 +1,7 @@
 package eina.unizar.unozar
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -18,7 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response*/
 
 class JoinMatch : AppCompatActivity() {
-    //private val tested = false
+    private var CODE = 73
     private var players = 2
     private var bots = 1
     private var session = ""
@@ -56,6 +58,8 @@ class JoinMatch : AppCompatActivity() {
                     if (response.code() == 200) {
                         session = response.body()!!.token
                         Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                        val intent = Intent().apply { putExtra("session", session) }
+                        setResult(Activity.RESULT_OK, intent)
                         finish()
                     } else {
                         //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
@@ -63,5 +67,12 @@ class JoinMatch : AppCompatActivity() {
                     }
                 }
             })
+    }
+
+    override fun onActivityResult (requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && requestCode == CODE) {
+            setResult(Activity.RESULT_OK, data)
+            finish()
+        } else { super.onActivityResult(requestCode, resultCode, data) }
     }
 }

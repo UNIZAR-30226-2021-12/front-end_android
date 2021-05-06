@@ -44,6 +44,8 @@ class ChangeAvatar : AppCompatActivity() {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                     if (response.code() == 200) {
+                        val intent = Intent().apply { putExtra("session", response.body()!!.token) }
+                        setResult(Activity.RESULT_OK, intent)
                         Toast.makeText(applicationContext, getString(R.string.avatar_change_success), Toast.LENGTH_LONG).show()
                         finish()
                     } else {

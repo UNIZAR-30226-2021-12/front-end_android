@@ -16,10 +16,12 @@
     <string name="logout">Logout</string>
     <string name="change">Change</string>
     <string name="cancel">Cancel</string>
+    <string name="add_friend">Add friend</string>
     <string name="create">Create match</string>
     <string name="public_game">Public match</string>
     <string name="private_game">Private match</string>
     <string name="choose_friend">Choose Friend</string>
+    <string name="friends">Friends</string>
     <string name="exit">Exit</string>
     <!-- DIALOG TEXT -->
     <string name="alert">Careful! </string>
@@ -44,6 +46,7 @@
     <string name="alias_format_error">Please write a valid alias</string>
     <string name="password_format_error">Please enter a valid password </string>
     <string name="different_passwords">Passwords do not match </string>
+    <!-- SERVER CALL ERRORS -->
     <string name="no_response">The server does not respond</string>
     <string name="bad_register_response">The server might be down</string>
     <string name="bad_delete_response">Error! Could not delete your account</string>
@@ -53,6 +56,7 @@
     <string name="bad_creation_response">Game could not be created </string>
     <string name="bad_quit_response">It´s not possible to quit the game</string>
     <string name="bad_read_response">Couldn\'t read your account info</string>
+    <!-- SERVER CALL SUCCESS -->
     <string name="email_change_success">You have successfully updated your email address </string>
     <string name="password_change_success">You have updated your password successfully </string>
     <string name="avatar_change_success">Your avatar was updated successfully</string>

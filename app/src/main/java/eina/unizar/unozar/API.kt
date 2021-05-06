@@ -1,5 +1,6 @@
 package eina.unizar.unozar
 
+import android.os.TokenWatcher
 import server.response.LoginUser
 import server.response.PlayerInfo
 import server.response.RegisterUser
@@ -58,7 +59,7 @@ interface API {
     ): Call<TokenResponse>
 
     @POST("/game/read")
-    fun readGame(
+    suspend fun readGame(
         @Body delete: TokenRequest
     ): Call<GameInfoResponse>
 
@@ -67,20 +68,20 @@ interface API {
         @Body addFriendRequest: AddFriendRequest
     ): Call<TokenResponse>
 
-    @POST("/player/addFriend")
+    @POST("/player/readFriends")
     fun getFriends(
-        @Body friendsListRequest: FriendsListRequest
+        @Body tokenRequest: TokenRequest
     ): Call<FriendsListResponse>
 
     @POST("/game/createGame")
     fun startMatch(
-        @Field("session") session:String
+        @Body tokenRequest: TokenRequest
     ): Call<TokenResponse>
 
     @POST("/game/playCard")
     fun userPlayCard(
-        @Field("session") session:String
-    ): Call<PutCardResponse>
+        @Body playCardRequest: PlayCardRequest
+    ): Call<TokenResponse>
 
     @POST("/game/drawCards")
     fun userDrawCards(

@@ -15,10 +15,12 @@
     <string name="logout">Cerrar sesión</string>
     <string name="change">Cambiar</string>
     <string name="cancel">Cancelar</string>
+    <string name="add_friend">Añadir amigo</string>
     <string name="create">Crear partida</string>
     <string name="public_game">Partida pública</string>
     <string name="private_game">Partida privada</string>
     <string name="choose_friend">Escoja un amigo</string>
+    <string name="friends">Amigos</string>
     <string name="exit">Salir</string>
     <!-- DIALOG TEXT -->
     <string name="alert">¡Cuidado!</string>

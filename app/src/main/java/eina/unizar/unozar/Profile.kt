@@ -1,6 +1,7 @@
 package eina.unizar.unozar
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -14,13 +15,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import server.request.IdRequest
 import server.request.TokenRequest
+import server.request.UpdateRequest
 import server.response.PlayerInfo
+import server.response.TokenResponse
 
 class Profile : AppCompatActivity() {
 
-    private val emailupdate = 1
-    private val passwordupdate = 2
-    private val avatarupdate = 3
+    private var CODE = 73
     private lateinit var session: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,25 +58,35 @@ class Profile : AppCompatActivity() {
     fun goToChangeEmail(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent(this, EmailChange::class.java)
         intent.putExtra("session", session)
-        startActivityForResult(intent, emailupdate)
+        startActivityForResult(intent, CODE)
     }
 
     fun goToChangePassword(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent(this, PasswordChange::class.java)
         intent.putExtra("session", session)
-        startActivityForResult(intent, passwordupdate)
+        startActivityForResult(intent, CODE)
     }
 
     fun goToChangeAvatar(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent(this, ChangeAvatar::class.java)
         intent.putExtra("session", session)
-        startActivityForResult(intent, avatarupdate)
+        startActivityForResult(intent, CODE)
     }
 
-    fun changeAlias(@Suppress("UNUSED_PARAMETER") view: View) {
-        val intent = Intent(this, ChangeAvatar::class.java)
-        intent.putExtra("session", session)
-        startActivityForResult(intent, avatarupdate)
+    fun changeAlias() {
+        RetrofitClient.instance.updatePlayer(UpdateRequest(null, null, null, session))
+            .enqueue(object : Callback<TokenResponse> {
+                override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                    if (response.code() == 200) {
+                        Toast.makeText(applicationContext, getString(R.string.password_change_success), Toast.LENGTH_LONG).show()
+                        finish()
+                    } else {
+                        Toast.makeText(applicationContext, getString(R.string.bad_update_response) + response.code(), Toast.LENGTH_LONG).show()
+                    }
+                }
+            })
     }
 
     fun deleteAccount(@Suppress("UNUSED_PARAMETER") view: View) {
@@ -101,8 +112,10 @@ class Profile : AppCompatActivity() {
         check.show()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        updateInfo()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && requestCode == CODE) {
+            session = data!!.getStringExtra("session").toString()
+            updateInfo()
+        } else { super.onActivityResult(requestCode, resultCode, data) }
     }
 }

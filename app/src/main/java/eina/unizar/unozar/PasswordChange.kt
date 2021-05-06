@@ -1,6 +1,8 @@
 package eina.unizar.unozar
 
+import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.os.Bundle
@@ -37,6 +39,8 @@ class PasswordChange : AppCompatActivity() {
                             Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                         } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                             if (response.code() == 200) {
+                                val intent = Intent().apply { putExtra("session", response.body()!!.token) }
+                                setResult(Activity.RESULT_OK, intent)
                                 Toast.makeText(applicationContext, getString(R.string.password_change_success), Toast.LENGTH_LONG).show()
                                 finish()
                             } else {
@@ -51,6 +55,8 @@ class PasswordChange : AppCompatActivity() {
     }
 
     fun cancel(@Suppress("UNUSED_PARAMETER")view: View) {
+        val intent = Intent().apply { putExtra("session", session) }
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 

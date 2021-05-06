@@ -81,6 +81,11 @@ class Register : AppCompatActivity() {
         }
     }
 
+    fun goToLogin(@Suppress("UNUSED_PARAMETER")view: View) {
+        val intent = Intent(this@Register, Login::class.java)
+        startActivity(intent)
+    }
+
     fun cancel(@Suppress("UNUSED_PARAMETER")view: View) {
         finish()
     }
