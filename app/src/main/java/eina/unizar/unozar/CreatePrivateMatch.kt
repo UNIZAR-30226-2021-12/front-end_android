@@ -26,6 +26,7 @@ class CreatePrivateMatch : AppCompatActivity() {
     private var CODE = 73
     private var players = 2
     private var bots = 1
+    private var started = false
     private lateinit var session: String
     private lateinit var code: String
     private val invite = Menu.FIRST
@@ -55,23 +56,20 @@ class CreatePrivateMatch : AppCompatActivity() {
             player_three.visibility = View.INVISIBLE
             player_four.visibility = View.INVISIBLE
         }
-        actualizar()
         /*RetrofitClient.instance.readGame(TokenRequest(session))
             .enqueue(object : Callback<GameInfoResponse> {
                 override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
-                    val code = AlertDialog.Builder(this@CreatePrivateMatch)
-                    code.setTitle("Error")
-                    code.setMessage(t.message)
-                    code.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int -> }
-                    code.show()
+                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
                     if (response.code() == 200) {
-                        Toast.makeText(applicationContext, "Sala creada", Toast.LENGTH_LONG).show()
+                        //Toast.makeText(applicationContext, "Actualización", Toast.LENGTH_LONG).show()
                     } else {
                         Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                     }
                 }
             })*/
+
+        actualizar()
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
@@ -117,6 +115,7 @@ class CreatePrivateMatch : AppCompatActivity() {
                     Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                     if (response.code() == 200) {
+                        started = true
                         Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
                         val intent = Intent(this@CreatePrivateMatch, TableroActivity::class.java)
                         intent.putExtra("session", response.body()!!.token)
@@ -131,20 +130,21 @@ class CreatePrivateMatch : AppCompatActivity() {
 
     private fun actualizar(){
         CoroutineScope(Dispatchers.IO).launch {
-            while(true){
+            while(!started){
                 RetrofitClient.instance.readGame(TokenRequest(session))
                     .enqueue(object : Callback<GameInfoResponse> {
                         override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
                             Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                         } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
                             if (response.code() == 200) {
+                                session = response.body()?.token.toString()
                                 //Toast.makeText(applicationContext, "Actualización", Toast.LENGTH_LONG).show()
                             } else {
                                 Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                             }
                         }
                     })
-                delay(200)
+                delay(500)
             }
         }
     }

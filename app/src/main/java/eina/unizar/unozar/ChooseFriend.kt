@@ -34,6 +34,7 @@ class ChooseFriend : AppCompatActivity() {
     private lateinit var code: String
     private lateinit var email: String
     private lateinit var friends: ArrayList<FriendInfo>
+    private lateinit var adapter: FriendsListAdapter
     private var avatars = arrayListOf(
         R.drawable.test_user,
         R.drawable.oso,
@@ -49,8 +50,6 @@ class ChooseFriend : AppCompatActivity() {
 
         friends = ArrayList()
         getFriendsRequest()
-        val adapter = FriendsListAdapter(this, friends)
-        add_friend_list.adapter = adapter
 
         registerForContextMenu(add_friend_list)
     }
@@ -78,26 +77,15 @@ class ChooseFriend : AppCompatActivity() {
                                 avatars[response.body()!!.avatarIds?.get(i)!!])
                             )
                             i++
-                            /*friends1[i] = (FriendInfo(
-                                response.body()!!.friendIds?.get(i),
-                                response.body()!!.alias?.get(i),
-                                response.body()!!.emails?.get(i),
-                                avatars[response.body()!!.avatarIds?.get(i)!!]
-                            ))*/
-                            /*val addFriend = AlertDialog.Builder(this@Friends)
-                            addFriend.setTitle(response.body()!!.emails?.get(i))
-                            addFriend.setPositiveButton(getString(R.string.add_button)) { _: DialogInterface, _: Int -> }
-                            addFriend.show()*/
                         }
-                        //Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                        adapter = FriendsListAdapter(this@ChooseFriend, friends)
+                        add_friend_list.adapter = adapter
                     } else {
                         //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
                         Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                     }
                 }
             })
-        friends.add(FriendInfo("5", "Pedrito", "pedrito@gmail.com", avatars[0]))
-        friends.add(FriendInfo("10", "Juanito", "juanito@gmail.com", avatars[2]))
     }
 
     private fun addFriend() {

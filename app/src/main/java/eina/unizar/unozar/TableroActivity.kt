@@ -35,6 +35,8 @@ var record = 0
 class TableroActivity : AppCompatActivity(){
 
     private lateinit var session: String
+    private var finished = false
+    private var myTurn = true
     private val cardsList = listOf(
         Card(1, "inicio", R.drawable.inicio),
         Card(1, "cambio_color_base", R.drawable.cambio_color_base),
@@ -402,41 +404,52 @@ class TableroActivity : AppCompatActivity(){
     //var recordCambiado = 0;
     private fun actualizar(){
         CoroutineScope(Dispatchers.IO).launch {
-            while(true){
-                RetrofitClient.instance.readGame(TokenRequest(session))
-                    .enqueue(object : Callback<GameInfoResponse> {
-                        override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
-                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                        } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
-                            if (response.code() == 200) {
-                                Toast.makeText(applicationContext, "Actualización", Toast.LENGTH_LONG).show()
-                                image_cima.setImageResource(traductorCartasToInt(response.body()!!.topDiscard))
-                                /*** Players info ***/
-                                for(i in 0..response.body()!!.maxPlayers) {
-                                    /*gamersList.add(Gamer(
-                                        response.body(),
-                                        "Carta +4",
-                                        R.drawable.cuatro_verde))*/
-                                }
-                                rvGamer.layoutManager = LinearLayoutManager(this@TableroActivity, LinearLayoutManager.HORIZONTAL, false)
-                                val adapter = GamerAdapter(gamersList)
-                                rvGamer.adapter = adapter
-                                cimaActual = traductorCartasToInt(response.body()!!.topDiscard)
-                                cimaCambiada = cimaActual != traductorCartasToInt(response.body()!!.topDiscard)
-                            } else {
-                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                            }
-                        }
-                    })
-                if(cimaCambiada){
-                    cambiarCima()
-                    cimaCambiada = false
-                }
-                if(recordCambiado == 1){
-                    cambiarElegido()
-                }
+            while(!finished){
+                if(myTurn) {
+                    RetrofitClient.instance.readGame(TokenRequest(session))
+                        .enqueue(object : Callback<GameInfoResponse> {
+                            override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
+                                Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                            } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
+                                if (response.code() == 200) {
+                                    Toast.makeText(applicationContext, "Actualización", Toast.LENGTH_LONG).show()
+                                    image_cima.setImageResource(traductorCartasToInt(response.body()!!.topDiscard))
+                                    /*** Players info ***/
+                                    if(response.body()!!.turn == 0) myTurn = true
+                                    else myTurn = false
 
-                delay(200)
+                                    for (i in 0..response.body()!!.maxPlayers) {
+                                        /*gamersList.add(Gamer(
+                                            response.body(),
+                                            "Carta +4",
+                                            R.drawable.cuatro_verde))*/
+                                    }
+                                    rvGamer.layoutManager = LinearLayoutManager(
+                                        this@TableroActivity,
+                                        LinearLayoutManager.HORIZONTAL,
+                                        false
+                                    )
+                                    val adapter = GamerAdapter(gamersList)
+                                    rvGamer.adapter = adapter
+                                    cimaActual = traductorCartasToInt(response.body()!!.topDiscard)
+                                    cimaCambiada =
+                                        cimaActual != traductorCartasToInt(response.body()!!.topDiscard)
+                                } else {
+                                    Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        })
+                    if (cimaCambiada) {
+                        cambiarCima()
+                        cimaCambiada = false
+                    }
+                    if (recordCambiado == 1) {
+                        cambiarElegido()
+                    }
+
+                    delay(200)
+
+                }
             }
 
         }

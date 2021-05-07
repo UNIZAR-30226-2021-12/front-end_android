@@ -163,10 +163,10 @@ class Principal : AppCompatActivity() {
                             }
                         })
                 }
-                bots.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
+                bots.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int -> }
                 bots.show()
             }
-            numP.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
+            numP.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int -> }
             numP.show()
         }
         choose.setNegativeButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->

@@ -59,7 +59,7 @@ interface API {
     ): Call<TokenResponse>
 
     @POST("/game/read")
-    suspend fun readGame(
+    fun readGame(
         @Body delete: TokenRequest
     ): Call<GameInfoResponse>
 

@@ -11,5 +11,4 @@ data class GameInfoResponse(@SerializedName("gameId")val gameId:String,
                             @SerializedName("playersNumCards")val playersNumCards:Array<Int>,
                             @SerializedName("gameStarted")val gameStarted:Boolean,
                             @SerializedName("gamePaused")val gamePaused:Boolean,
-                            @SerializedName("gameFinished")val gameFinished:Boolean,
                             @SerializedName("token")val token: String)

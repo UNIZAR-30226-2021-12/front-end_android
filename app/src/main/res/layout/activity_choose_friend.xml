@@ -35,8 +35,8 @@
 
     <ListView
         android:id="@+id/add_friend_list"
-        android:layout_width="375dp"
-        android:layout_height="394dp"
+        android:layout_width="374dp"
+        android:layout_height="343dp"
         app:layout_constraintBottom_toTopOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

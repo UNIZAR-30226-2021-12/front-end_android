@@ -30,6 +30,7 @@ class Friends : AppCompatActivity() {
     private lateinit var session: String
     private lateinit var code: String
     private lateinit var friends: ArrayList<FriendInfo>
+    private lateinit var adapter: FriendsListAdapter
     private var avatars = arrayListOf(
         R.drawable.test_user,
         R.drawable.oso,
@@ -46,8 +47,6 @@ class Friends : AppCompatActivity() {
         code = intent.getStringExtra("code").toString()
         friends = ArrayList()
         getFriendsRequest()
-        val adapter = FriendsListAdapter(this, friends)
-        add_friend_list.adapter = adapter
 
         registerForContextMenu(add_friend_list)
         add_friend.setOnClickListener {
@@ -62,18 +61,12 @@ class Friends : AppCompatActivity() {
         RetrofitClient.instance.getFriends(TokenRequest(session))
             .enqueue(object : Callback<FriendsListResponse> {
                 override fun onFailure(call: Call<FriendsListResponse>, t: Throwable) {
-                    //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<FriendsListResponse>, response: Response<FriendsListResponse>) {
                     if (response.code() == 200) {
                         var i = 0
                         session = response.body()?.token.toString()
-                        /*val emailArray = response.body()!!.emails
-                        val aliasArray = response.body()!!.alias
-                        val avatarArray = response.body()!!.avatarIds
-                        val idArray = response.body()!!.friendIds*/
                         while (i < response.body()!!.avatarIds?.size!!) {
-                            Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
                             friends.add(FriendInfo(
                                 response.body()!!.friendIds?.get(i),
                                 response.body()!!.alias?.get(i),
@@ -81,26 +74,14 @@ class Friends : AppCompatActivity() {
                                 avatars[response.body()!!.avatarIds?.get(i)!!])
                             )
                             i++
-                            /*friends1[i] = (FriendInfo(
-                                response.body()!!.friendIds?.get(i),
-                                response.body()!!.alias?.get(i),
-                                response.body()!!.emails?.get(i),
-                                avatars[response.body()!!.avatarIds?.get(i)!!]
-                            ))*/
-                            /*val addFriend = AlertDialog.Builder(this@Friends)
-                            addFriend.setTitle(response.body()!!.emails?.get(i))
-                            addFriend.setPositiveButton(getString(R.string.add_button)) { _: DialogInterface, _: Int -> }
-                            addFriend.show()*/
                         }
-                        //Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                        adapter = FriendsListAdapter(this@Friends, friends)
+                        add_friend_list.adapter = adapter
                     } else {
-                        //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
                     }
                 }
             })
-        friends.add(FriendInfo("5", "Pedrito", "pedrito@gmail.com", avatars[0]))
-        friends.add(FriendInfo("10", "Juanito", "juanito@gmail.com", avatars[2]))
     }
 
     private fun addFriend() {
@@ -118,6 +99,7 @@ class Friends : AppCompatActivity() {
                         if (response.code() == 200) {
                             session = response.body()?.token.toString()
                             Toast.makeText(applicationContext, "Amigo añadido", Toast.LENGTH_LONG).show()
+                            getFriendsRequest()
                         } else {
                             //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
                             Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
@@ -154,7 +136,8 @@ class Friends : AppCompatActivity() {
                         } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                             if (response.code() == 200) {
                                 Toast.makeText(applicationContext, "Amigo borrado", Toast.LENGTH_LONG).show()
-                                finish()
+                                val intent = Intent().apply { putExtra("session", response.body()?.token.toString()) }
+                                setResult(Activity.RESULT_OK, intent)
                             } else {
                                 //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
                                 Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
