@@ -474,7 +474,6 @@ class TableroActivity : AppCompatActivity(){
         imageView2.setImageResource(record)
     }
 
-    //var recordCambiado = 0;
     private fun actualizar(){
         CoroutineScope(Dispatchers.IO).launch {
             while(!finished){
@@ -504,6 +503,7 @@ class TableroActivity : AppCompatActivity(){
                                         }
                                     }
 
+                                    manoNueva = response.body()!!.playerCards
                                     comprobarManoNueva()
                                     if(manoCambiada){
                                         cambiarMano()
@@ -515,6 +515,7 @@ class TableroActivity : AppCompatActivity(){
                                         manoCambiada = false
                                     }
 
+
                                     if(robadaCarta && cartaAnadida){
                                         anadirCartaMano(CartaNueva)
                                         val misNumCartas = findViewById<TextView>(R.id.your_cards) as TextView
@@ -525,6 +526,8 @@ class TableroActivity : AppCompatActivity(){
                                         cartaAnadida = false
                                     }
 
+                                    jugadoresNuevos = response.body()!!.playersIds
+                                    numCartasJugadoresNuevos = response.body()!!.playersNumCards
                                     comprobarNombresJugadoresNuevos()
                                     comprobarCartasJugadores()
                                     if(jugadoresCambiados || numCartasJugadoresCambiados){
@@ -536,6 +539,7 @@ class TableroActivity : AppCompatActivity(){
                                         numCartasJugadoresCambiados = false
                                     }
 
+                                    cimaNueva = response.body()!!.topDiscard
                                     comprobarCima()
                                     if(cimaCambiada){
                                         runOnUiThread {
