@@ -316,10 +316,10 @@ class TableroActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tablero)
         session = intent.getStringExtra("session").toString()
-        manoNueva = PruebaCartas
+        /*manoNueva = PruebaCartas
         jugadoresNuevos = PruebaJugadores
         numCartasJugadoresNuevos = PruebaNCartas
-        cimaNueva = cimaPrueba
+        cimaNueva = cimaPrueba*/
 
         actualizar()
 
