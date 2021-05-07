@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import server.request.PlayCardRequest
 import server.request.TokenRequest
 import server.response.GameInfoResponse
 import server.response.TokenResponse
@@ -204,10 +203,10 @@ class TableroActivity : AppCompatActivity(){
 
     var miTurno = true
 
-    val PruebaCartas = arrayOf("XXC","2RX","XRS","XX4","0GX","8YX","XB2","4BX")
+    /*val PruebaCartas = arrayOf("XXC","2RX","XRS","XX4","0GX","8YX","XB2","4BX")
     val PruebaJugadores = arrayOf("Jugador1","Jugador2","Jugador3","Jugador4")
     val PruebaNCartas = arrayOf(4,5,6,7)
-    val cimaPrueba = "0GX"
+    val cimaPrueba = "0GX"*/
 
     fun comprobarCima(){
         if(cimaActual.length == 0) {
@@ -485,7 +484,7 @@ class TableroActivity : AppCompatActivity(){
                             } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
                                 if (response.code() == 200) {
                                     Toast.makeText(applicationContext, "Actualización", Toast.LENGTH_LONG).show()
-                                    image_cima.setImageResource(traductorCartasToInt(response.body()!!.topDiscard))
+                                    //image_cima.setImageResource(traductorCartasToInt(response.body()!!.topDiscard))
                                     /*** Players info ***/
                                     if(response.body()!!.turn == 0) myTurn = true
                                     else myTurn = false
