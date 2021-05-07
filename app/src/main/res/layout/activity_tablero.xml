@@ -88,37 +88,27 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/recordarButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Elegir Carta" />
-
-        <Button
             android:id="@+id/buttonPoner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="ponerCarta"
             android:text="Poner Carta" />
 
         <Button
             android:id="@+id/buttonPedirUno"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="pedirUno"
             android:text="Pedir Uno" />
 
         <Button
             android:id="@+id/buttonRobarCarta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="robarCarta"
             android:text="Robar Carta" />
 
         <Button
             android:id="@+id/buttonPasar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="pasarTurno"
             android:text="Pasar" />
     </LinearLayout>
 </LinearLayout>
