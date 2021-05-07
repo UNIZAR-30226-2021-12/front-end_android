@@ -27,7 +27,9 @@
     <string name="alert">Careful! </string>
     <string name="choose">Choose</string>
     <string name="code">Write here the code of the match</string>
-    <string name="friend">Do you want to add this friend to the game? </string>
+    <string name="add_friend_message">Do you want to add him/her as your friend? </string>
+    <string name="add_to_game">¿Do you want to add this friend to your game?</string>
+    <string name="delete_friend_message">Do you want to delete this player from your friends list? </string>
     <string name="delete_account_alert_message">You are permanently deleting your account, do you want to continue? </string>
     <string name="email_update_alert_message">You are going to change the email associated with your account, do you want to continue? </string>
     <string name="password_update_alert_message">You are going to change your account password, do you want to continue? </string>
@@ -41,6 +43,7 @@
     <string name="add_button">Add</string>
     <string name="create_button">Create</string>
     <string name="join_button">Join</string>
+    <string name="delete_button">Delete</string>
     <!-- INPUT ERRORS -->
     <string name="email_format_error">Write a valid email </string>
     <string name="alias_format_error">Please write a valid alias</string>
