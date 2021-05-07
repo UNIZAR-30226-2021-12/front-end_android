@@ -68,11 +68,6 @@ interface API {
         @Body addFriendRequest: AddFriendRequest
     ): Call<TokenResponse>
 
-    @POST("/player/deleteFriend")
-    fun deleteFriend(
-        @Body addFriendRequest: AddFriendRequest
-    ): Call<TokenResponse>
-
     @POST("/player/readFriends")
     fun getFriends(
         @Body tokenRequest: TokenRequest

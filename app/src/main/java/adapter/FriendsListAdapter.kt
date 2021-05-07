@@ -11,7 +11,7 @@ import data.FriendInfo
 import eina.unizar.unozar.R
 
 
-class FriendsListAdapter(private val context: Activity, private val friends: ArrayList<FriendInfo>)
+class FriendsListAdapter(private val context: Activity, private val friends: Array<FriendInfo>)
     : BaseAdapter() {
 
     private class ViewHolder(row: View) {

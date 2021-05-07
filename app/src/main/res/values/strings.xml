@@ -26,9 +26,7 @@
     <string name="alert">¡Cuidado!</string>
     <string name="choose">Elija</string>
     <string name="code">Escriba aquí el código de la partida</string>
-    <string name="add_friend_message">¿Quiere añadir a este jugador como amigo?</string>
-    <string name="add_to_game">¿Quiere añadir a este amigo a la partida?</string>
-    <string name="delete_friend_message">¿Quiere eliminar a este jugador de su lista de amigos? </string>
+    <string name="friend">¿Quiere añadir a este amigo a la partida?</string>
     <string name="delete_account_alert_message">Va a eliminar su cuenta de forma permanente, ¿desea continuar?</string>
     <string name="email_update_alert_message">Va a cambiar el correo electrónico asociado a su cuenta, ¿desea continuar?</string>
     <string name="password_update_alert_message">Va a cambiar la contraseña de su cuenta, ¿desea continuar?</string>
@@ -42,7 +40,6 @@
     <string name="add_button">Añadir</string>
     <string name="create_button">Crear</string>
     <string name="join_button">Unirme</string>
-    <string name="delete_button">Borrar</string>
     <!-- INPUT ERRORS -->
     <string name="alias_format_error">Escriba un alias válido</string>
     <string name="email_format_error">Escriba un email válido</string>

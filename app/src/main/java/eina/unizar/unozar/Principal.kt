@@ -182,13 +182,18 @@ class Principal : AppCompatActivity() {
                             Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
                         } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                             if (response.code() == 200) {
-                                Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG)
+                                    .show()
                                 val intent = Intent(this@Principal, JoinMatch::class.java)
                                 intent.putExtra("session", response.body()?.token)
                                 startActivityForResult(intent, CODE)
                             } else {
                                 //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    response.code(),
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         }
                     })

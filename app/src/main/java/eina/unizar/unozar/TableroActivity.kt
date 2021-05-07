@@ -13,7 +13,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import data.Card
-import data.FriendInfo
 import data.Gamer
 import kotlinx.android.synthetic.main.activity_tablero.*
 import kotlinx.coroutines.CoroutineScope
@@ -47,8 +46,11 @@ class TableroActivity : AppCompatActivity(){
         Card(1, "fin", R.drawable.fin)
     )
 
-    private lateinit var gamersList: ArrayList<Gamer>
-    //private val gamersList = Array<Gamer>()
+    private val gamersList = listOf(
+        Gamer(1, R.drawable.jesica, "Nombre1", "su turno", "13  Cartas"),
+        Gamer(2, R.drawable.castor, "Nombre2", "", "4 Cartas"),
+        Gamer(3, R.drawable.larry, "Nombre3", "", "6 Cartas")
+    )
 
     fun traductorCartasToInt(carta: String): Int {
         if(carta[1] == 'R') {
@@ -207,7 +209,7 @@ class TableroActivity : AppCompatActivity(){
     val listaJugadores = mutableListOf<Gamer>()
 
     private var cimaActual = 0
-    private var cimaCambiada = true
+    private var cimaCambiada = 1
     /*var cimaNueva = 0
 
     val manoActual = mutableListOf<String>()
@@ -411,30 +413,19 @@ class TableroActivity : AppCompatActivity(){
                             if (response.code() == 200) {
                                 Toast.makeText(applicationContext, "Actualización", Toast.LENGTH_LONG).show()
                                 image_cima.setImageResource(traductorCartasToInt(response.body()!!.topDiscard))
-                                /*** Players info ***/
-                                for(i in 0..response.body()!!.maxPlayers) {
-                                    /*gamersList.add(Gamer(
-                                        response.body(),
-                                        "Carta +4",
-                                        R.drawable.cuatro_verde))*/
-                                }
-                                rvGamer.layoutManager = LinearLayoutManager(this@TableroActivity, LinearLayoutManager.HORIZONTAL, false)
-                                val adapter = GamerAdapter(gamersList)
-                                rvGamer.adapter = adapter
-                                cimaActual = traductorCartasToInt(response.body()!!.topDiscard)
-                                cimaCambiada = cimaActual != traductorCartasToInt(response.body()!!.topDiscard)
+                                //cimaActual = traductorCartasToInt(response.body()!!.topDiscard)
                             } else {
                                 Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                             }
                         }
                     })
-                if(cimaCambiada){
+                /*if(cimaCambiada == 1){
                     cambiarCima()
-                    cimaCambiada = false
+                    cimaCambiada = 0
                 }
                 if(recordCambiado == 1){
                     cambiarElegido()
-                }
+                }*/
 
                 delay(200)
             }
