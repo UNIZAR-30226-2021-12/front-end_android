@@ -63,6 +63,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Profile" />
         </activity>
+        <activity
+            android:name=".ChangeAvatar"
+            android:label="@string/app_name"
+            android:parentActivityName=".Profile" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Profile" />
+        </activity>
         <activity android:name=".CreatePrivateMatch"
             android:label="@string/app_name"
             android:parentActivityName=".Principal" >
