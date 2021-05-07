@@ -24,8 +24,10 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import server.request.PutCardRequest
 import server.request.TokenRequest
 import server.response.GameInfoResponse
+import server.response.PutCardResponse
 import server.response.TokenResponse
 
 var posCambiado :Long = 0
@@ -369,18 +371,19 @@ class TableroActivity : AppCompatActivity(){
         robadaCarta = true
         cartaAnadida = true
         //Pedir robar carta al servidor
-        /*RetrofitClient.instance.userPlayCard(PutCardRequest(/*Que tengo que enviar*/))
+        /*RetrofitClient.instance.userDrawCards(PutCardRequest(session))
             .enqueue(object : Callback<PutCardResponse> {
-                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                    Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_LONG).show()
-                } override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                override fun onFailure(call: Call<PutCardResponse>, t: Throwable) {
+                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<PutCardResponse>, response: Response<PutCardResponse>) {
                     if (response.code() == 200) {
-                        //La carta se ha puesto con éxito
-                    } else {
-                        Toast.makeText(applicationContext, "Quizás se haya caido el servidor", Toast.LENGTH_LONG).show()
+                        CartaNueva = response.body()!!.
+                    }
+                    else {
+                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                     }
                 }
-            })*/
+            }) */
     }
 
     fun anadirCartaMano(nuevaCarta:String){
@@ -414,7 +417,7 @@ class TableroActivity : AppCompatActivity(){
 
     fun ponerCarta(){
         //Si es una +4 o un cambia color
-        if(nombreRecordado == "mas_cuatro_base" || nombreRecordado == "cambio_color_base") {
+        if((nombreRecordado).equals("mas_cuatro_base") && (nombreRecordado).equals("cambio_color_base")) {
             val builder = AlertDialog.Builder(this)
             val items = arrayOf("Red", "Green", "Yellow", "Blue")
             with(builder)
@@ -476,7 +479,6 @@ class TableroActivity : AppCompatActivity(){
     private fun actualizar(){
         CoroutineScope(Dispatchers.IO).launch {
             while(!finished){
-                if(myTurn) {
                     RetrofitClient.instance.readGame(TokenRequest(session))
                         .enqueue(object : Callback<GameInfoResponse> {
                             override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
@@ -486,10 +488,10 @@ class TableroActivity : AppCompatActivity(){
                                     Toast.makeText(applicationContext, "Actualización", Toast.LENGTH_LONG).show()
                                     //image_cima.setImageResource(traductorCartasToInt(response.body()!!.topDiscard))
                                     /*** Players info ***/
-                                    if(response.body()!!.turn == 0) myTurn = true
-                                    else myTurn = false
+                                    if(response.body()!!.turn == 0) miTurno = true
+                                    else miTurno = false
 
-                                    if(myTurn){
+                                    if(miTurno){
                                         val definirTurno = findViewById<TextView>(R.id.your_turn) as TextView
                                         runOnUiThread {
                                             definirTurno.text = "Tu turno"
@@ -559,8 +561,6 @@ class TableroActivity : AppCompatActivity(){
                             }
                         })
                     delay(200)
-
-                }
             }
 
         }
