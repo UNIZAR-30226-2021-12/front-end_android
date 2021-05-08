@@ -39,7 +39,7 @@ class TableroActivity : AppCompatActivity(){
 
     private lateinit var session: String
     private var finished = false
-    private var myTurn = true
+    //private var myTurn = true
 
     fun traductorCartasToInt(carta: String): Int {
         if(carta[1] == 'R'){
@@ -243,8 +243,6 @@ class TableroActivity : AppCompatActivity(){
             else { //La manoActual y la nueva tienen el mismo tamaño
                 var i = 0
                 while ((i < manoActual.size) && !manoCambiada) {
-                    var una = manoActual.get(i)
-                    var dos = manoNueva[i]
                     if (!(manoActual.get(i)).equals(manoNueva[i])) {
                         manoCambiada = true
                     }
@@ -411,7 +409,7 @@ class TableroActivity : AppCompatActivity(){
     }
 
     var cartaPuesta = false
-    fun quitarCarta(pos: Long){
+    fun quitarCarta(){
         val auxMano = mutableListOf<String>()
         var tamano = manoActual.size -1
         var cartaExp = nombreRecordado
@@ -478,7 +476,7 @@ class TableroActivity : AppCompatActivity(){
                     }
                 }
             })*/
-        quitarCarta(posCambiado)
+        //quitarCarta()
         nombreRecordado = ""
         record = 0
         recordCambiado = true
@@ -501,7 +499,6 @@ class TableroActivity : AppCompatActivity(){
     fun anyadirGamers(){
         Gamers.clear()
         val tamano = jugadoresActuales.size - 1
-        var i = 0
         for(i in 0..tamano) {
             Gamers.add(Gamer(i.toLong(), R.drawable.jesica, jugadoresActuales[i], "su turno", numCartasJugadoresActuales[i].toString() + "  Cartas"))
         }
