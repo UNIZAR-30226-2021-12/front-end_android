@@ -411,13 +411,23 @@ class TableroActivity : AppCompatActivity(){
     }
 
     var cartaPuesta = false
-    fun quitarCarta(pos: Int){
-
+    fun quitarCarta(pos: Long){
+        val auxMano = mutableListOf<String>()
+        var tamano = manoActual.size -1
+        var cartaExp = nombreRecordado
+        lateinit var cartaMia : String
+        for(i in 0..tamano){
+            cartaMia = manoActual[i]
+            if(!(cartaMia.equals(cartaExp))) {
+                auxMano.add(manoActual[i])
+            }
+        }
+        manoNueva = auxMano.toTypedArray()
     }
 
     fun ponerCarta(){
         //Si es una +4 o un cambia color
-        if((nombreRecordado).equals("mas_cuatro_base") && (nombreRecordado).equals("cambio_color_base")) {
+        if(nombreRecordado == "XXC" || nombreRecordado == "XX4") {
             val builder = AlertDialog.Builder(this)
             val items = arrayOf("Red", "Green", "Yellow", "Blue")
             with(builder)
@@ -426,10 +436,35 @@ class TableroActivity : AppCompatActivity(){
                 setItems(items) { _, which ->
                     //Poner carta
                     Toast.makeText(applicationContext, items[which] + " is clicked", Toast.LENGTH_SHORT).show()
+                    if(items[which].equals("Red") && nombreRecordado == "XXC") {
+                        nombreRecordado = "XRC"
+                    }
+                    else if(items[which].equals("Green") && nombreRecordado == "XXC"){
+                        nombreRecordado = "XGC"
+                    }
+                    else if(items[which].equals("Blue") && nombreRecordado == "XXC"){
+                        nombreRecordado = "XBC"
+                    }
+                    else if(items[which].equals("Yellow") && nombreRecordado == "XXC"){
+                        nombreRecordado = "XYC"
+                    }
+                    else if(items[which].equals("Red") && nombreRecordado == "XX4") {
+                        nombreRecordado = "XR4"
+                    }
+                    else if(items[which].equals("Green") && nombreRecordado == "XX4"){
+                        nombreRecordado = "XG4"
+                    }
+                    else if(items[which].equals("Blue") && nombreRecordado == "XX4"){
+                        nombreRecordado = "XB4"
+                    }
+                    else if(items[which].equals("Yellow") && nombreRecordado == "XX4"){
+                        nombreRecordado = "XY4"
+                    }
                 }
                 show()
             }
         }
+
         //Mandar carta al servidor
         /*RetrofitClient.instance.userPlayCard(PutCardRequest(/*Que tengo que enviar*/))
             .enqueue(object : Callback<PutCardResponse> {
@@ -443,6 +478,10 @@ class TableroActivity : AppCompatActivity(){
                     }
                 }
             })*/
+        quitarCarta(posCambiado)
+        nombreRecordado = ""
+        record = 0
+        recordCambiado = true
     }
 
     private fun anyadirCartas(){
