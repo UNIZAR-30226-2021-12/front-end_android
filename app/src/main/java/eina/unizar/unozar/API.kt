@@ -1,6 +1,5 @@
 package eina.unizar.unozar
 
-import android.os.TokenWatcher
 import server.response.LoginUser
 import server.response.PlayerInfo
 import server.response.RegisterUser
@@ -9,10 +8,10 @@ import retrofit2.http.*
 import server.request.*
 import server.response.FriendsListResponse
 import server.response.GameInfoResponse
-import server.response.PutCardResponse
 import server.response.TokenResponse
 
 interface API {
+    /*** PLAYER REQUESTS ***/
     @POST("/player/authentication")
     fun authentication(
         @Body login: LoginUser
@@ -43,6 +42,22 @@ interface API {
         @Body refreshRequest: TokenRequest
     ): Call<TokenResponse>
 
+    @POST("/player/addFriend")
+    fun addFriend(
+        @Body addFriendRequest: AddFriendRequest
+    ): Call<TokenResponse>
+
+    @POST("/player/deleteFriend")
+    fun deleteFriend(
+        @Body addFriendRequest: AddFriendRequest
+    ): Call<TokenResponse>
+
+    @POST("/player/readFriends")
+    fun getFriends(
+        @Body tokenRequest: TokenRequest
+    ): Call<FriendsListResponse>
+
+    /*** GAME REQUESTS ***/
     @POST("/game/create")
     fun createMatch(
         @Body createMatchRequest: CreateMatchRequest
@@ -63,33 +78,18 @@ interface API {
         @Body delete: TokenRequest
     ): Call<GameInfoResponse>
 
-    @POST("/player/addFriend")
-    fun addFriend(
-        @Body addFriendRequest: AddFriendRequest
-    ): Call<TokenResponse>
-
-    @POST("/player/deleteFriend")
-    fun deleteFriend(
-        @Body addFriendRequest: AddFriendRequest
-    ): Call<TokenResponse>
-
-    @POST("/player/readFriends")
-    fun getFriends(
-        @Body tokenRequest: TokenRequest
-    ): Call<FriendsListResponse>
-
     @POST("/game/createGame")
     fun startMatch(
         @Body tokenRequest: TokenRequest
     ): Call<TokenResponse>
 
     @POST("/game/playCard")
-    fun userPlayCard(
+    fun playCard(
         @Body playCardRequest: PlayCardRequest
     ): Call<TokenResponse>
 
-    @POST("/game/drawCards")
-    fun userDrawCards(
-        @Field("session") session:String
-    ): Call<PutCardResponse>
+    @POST("/game/draw")
+    fun draw(
+        @Body tokenRequest: TokenRequest
+    ): Call<TokenResponse>
 }

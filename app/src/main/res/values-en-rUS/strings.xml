@@ -23,12 +23,15 @@
     <string name="choose_friend">Choose Friend</string>
     <string name="friends">Friends</string>
     <string name="exit">Exit</string>
+    <string name="chosen_card">Chosen</string>
+    <string name="play_card">Play card</string>
+    <string name="time_left">Time left: %1$s</string>
     <!-- DIALOG TEXT -->
     <string name="alert">Careful! </string>
     <string name="choose">Choose</string>
     <string name="code">Write here the code of the match</string>
     <string name="add_friend_message">Do you want to add him/her as your friend? </string>
-    <string name="add_to_game">¿Do you want to add this friend to your game?</string>
+    <string name="add_to_game">¿Do you want to invite %1$s to your game?</string>
     <string name="delete_friend_message">Do you want to delete this player from your friends list? </string>
     <string name="delete_account_alert_message">You are permanently deleting your account, do you want to continue? </string>
     <string name="email_update_alert_message">You are going to change the email associated with your account, do you want to continue? </string>
@@ -64,5 +67,8 @@
     <string name="password_change_success">You have updated your password successfully </string>
     <string name="avatar_change_success">Your avatar was updated successfully</string>
     <string name="refresh_success">Updated session </string>
+    <string name="quit_game_success">You left the game</string>
+    <!-- INVITE EMAIL -->
+    <string name="email_message">Write this code to join a game: %1$s</string>
     <string name="cash">5500</string>
 </resources>

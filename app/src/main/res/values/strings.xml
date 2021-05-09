@@ -22,12 +22,15 @@
     <string name="choose_friend">Escoja un amigo</string>
     <string name="friends">Amigos</string>
     <string name="exit">Salir</string>
+    <string name="chosen_card">Elegida</string>
+    <string name="play_card">Poner carta</string>
+    <string name="time_left">Tiempo restante: %1$s</string>
     <!-- DIALOG TEXT -->
     <string name="alert">¡Cuidado!</string>
     <string name="choose">Elija</string>
     <string name="code">Escriba aquí el código de la partida</string>
-    <string name="add_friend_message">¿Quiere añadir a este jugador como amigo?</string>
-    <string name="add_to_game">¿Quiere añadir a este amigo a la partida?</string>
+    <string name="add_friend_message">Escriba aquí el email de su amigo</string>
+    <string name="add_to_game">¿Quiere invitar a %1$s a la partida?</string>
     <string name="delete_friend_message">¿Quiere eliminar a este jugador de su lista de amigos? </string>
     <string name="delete_account_alert_message">Va a eliminar su cuenta de forma permanente, ¿desea continuar?</string>
     <string name="email_update_alert_message">Va a cambiar el correo electrónico asociado a su cuenta, ¿desea continuar?</string>
@@ -63,5 +66,8 @@
     <string name="password_change_success">Ha actualizado su contraseña con éxito</string>
     <string name="avatar_change_success">Ha actualizado su avatar con éxito</string>
     <string name="refresh_success">Sesión actualizada</string>
+    <string name="quit_game_success">Ha salido de la partida</string>
+    <!-- INVITE EMAIL -->
+    <string name="email_message">Escribe este código en la app para unirte a una partida: %1$s</string>
     <string name="cash">5500</string>
 </resources>

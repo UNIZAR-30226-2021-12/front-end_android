@@ -88,7 +88,7 @@ class Friends : AppCompatActivity() {
         val addFriend = AlertDialog.Builder(this)
         val customLayout: View = layoutInflater.inflate(R.layout.custom_alertdialog, null)
         addFriend.setView(customLayout)
-        addFriend.setTitle(getString(R.string.code))
+        addFriend.setTitle(getString(R.string.add_friend_message))
         addFriend.setPositiveButton(getString(R.string.add_button)) { _: DialogInterface, _: Int ->
             RetrofitClient.instance.addFriend(AddFriendRequest(session, customLayout.inputCode.text.toString().trim()))
                 .enqueue(object : Callback<TokenResponse> {

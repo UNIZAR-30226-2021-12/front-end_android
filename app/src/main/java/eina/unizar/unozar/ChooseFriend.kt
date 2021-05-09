@@ -1,8 +1,6 @@
 package eina.unizar.unozar
 
 import adapter.FriendsListAdapter
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -88,32 +86,32 @@ class ChooseFriend : AppCompatActivity() {
             })
     }
 
-    private fun addFriend() {
-        val friend = AlertDialog.Builder(this)
-        friend.setTitle(getString(R.string.add_to_game))
-        friend.setPositiveButton(getString(R.string.add_button)) { _: DialogInterface, _: Int ->
+    private fun addFriend(friend: String) {
+        val addFriend = AlertDialog.Builder(this)
+        addFriend.setTitle(getString(R.string.add_to_game, friend))
+        addFriend.setPositiveButton(getString(R.string.add_button)) { _: DialogInterface, _: Int ->
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto: $email")
             intent.putExtra(Intent.EXTRA_EMAIL, "UNOZAR")
             intent.putExtra(Intent.EXTRA_SUBJECT,
-                "Escribe este código en la app para unirte a una partida: $code"
+                getString(R.string.email_message, code)
             )
             startActivityForResult(intent, CODE)
         }
-        friend.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
-        friend.show()
+        addFriend.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
+        addFriend.show()
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View?, menuInfo: ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
-        menu.add(Menu.NONE, add, Menu.NONE, "Añadir jugador")
+        menu.add(Menu.NONE, add, Menu.NONE, getString(R.string.add_friend))
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         when (item.itemId) { add -> {
             val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
             email = friends[info.position].email.toString()
-            addFriend()
+            addFriend(friends[info.position].alias.toString())
             return true
         }}
         return super.onContextItemSelected(item)

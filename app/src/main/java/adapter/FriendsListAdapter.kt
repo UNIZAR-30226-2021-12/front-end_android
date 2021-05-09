@@ -42,7 +42,7 @@ class FriendsListAdapter(private val context: Activity, private val friends: Arr
 
         if (view == null) {
             val inflater = LayoutInflater.from(context)
-            row = inflater.inflate(R.layout.activity_friends_row, parent, false)
+            row = inflater.inflate(R.layout.friends_row, parent, false)
             holder = ViewHolder(row)
             row.tag = holder
         } else {
