@@ -350,9 +350,7 @@ class TableroActivity : AppCompatActivity() {
     }
 
     private fun robarCarta() {
-        CartaNueva = "XG2"
-        robadaCarta = true
-        cartaAnadida = true
+
         //Pedir robar carta al servidor
         RetrofitClient.instance.draw(TokenRequest(session))
             .enqueue(object : Callback<TokenResponse> {
@@ -361,6 +359,9 @@ class TableroActivity : AppCompatActivity() {
                 } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                     if (response.code() == 200) {
                         //CartaNueva = response.body()!!.
+                        CartaNueva = "XG2"
+                        robadaCarta = true
+                        cartaAnadida = true
                         session = response.body()?.token.toString()
                     }
                     else {
