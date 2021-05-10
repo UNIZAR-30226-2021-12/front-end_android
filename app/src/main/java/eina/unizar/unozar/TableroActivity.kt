@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -503,7 +504,6 @@ class TableroActivity : AppCompatActivity() {
     }
 
     fun cambiarElegido() {
-        //val imageView2 = findViewById<ImageView>(R.id.image_record)
         image_record.setImageResource(record)
     }
 
@@ -524,6 +524,31 @@ class TableroActivity : AppCompatActivity() {
 
                                     /*** Players info ***/
                                     miTurno = response.body()!!.turn == 0
+
+                                    if(miTurno){
+                                        val definirTurno = findViewById<TextView>(R.id.your_turn) as TextView
+                                        runOnUiThread {
+                                            definirTurno.text = "Tu turno"
+                                        }
+                                    }
+                                    else{
+                                        val definirTurno = findViewById<TextView>(R.id.your_turn) as TextView
+                                        runOnUiThread {
+                                            definirTurno.text = "No es tu turno"
+                                        }
+                                    }
+
+                                    manoNueva= response.body()!!.playerCards
+                                    comprobarManoNueva()
+                                    if(manoCambiada){
+                                        cambiarMano()
+                                        val misNumCartas = findViewById<TextView>(R.id.your_cards) as TextView
+                                        runOnUiThread {
+                                            misNumCartas.text = (manoActual.size).toString() + " Cartas"
+                                            anyadirCartas()
+                                        }
+                                        manoCambiada = false
+                                    }
 
                                     if(robadaCarta && cartaAnadida) {
                                         anadirCartaMano(CartaNueva)
