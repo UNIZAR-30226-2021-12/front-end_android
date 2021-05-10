@@ -542,7 +542,7 @@ class TableroActivity : AppCompatActivity() {
                                     comprobarManoNueva()
                                     if(manoCambiada){
                                         cambiarMano()
-                                        val misNumCartas = findViewById<TextView>(R.id.your_cards) as TextView
+                                        val misNumCartas = findViewById(R.id.your_cards) as TextView
                                         runOnUiThread {
                                             misNumCartas.text = (manoActual.size).toString() + " Cartas"
                                             anyadirCartas()
