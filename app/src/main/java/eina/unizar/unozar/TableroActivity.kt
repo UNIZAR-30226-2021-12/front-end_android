@@ -465,15 +465,15 @@ class TableroActivity : AppCompatActivity() {
                 } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                     if (response.code() == 200) {
                         //La carta se ha puesto con éxito
+                        quitarCarta()
+                        nombreRecordado = ""
+                        record = 0
+                        recordCambiado = true
                     } else {
                         Toast.makeText(applicationContext, "Quizás se haya caido el servidor", Toast.LENGTH_LONG).show()
                     }
                 }
             })
-        quitarCarta()
-        nombreRecordado = ""
-        record = 0
-        recordCambiado = true
     }
 
     private fun anyadirCartas() {
