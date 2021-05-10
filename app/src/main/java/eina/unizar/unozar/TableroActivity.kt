@@ -466,7 +466,7 @@ class TableroActivity : AppCompatActivity() {
                 } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                     if (response.code() == 200) {
                         //La carta se ha puesto con éxito
-                        quitarCarta()
+                        //quitarCarta()
                         nombreRecordado = ""
                         record = 0
                         recordCambiado = true
@@ -527,15 +527,15 @@ class TableroActivity : AppCompatActivity() {
                                     miTurno = response.body()!!.turn == 0
 
                                     if(miTurno){
-                                        val definirTurno = findViewById<TextView>(R.id.your_turn) as TextView
+                                        //val definirTurno = findViewById<TextView>(R.id.your_turn) as TextView
                                         runOnUiThread {
-                                            definirTurno.text = "Tu turno"
+                                            your_turn.text = "Tu turno"
                                         }
                                     }
                                     else{
-                                        val definirTurno = findViewById<TextView>(R.id.your_turn) as TextView
+                                        //val definirTurno = findViewById<TextView>(R.id.your_turn) as TextView
                                         runOnUiThread {
-                                            definirTurno.text = "No es tu turno"
+                                            your_turn.text = "No es tu turno"
                                         }
                                     }
 
@@ -543,9 +543,9 @@ class TableroActivity : AppCompatActivity() {
                                     comprobarManoNueva()
                                     if(manoCambiada){
                                         cambiarMano()
-                                        val misNumCartas = findViewById(R.id.your_cards) as TextView
+                                        //val misNumCartas = findViewById(R.id.your_cards) as TextView
                                         runOnUiThread {
-                                            misNumCartas.text = (manoActual.size).toString() + " Cartas"
+                                            your_cards.text = (manoActual.size).toString() + " Cartas"
                                             anyadirCartas()
                                         }
                                         manoCambiada = false
@@ -593,6 +593,7 @@ class TableroActivity : AppCompatActivity() {
                         })
                     delay(500)
             }
+            //Cambias de actividad de fin de juego
         }
     }
 
