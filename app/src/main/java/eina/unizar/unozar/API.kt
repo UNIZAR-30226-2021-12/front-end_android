@@ -1,14 +1,9 @@
 package eina.unizar.unozar
 
-import server.response.LoginUser
-import server.response.PlayerInfo
-import server.response.RegisterUser
 import retrofit2.Call
 import retrofit2.http.*
 import server.request.*
-import server.response.FriendsListResponse
-import server.response.GameInfoResponse
-import server.response.TokenResponse
+import server.response.*
 
 interface API {
     /*** PLAYER REQUESTS ***/
@@ -73,12 +68,17 @@ interface API {
         @Body delete: TokenRequest
     ): Call<TokenResponse>
 
-    @POST("/game/read")
+    @POST("/game/readRoom")
+    fun readRoom(
+        @Body delete: TokenRequest
+    ): Call<RoomInfoResponse>
+
+    @POST("/game/readGame")
     fun readGame(
         @Body delete: TokenRequest
     ): Call<GameInfoResponse>
 
-    @POST("/game/createGame")
+    @POST("/game/start")
     fun startMatch(
         @Body tokenRequest: TokenRequest
     ): Call<TokenResponse>

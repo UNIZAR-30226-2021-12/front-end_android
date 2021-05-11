@@ -23,6 +23,9 @@
     <string name="friends">Amigos</string>
     <string name="exit">Salir</string>
     <string name="chosen_card">Elegida</string>
+    <string name="your_turn">Tu turno</string>
+    <string name="your_cards">%1$s Cartas</string>
+    <string name="not_your_turn">No es tu turno</string>
     <string name="play_card">Poner carta</string>
     <string name="time_left">Tiempo restante: %1$s</string>
     <!-- DIALOG TEXT -->

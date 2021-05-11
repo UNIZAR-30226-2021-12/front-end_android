@@ -31,7 +31,7 @@ class Friends : AppCompatActivity() {
     private lateinit var code: String
     private lateinit var friends: ArrayList<FriendInfo>
     private lateinit var adapter: FriendsListAdapter
-    private var avatars = arrayListOf(
+    private val avatars = arrayListOf(
         R.drawable.test_user,
         R.drawable.oso,
         R.drawable.larry,
