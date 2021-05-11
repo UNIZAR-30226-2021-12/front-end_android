@@ -9,4 +9,5 @@ data class PlayerInfo(@SerializedName("id")val id:String,
                       @SerializedName("privateWins")val privateWins:Int,
                       @SerializedName("privateTotal")val privateTotal:Int,
                       @SerializedName("publicWins")val publicWins:Int,
-                      @SerializedName("publicTotal")val publicTotal:Int)
+                      @SerializedName("publicTotal")val publicTotal:Int,
+                      @SerializedName("token")val token: String)

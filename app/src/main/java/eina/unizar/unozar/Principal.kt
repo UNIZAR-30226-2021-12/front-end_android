@@ -20,6 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import server.request.CreateMatchRequest
 import server.request.JoinPrivateRequest
+import server.request.PlayCardRequest
 import server.request.TokenRequest
 import server.response.TokenResponse
 
@@ -89,6 +90,21 @@ class Principal : AppCompatActivity() {
                             if (response.code() == 200) {
                                 session = response.body()!!.token
                                 Toast.makeText(applicationContext, "Ha salido de la partida", Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(applicationContext, getString(R.string.bad_quit_response), Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    })
+            }
+            R.id.action_draw -> {
+                RetrofitClient.instance.draw(TokenRequest(session))
+                    .enqueue(object : Callback<TokenResponse> {
+                        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                            if (response.code() == 200) {
+                                session = response.body()!!.token
+                                Toast.makeText(applicationContext, "Ha robado", Toast.LENGTH_LONG).show()
                             } else {
                                 Toast.makeText(applicationContext, getString(R.string.bad_quit_response), Toast.LENGTH_LONG).show()
                             }

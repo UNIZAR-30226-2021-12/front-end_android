@@ -24,6 +24,9 @@
     <string name="friends">Friends</string>
     <string name="exit">Exit</string>
     <string name="chosen_card">Chosen</string>
+    <string name="your_turn">Your turn</string>
+    <string name="not_your_turn">It\'s not your turn</string>
+    <string name="your_cards">%1$s Cards</string>
     <string name="play_card">Play card</string>
     <string name="time_left">Time left: %1$s</string>
     <!-- DIALOG TEXT -->
