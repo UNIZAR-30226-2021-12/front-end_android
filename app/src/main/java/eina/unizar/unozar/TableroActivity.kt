@@ -60,7 +60,7 @@ class TableroActivity : AppCompatActivity() {
             else if(carta[2] == '2') { return R.drawable.mas_dos_rojo }
             else if(carta[2] == 'C') { return R.drawable.cambio_color_rojo }
             else if(carta[2] == '4') { return R.drawable.mas_cuatro_rojo }
-            else { return 0 }
+            //else { return 0 }
         }
         else if(carta[1] == 'Y') {
             if(carta[2] == 'X') {
@@ -79,7 +79,7 @@ class TableroActivity : AppCompatActivity() {
             else if(carta[2] == '2') { return R.drawable.mas_dos_amarillo }
             else if(carta[2] == 'C') { return R.drawable.cambio_color_amarillo }
             else if(carta[2] == '4') { return R.drawable.mas_cuatro_amarillo }
-            else{return 0}
+            //else{return 0}
         }
         else if(carta[1] == 'B') {
             if(carta[2] == 'X') {
@@ -122,7 +122,7 @@ class TableroActivity : AppCompatActivity() {
         else if((carta[0] == 'X') && (carta[1] == 'X')) {
             if(carta[2] == 'C') { return R.drawable.cambio_color_base }
             else if(carta[2] == '4') { return R.drawable.mas_cuatro_base }
-            else { return 0 }
+            //else { return 0 }
         }
         Toast.makeText(applicationContext, "La carta no existe", Toast.LENGTH_LONG).show()
         return R.drawable.cambio_color_verde
