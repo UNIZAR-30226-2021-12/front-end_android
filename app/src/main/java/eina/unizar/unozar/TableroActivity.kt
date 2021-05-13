@@ -251,9 +251,8 @@ class TableroActivity : AppCompatActivity() {
         /*Pasar nombres de jugadores desde la anterior actividad
         idJugadoresCambiados = arrayOf(false,false,false,false)
         idJugadoresActuales=
-        idJugadoresNuevos=
+        idJugadoresNuevos =
         jugadoresNuevos =
-        numCartasJugadoresNuevos =
         */
 
         actualizar()
@@ -296,7 +295,6 @@ class TableroActivity : AppCompatActivity() {
                 } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                     if (response.code() == 200) {
                         Toast.makeText(applicationContext, "Carta robada", Toast.LENGTH_LONG).show()
-                        //CartaNueva = "XG2"
                         robadaCarta = true
                         session = response.body()?.token.toString()
                     }
@@ -400,7 +398,7 @@ class TableroActivity : AppCompatActivity() {
             /*var turno: String = ""
             if (i == turn) turno = "Su turno"*/
             if((jugadoresActuales[i]).equals("IA")){
-                Gamers.add(Gamer(i.toLong(), R.drawable.imgia/*Imagen IA*/, jugadoresActuales[i], /* turno */"su turno", numCartasJugadoresActuales[i].toString() + "  Cartas"))
+                Gamers.add(Gamer(i.toLong(), R.drawable.robotia/*Imagen IA*/, jugadoresActuales[i], /* turno */"su turno", numCartasJugadoresActuales[i].toString() + "  Cartas"))
             }
             else{
                 Gamers.add(Gamer(i.toLong(), R.drawable.jesica, jugadoresActuales[i], /* turno */"su turno", numCartasJugadoresActuales[i].toString() + "  Cartas"))
@@ -424,7 +422,6 @@ class TableroActivity : AppCompatActivity() {
                                 Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                             } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
                                 if (response.code() == 200) {
-                                    runOnUiThread {
                                     session = response.body()?.token.toString()
 
                                     val prevTurn = turn
@@ -435,31 +432,31 @@ class TableroActivity : AppCompatActivity() {
                                         if (miTurno) {
                                             val definirTurno =
                                                 findViewById<TextView>(R.id.your_turn) as TextView
-                                            //runOnUiThread {
+                                            runOnUiThread {
                                             definirTurno.text = "Tu turno"
-                                            //}
+                                            }
                                         } else {
                                             val definirTurno =
                                                 findViewById<TextView>(R.id.your_turn) as TextView
-                                            //runOnUiThread {
+                                            runOnUiThread {
                                             definirTurno.text = "No es tu turno"
-                                            //}
+                                            }
                                         }
 
 
                                         manoNueva = response.body()!!.playerCards
                                         comprobarManoNueva()
                                         if (manoCambiada) {
-                                            //runOnUiThread {
-                                            cambiarMano()
-                                            // }
+                                            runOnUiThread {
+                                                cambiarMano()
+                                            }
                                             your_cards.text =
                                                 (manoActual.size).toString() + " Cartas"
                                             anyadirCartas()
                                             manoCambiada = false
                                         }
 
-                                    /*idJugadoresNuevos = response.body()!!.playersIds
+                                        idJugadoresNuevos = response.body()!!.playersIds
                                         numCartasJugadoresNuevos = response.body()!!.playersNumCards
                                         comprobarIdsJugadores()
                                         comprobarCartasJugadores()
@@ -470,21 +467,21 @@ class TableroActivity : AppCompatActivity() {
                                             }
                                             jugadoresCambiados = false
                                             numCartasJugadoresCambiados = false
-                                        }*/
+                                        }
 
                                         cimaNueva = response.body()!!.topDiscard
                                         comprobarCima()
                                         if (cimaCambiada) {
-                                            //runOnUiThread {
+                                            runOnUiThread {
                                                 cambiarCima()
-                                            //}
+                                            }
                                             cimaCambiada = false
                                         }
 
                                         if (recordCambiado) {
-                                            //runOnUiThread {
+                                            runOnUiThread {
                                                 cambiarElegido()
-                                            // }
+                                            }
                                             recordCambiado = false
                                         }
 
@@ -492,7 +489,6 @@ class TableroActivity : AppCompatActivity() {
                                             /*timer.cancel()
                                         timer.start()*/
                                         }
-                                    }
                                 } else Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                             }
                         })
