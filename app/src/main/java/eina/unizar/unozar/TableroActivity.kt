@@ -187,15 +187,15 @@ class TableroActivity : AppCompatActivity() {
     var jugadoresCambiados = false
     lateinit var jugadoresNuevos : Array<String>
 
-    lateinit var idJugadoresActuales : Array<Int>
-    lateinit var idJugadoresNuevos : Array<Int>
+    lateinit var idJugadoresActuales : Array<String>
+    lateinit var idJugadoresNuevos : Array<String>
     lateinit var idJugadoresCambiados : Array<Boolean>
 
     fun comprobarIdsJugadores() {
         var i = 0
         var cont = 0
         while (i < idJugadoresActuales.size) {
-             if ((idJugadoresActuales[i]) != idJugadoresNuevos[i]) {
+             if (!(idJugadoresActuales[i]).equals(idJugadoresNuevos[i])) {
                  cont++
                  idJugadoresCambiados[i] = true
              }
