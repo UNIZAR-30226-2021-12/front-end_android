@@ -249,7 +249,7 @@ class TableroActivity : AppCompatActivity() {
         session = intent.getStringExtra("session").toString()
 
         /*Pasar nombres de jugadores desde la anterior actividad
-        idJugadoresCambiados = arrayOf(false,false,false,false)
+        idJugadoresCambiados = arrayOf(false,false,false)
         idJugadoresActuales=
         idJugadoresNuevos =
         jugadoresNuevos =
@@ -285,24 +285,10 @@ class TableroActivity : AppCompatActivity() {
         haDichoUnozar = true
     }
 
-    private fun robarCarta() {
+    var pedirRobada = false
 
-        //Pedir robar carta al servidor
-        RetrofitClient.instance.draw(TokenRequest(session))
-            .enqueue(object : Callback<TokenResponse> {
-                override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-                    if (response.code() == 200) {
-                        Toast.makeText(applicationContext, "Carta robada", Toast.LENGTH_LONG).show()
-                        robadaCarta = true
-                        session = response.body()?.token.toString()
-                    }
-                    else {
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                    }
-                }
-            })
+    private fun robarCarta() {
+        pedirRobada = true
     }
 
     private var cartaPuesta = false
@@ -395,13 +381,13 @@ class TableroActivity : AppCompatActivity() {
         Gamers.clear()
         val tamano = jugadoresActuales.size - 1
         for(i in 0..tamano) {
-            /*var turno: String = ""
-            if (i == turn) turno = "Su turno"*/
+            var turno = ""
+            if (i == turn) turno = "Su turno"
             if((jugadoresActuales[i]).equals("IA")){
-                Gamers.add(Gamer(i.toLong(), R.drawable.robotia/*Imagen IA*/, jugadoresActuales[i], /* turno */"su turno", numCartasJugadoresActuales[i].toString() + "  Cartas"))
+                Gamers.add(Gamer(i.toLong(), R.drawable.robotia/*Imagen IA*/, jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
             }
             else{
-                Gamers.add(Gamer(i.toLong(), R.drawable.jesica, jugadoresActuales[i], /* turno */"su turno", numCartasJugadoresActuales[i].toString() + "  Cartas"))
+                Gamers.add(Gamer(i.toLong(), R.drawable.jesica, jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
             }
         }
         rvGamer.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -416,83 +402,120 @@ class TableroActivity : AppCompatActivity() {
     private fun actualizar() {
         CoroutineScope(Dispatchers.IO).launch {
             while(!finished) {
+                if(!pedirRobada) {
                     RetrofitClient.instance.readGame(TokenRequest(session))
                         .enqueue(object : Callback<GameInfoResponse> {
                             override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
-                                Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                            } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
+                                Toast.makeText(
+                                    applicationContext,
+                                    getString(R.string.no_response),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+
+                            override fun onResponse(
+                                call: Call<GameInfoResponse>,
+                                response: Response<GameInfoResponse>
+                            ) {
                                 if (response.code() == 200) {
                                     session = response.body()?.token.toString()
 
                                     val prevTurn = turn
                                     turn = response.body()!!.turn
-                                        /*** Players info ***/
-                                        miTurno = response.body()!!.turn == 0
+                                    /*** Players info ***/
+                                    miTurno = response.body()!!.turn == 0
 
-                                        if (miTurno) {
-                                            val definirTurno =
-                                                findViewById<TextView>(R.id.your_turn) as TextView
-                                            runOnUiThread {
+                                    if (miTurno) {
+                                        val definirTurno =
+                                            findViewById<TextView>(R.id.your_turn) as TextView
+                                        runOnUiThread {
                                             definirTurno.text = "Tu turno"
-                                            }
-                                        } else {
-                                            val definirTurno =
-                                                findViewById<TextView>(R.id.your_turn) as TextView
-                                            runOnUiThread {
+                                        }
+                                    } else {
+                                        val definirTurno =
+                                            findViewById<TextView>(R.id.your_turn) as TextView
+                                        runOnUiThread {
                                             definirTurno.text = "No es tu turno"
-                                            }
                                         }
+                                        //Reiniciar variables porque ya no es tu turno
+                                        robadaCarta = false
+                                    }
 
 
-                                        manoNueva = response.body()!!.playerCards
-                                        comprobarManoNueva()
-                                        if (manoCambiada) {
-                                            runOnUiThread {
-                                                cambiarMano()
-                                            }
-                                            your_cards.text =
-                                                (manoActual.size).toString() + " Cartas"
-                                            anyadirCartas()
-                                            manoCambiada = false
+                                    manoNueva = response.body()!!.playerCards
+                                    comprobarManoNueva()
+                                    if (manoCambiada) {
+                                        runOnUiThread {
+                                            cambiarMano()
                                         }
+                                        your_cards.text =
+                                            (manoActual.size).toString() + " Cartas"
+                                        anyadirCartas()
+                                        manoCambiada = false
+                                    }
 
-                                        idJugadoresNuevos = response.body()!!.playersIds
-                                        numCartasJugadoresNuevos = response.body()!!.playersNumCards
-                                        comprobarIdsJugadores()
-                                        comprobarCartasJugadores()
-                                        if (jugadoresCambiados || numCartasJugadoresCambiados) {
-                                            cambiarJugadoresYCartas()
-                                            runOnUiThread {
-                                                anyadirGamers()
-                                            }
-                                            jugadoresCambiados = false
-                                            numCartasJugadoresCambiados = false
+                                    idJugadoresNuevos = response.body()!!.playersIds
+                                    numCartasJugadoresNuevos = response.body()!!.playersNumCards
+                                    comprobarIdsJugadores()
+                                    comprobarCartasJugadores()
+                                    if (jugadoresCambiados || numCartasJugadoresCambiados) {
+                                        cambiarJugadoresYCartas()
+                                        runOnUiThread {
+                                            anyadirGamers()
                                         }
+                                        jugadoresCambiados = false
+                                        numCartasJugadoresCambiados = false
+                                    }
 
-                                        cimaNueva = response.body()!!.topDiscard
-                                        comprobarCima()
-                                        if (cimaCambiada) {
-                                            runOnUiThread {
-                                                cambiarCima()
-                                            }
-                                            cimaCambiada = false
+                                    cimaNueva = response.body()!!.topDiscard
+                                    comprobarCima()
+                                    if (cimaCambiada) {
+                                        runOnUiThread {
+                                            cambiarCima()
                                         }
+                                        cimaCambiada = false
+                                    }
 
-                                        if (recordCambiado) {
-                                            runOnUiThread {
-                                                cambiarElegido()
-                                            }
-                                            recordCambiado = false
+                                    if (recordCambiado) {
+                                        runOnUiThread {
+                                            cambiarElegido()
                                         }
+                                        recordCambiado = false
+                                    }
 
-                                        if (prevTurn != turn) {  // Cambio de turno
-                                            /*timer.cancel()
-                                        timer.start()*/
-                                        }
-                                } else Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                    if (prevTurn != turn) {  // Cambio de turno
+                                        /*timer.cancel()
+                                            timer.start()*/
+                                    }
+                                } else Toast.makeText(
+                                    applicationContext,
+                                    response.code(),
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         })
                     delay(500)
+                }
+                else{
+                    //Pedir robar carta al servidor
+                    RetrofitClient.instance.draw(TokenRequest(session))
+                        .enqueue(object : Callback<TokenResponse> {
+                            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                                Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                            } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                                if (response.code() == 200) {
+                                    Toast.makeText(applicationContext, "Carta robada", Toast.LENGTH_LONG).show()
+                                    robadaCarta = true
+                                    session = response.body()?.token.toString()
+                                }
+                                else {
+                                    Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        })
+                    pedirRobada = false;
+                }
+
             }
         }
     }
