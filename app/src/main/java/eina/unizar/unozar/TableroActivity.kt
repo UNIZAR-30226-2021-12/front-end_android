@@ -445,12 +445,12 @@ class TableroActivity : AppCompatActivity() {
                                     manoNueva = response.body()!!.playerCards
                                     comprobarManoNueva()
                                     if (manoCambiada) {
-                                        runOnUiThread {
-                                            cambiarMano()
-                                        }
+                                        cambiarMano()
                                         your_cards.text =
                                             (manoActual.size).toString() + " Cartas"
-                                        anyadirCartas()
+                                        runOnUiThread {
+                                            anyadirCartas()
+                                        }
                                         manoCambiada = false
                                     }
 
