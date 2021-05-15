@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_create_game.*
-import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.custom_alertdialog.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,12 +20,12 @@ import retrofit2.Callback
 import retrofit2.Response
 import server.request.IdRequest
 import server.request.TokenRequest
-import server.response.GameInfoResponse
 import server.response.PlayerInfo
 import server.response.RoomInfoResponse
 import server.response.TokenResponse
 import java.util.concurrent.Semaphore
 import java.util.ArrayList
+import java.util.concurrent.locks.ReentrantLock
 
 class CreatePrivateMatch : AppCompatActivity() {
     private var CODE = 73
@@ -38,7 +37,8 @@ class CreatePrivateMatch : AppCompatActivity() {
     private lateinit var code: String
     private val invite = Menu.FIRST
     private lateinit var ids: ArrayList<String>
-    private val s = Semaphore(1)
+    private val sharedCounterLock = ReentrantLock()
+    //private val s = Semaphore(1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val n:Int = intent.getIntExtra("numPlayers", 0)
@@ -79,6 +79,8 @@ class CreatePrivateMatch : AppCompatActivity() {
                 }
             })*/
 
+        create.setOnClickListener { start() }
+        exit.setOnClickListener { quit() }
         actualizar()
     }
 
@@ -97,8 +99,9 @@ class CreatePrivateMatch : AppCompatActivity() {
         return super.onContextItemSelected(item)
     }
 
-    fun quit(@Suppress("UNUSED_PARAMETER") view: View) {
-        s.acquireUninterruptibly()
+    private fun quit() {
+        sharedCounterLock.lock()
+        //s.acquireUninterruptibly()
         gone = true
         RetrofitClient.instance.quitMatch(TokenRequest(session))
             .enqueue(object : Callback<TokenResponse> {
@@ -118,12 +121,14 @@ class CreatePrivateMatch : AppCompatActivity() {
                     }
                 }
             })
-        s.release()
+        sharedCounterLock.unlock()
+        //s.release()
     }
 
-    fun start(@Suppress("UNUSED_PARAMETER") view: View) {
-        s.acquireUninterruptibly()
+    private fun start() {
         runOnUiThread {
+            sharedCounterLock.lock()
+            //s.acquireUninterruptibly()
             started = true
             RetrofitClient.instance.startMatch(TokenRequest(session))
                 .enqueue(object : Callback<TokenResponse> {
@@ -150,8 +155,9 @@ class CreatePrivateMatch : AppCompatActivity() {
                         }
                     }
                 })
+            sharedCounterLock.unlock()
+            //s.release()
         }
-        s.release()
     }
 
     private fun actualizarJugador(id: String) {
@@ -161,7 +167,6 @@ class CreatePrivateMatch : AppCompatActivity() {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                     if (response.code() == 200) {
-                        session = response.body()?.token.toString()
                         /*showAlias.text = response.body()?.alias
                         showEmail2.text = response.body()?.email
                         showJugadasTotales.text = response.body()?.publicTotal.toString()
@@ -178,13 +183,18 @@ class CreatePrivateMatch : AppCompatActivity() {
 
     private fun actualizar(){
         CoroutineScope(Dispatchers.IO).launch {
-            while(!started && !gone){
-                runOnUiThread {
-                    s.acquireUninterruptibly()
+            //runOnUiThread {
+                while(!started && !gone) {
+                    sharedCounterLock.lock()
+                    //s.acquireUninterruptibly()
                     RetrofitClient.instance.readRoom(TokenRequest(session))
                         .enqueue(object : Callback<RoomInfoResponse> {
                             override fun onFailure(call: Call<RoomInfoResponse>, t: Throwable) {
-                                Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    getString(R.string.no_response),
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
 
                             override fun onResponse(
@@ -195,18 +205,26 @@ class CreatePrivateMatch : AppCompatActivity() {
                                     session = response.body()?.token.toString()
                                     for (i in 0..response.body()!!.playersIds.size) {
                                         /*if(response.body()!!.playersIds[i] != ids[i] && response.body()!!.playersIds[i] != "BOT") {
-                                        actualizarJugador(response.body()!!.playersIds[i])
-                                    }*/
+                                            actualizarJugador(response.body()!!.playersIds[i])
+                                        }*/
                                     }
                                     //Toast.makeText(applicationContext, "Actualización", Toast.LENGTH_LONG).show()
-                                } else { Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show() }
+                                } else {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        response.code(),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
                             }
                         })
-                    s.release()
+                    sharedCounterLock.unlock()
+                    //s.release()
                     //delay(1000)
+                    //}
+                    delay(1000)
                 }
-                delay(1000)
-            }
+            //}
         }
     }
 
