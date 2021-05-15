@@ -33,10 +33,12 @@ class CreatePrivateMatch : AppCompatActivity() {
     private var bots = 1
     private var started = false
     private var gone = false
+    private var empezar = false
+    private var done = true
     private lateinit var session: String
     private lateinit var code: String
     private val invite = Menu.FIRST
-    private lateinit var ids: ArrayList<String>
+    private lateinit var ids: Array<String>
     private val sharedCounterLock = ReentrantLock()
     //private val s = Semaphore(1)
 
@@ -46,11 +48,11 @@ class CreatePrivateMatch : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_game)
         setSupportActionBar(match_toolbar)
-        ids = ArrayList<String>(n)
+        ids = arrayOf(session.substring(0,32), "BOT")
 
         player_one.setImageResource(R.drawable.test_user)
         player_two.setImageResource(R.drawable.ai)
-        if (n > 2) {
+        /*if (n > 2) {
             player_three.setImageResource(R.drawable.ai)
             player_three.visibility = View.VISIBLE
             bots++
@@ -65,7 +67,7 @@ class CreatePrivateMatch : AppCompatActivity() {
         } else {
             player_three.visibility = View.INVISIBLE
             player_four.visibility = View.INVISIBLE
-        }
+        }*/
         /*RetrofitClient.instance.readGame(TokenRequest(session))
             .enqueue(object : Callback<GameInfoResponse> {
                 override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
@@ -126,8 +128,9 @@ class CreatePrivateMatch : AppCompatActivity() {
     }
 
     private fun start() {
-        runOnUiThread {
-            sharedCounterLock.lock()
+        empezar = true
+        //runOnUiThread {
+            /*sharedCounterLock.lock()
             //s.acquireUninterruptibly()
             started = true
             RetrofitClient.instance.startMatch(TokenRequest(session))
@@ -156,8 +159,8 @@ class CreatePrivateMatch : AppCompatActivity() {
                     }
                 })
             sharedCounterLock.unlock()
-            //s.release()
-        }
+            //s.release()*/
+        //}
     }
 
     private fun actualizarJugador(id: String) {
@@ -183,9 +186,81 @@ class CreatePrivateMatch : AppCompatActivity() {
 
     private fun actualizar(){
         CoroutineScope(Dispatchers.IO).launch {
-            //runOnUiThread {
-                while(!started && !gone) {
-                    sharedCounterLock.lock()
+            while (!started && !gone) {
+                if (empezar && done) {
+                    done = false
+                    empezar = false
+                    //sharedCounterLock.lock()
+                    /*RetrofitClient.instance.readRoom(TokenRequest(session))
+                        .enqueue(object : Callback<RoomInfoResponse> {
+                            override fun onFailure(call: Call<RoomInfoResponse>, t: Throwable) {
+                                Toast.makeText(
+                                    applicationContext,
+                                    getString(R.string.no_response),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+
+                            override fun onResponse(
+                                call: Call<RoomInfoResponse>,
+                                response: Response<RoomInfoResponse>
+                            ) {
+                                if (response.code() == 200) {
+                                    session = response.body()?.token.toString()
+                                    for (i in 0..response.body()!!.playersIds.size) {
+                                        /*if(response.body()!!.playersIds[i] != ids[i] && response.body()!!.playersIds[i] != "BOT") {
+                                                actualizarJugador(response.body()!!.playersIds[i])
+                                            }*/
+                                    }
+                                    //Toast.makeText(applicationContext, "Actualización", Toast.LENGTH_LONG).show()
+                                } else {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        response.code(),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+                        })*/
+                    RetrofitClient.instance.startMatch(TokenRequest(session))
+                        .enqueue(object : Callback<TokenResponse> {
+                            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                                //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG)
+                                    .show()
+                            }
+
+                            override fun onResponse(
+                                call: Call<TokenResponse>,
+                                response: Response<TokenResponse>
+                            ) {
+                                if (response.code() == 200) {
+                                    started = true
+                                    Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG)
+                                        .show()
+                                    val intent =
+                                        Intent(this@CreatePrivateMatch, TableroActivity::class.java)
+                                    intent.putExtra("session", response.body()!!.token)
+                                    intent.putExtra("ids", ids)
+                                    startActivityForResult(intent, CODE)
+                                } else {
+                                    //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        response.code(),
+                                        Toast.LENGTH_LONG
+                                    )
+                                        .show()
+                                }
+                                //sharedCounterLock.unlock()
+                            }
+                        })
+
+                }
+                //runOnUiThread {
+                else if(done) {
+                    done = false
+                    //sharedCounterLock.lock()
                     //s.acquireUninterruptibly()
                     RetrofitClient.instance.readRoom(TokenRequest(session))
                         .enqueue(object : Callback<RoomInfoResponse> {
@@ -205,10 +280,11 @@ class CreatePrivateMatch : AppCompatActivity() {
                                     session = response.body()?.token.toString()
                                     for (i in 0..response.body()!!.playersIds.size) {
                                         /*if(response.body()!!.playersIds[i] != ids[i] && response.body()!!.playersIds[i] != "BOT") {
-                                            actualizarJugador(response.body()!!.playersIds[i])
-                                        }*/
+                                                actualizarJugador(response.body()!!.playersIds[i])
+                                            }*/
                                     }
                                     //Toast.makeText(applicationContext, "Actualización", Toast.LENGTH_LONG).show()
+                                    done = true
                                 } else {
                                     Toast.makeText(
                                         applicationContext,
@@ -216,15 +292,16 @@ class CreatePrivateMatch : AppCompatActivity() {
                                         Toast.LENGTH_LONG
                                     ).show()
                                 }
+                                //sharedCounterLock.unlock()
                             }
                         })
-                    sharedCounterLock.unlock()
                     //s.release()
                     //delay(1000)
                     //}
                     delay(1000)
                 }
-            //}
+                //}
+            }
         }
     }
 

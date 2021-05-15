@@ -92,4 +92,9 @@ interface API {
     fun draw(
         @Body tokenRequest: TokenRequest
     ): Call<TokenResponse>
+
+    @POST("/game/pause")
+    fun pause(
+        @Body tokenRequest: TokenRequest
+    ): Call<TokenResponse>
 }

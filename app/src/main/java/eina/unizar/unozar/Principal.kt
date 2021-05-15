@@ -18,10 +18,8 @@ import kotlinx.android.synthetic.main.custom_alertdialog.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import server.request.CreateMatchRequest
-import server.request.JoinPrivateRequest
-import server.request.PlayCardRequest
-import server.request.TokenRequest
+import server.request.*
+import server.response.PlayerInfo
 import server.response.TokenResponse
 
 
@@ -37,6 +35,7 @@ class Principal : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         session = intent.getStringExtra("session").toString()
+        updateInfo()
         val numPlayers = arrayOf("2", "3", "4")
         players = AlertDialog.Builder(this)
         players.setTitle(getString(R.string.number_of_players))
@@ -116,24 +115,31 @@ class Principal : AppCompatActivity() {
     }
 
     fun publicMatch(@Suppress("UNUSED_PARAMETER") view: View) {
-        val choose = AlertDialog.Builder(this)
-        choose.setTitle(getString(R.string.choose))
-        choose.setMessage(getString(R.string.public_match_dialog))
-        choose.setPositiveButton(getString(R.string.create_button)) { _: DialogInterface, _: Int ->
-            players.show()
-            /*val intent = Intent(this, CreatePublicMatch::class.java)
-            intent.putExtra("numPlayers", n)
-            intent.putExtra("session", session)
-            startActivityForResult(intent, CODE)*/
+        val numP = AlertDialog.Builder(this)
+        val numPlayers = arrayOf("2", "3", "4")
+        numP.setTitle(getString(R.string.number_of_players))
+        numP.setItems(numPlayers) { _: DialogInterface, i: Int ->
+            RetrofitClient.instance.createMatch(CreateMatchRequest(false, numPlayers[i].toInt(), 0, session))
+                .enqueue(object : Callback<TokenResponse> {
+                    override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                        //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                    } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                        if (response.code() == 200) {
+                            Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                            val intent = Intent(this@Principal, CreatePublicMatch::class.java)
+                            intent.putExtra("numPlayers", n)
+                            intent.putExtra("numBots", 0)
+                            intent.putExtra("session", response.body()?.token)
+                            startActivityForResult(intent, CODE)
+                        } else {
+                            //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                            //Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                        }
+                    }
+                })
         }
-        choose.setNegativeButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->
-            players.show()
-            /*val intent = Intent(this, JoinMatch::class.java)
-            intent.putExtra("numPlayers", n)
-            intent.putExtra("session", session)
-            startActivityForResult(intent, CODE)*/
-        }
-        choose.show()
+        numP.show()
     }
 
     fun privateMatch(@Suppress("UNUSED_PARAMETER") view: View) {
@@ -151,8 +157,7 @@ class Principal : AppCompatActivity() {
                 var numBots:Array<String>
                 if (n > 2) {
                     numBots = arrayOf("0", "1", "2")
-                    if (n > 3)
-                        numBots = arrayOf("0", "1", "2", "3")
+                    if (n > 3) numBots = arrayOf("0", "1", "2", "3")
                 } else
                     numBots = arrayOf("0", "1")
                 bots.setTitle(getString(R.string.number_of_bots))
@@ -213,6 +218,21 @@ class Principal : AppCompatActivity() {
             code.show()
         }
         choose.show()
+    }
+
+    private fun updateInfo() {
+        RetrofitClient.instance.readPlayer(IdRequest(session.substring(0, 32)))
+            .enqueue(object : Callback<PlayerInfo> {
+                override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
+                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
+                    if (response.code() == 200) { money.text = response.body()?.money.toString() }
+                    else {
+                        //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                    }
+                }
+            })
     }
 
     override fun onActivityResult (requestCode: Int, resultCode: Int, data: Intent?) {

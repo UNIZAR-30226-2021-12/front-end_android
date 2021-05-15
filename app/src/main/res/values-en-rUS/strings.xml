@@ -10,6 +10,7 @@
     <string name="repeat_password">Repeat Password</string>
     <string name="register">Sign in</string>
     <string name="registered">Are you already registered? </string>
+    <string name="not_registered">Not registered yet?</string>
     <string name="login">Login</string>
     <string name="profile">Perfil</string>
     <string name="menu">Menu</string>
@@ -65,6 +66,7 @@
     <string name="bad_creation_response">Game could not be created </string>
     <string name="bad_quit_response">It´s not possible to quit the game</string>
     <string name="bad_read_response">Couldn\'t read your account info</string>
+    <string name="bad_play_card_response">Error while playing that card, try again</string>
     <!-- SERVER CALL SUCCESS -->
     <string name="email_change_success">You have successfully updated your email address </string>
     <string name="password_change_success">You have updated your password successfully </string>
@@ -73,5 +75,4 @@
     <string name="quit_game_success">You left the game</string>
     <!-- INVITE EMAIL -->
     <string name="email_message">Write this code to join a game: %1$s</string>
-    <string name="cash">5500</string>
 </resources>

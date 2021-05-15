@@ -41,7 +41,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:gravity="center"
-            android:text="Correo electrónico"
+            android:text="@string/mail"
             android:textSize="18sp" />
 
         <EditText
@@ -65,7 +65,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:gravity="center"
-            android:text="Password"
+            android:text="@string/password"
             android:textSize="18sp" />
 
         <EditText
@@ -89,7 +89,7 @@
             android:layout_marginBottom="5dp"
             android:gravity="center"
             android:onClick="login"
-            android:text="Login" />
+            android:text="@string/login" />
 
         <TextView
             android:id="@+id/textView"
@@ -98,7 +98,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:gravity="center"
-            android:text="¿Ya está registrado?" />
+            android:text="@string/not_registered" />
 
         <Button
             android:id="@+id/registrase"
@@ -108,6 +108,6 @@
             android:layout_marginBottom="5dp"
             android:gravity="center"
             android:onClick="goToRegister"
-            android:text="Registrarse" />
+            android:text="@string/register" />
     </LinearLayout>
 </LinearLayout>

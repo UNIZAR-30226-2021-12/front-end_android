@@ -82,6 +82,14 @@
                 android:value=".Principal" />
         </activity>
         <activity
+            android:name=".CreatePublicMatch"
+            android:label="@string/app_name"
+            android:parentActivityName=".Principal" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Principal" />
+        </activity>
+        <activity
             android:name=".ChooseFriend"
             android:label="@string/app_name"
             android:parentActivityName=".CreatePrivateMatch" >

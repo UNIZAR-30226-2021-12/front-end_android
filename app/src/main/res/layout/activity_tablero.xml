@@ -97,7 +97,7 @@
             android:id="@+id/buttonPedirUno"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pedir Uno" />
+            android:text="Unozar" />
 
         <Button
             android:id="@+id/buttonRobarCarta"

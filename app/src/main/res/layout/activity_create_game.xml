@@ -49,13 +49,13 @@
             android:layout_height="100dp"
             android:layout_marginBottom="4dp"
             android:background="@drawable/player_border"
-            android:visibility="visible"
+            android:contentDescription="@string/alias"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/player_three"
-            tools:srcCompat="@drawable/ai"
-            android:contentDescription="@string/alias" />
+            tools:srcCompat="@drawable/empty" />
 
         <ImageView
             android:id="@+id/player_one"
@@ -75,13 +75,13 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/player_border"
+            android:contentDescription="@string/alias"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/player_one"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ai"
-            android:contentDescription="@string/alias" />
+            tools:srcCompat="@drawable/empty" />
 
         <ImageView
             android:id="@+id/player_three"
@@ -89,13 +89,13 @@
             android:layout_height="100dp"
             android:layout_marginBottom="4dp"
             android:background="@drawable/player_border"
-            android:visibility="visible"
+            android:contentDescription="@string/alias"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/player_four"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            tools:srcCompat="@drawable/ai"
-            android:contentDescription="@string/alias" />
+            tools:srcCompat="@drawable/empty" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -115,7 +115,6 @@
             android:layout_width="128dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:onClick="start"
             android:text="@string/create"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -127,7 +126,6 @@
             style="@android:style/Widget.Holo.Button"
             android:layout_width="128dp"
             android:layout_height="50dp"
-            android:onClick="quit"
             android:text="@string/exit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

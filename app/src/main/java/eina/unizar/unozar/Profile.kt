@@ -23,6 +23,12 @@ class Profile : AppCompatActivity() {
 
     private var CODE = 73
     private lateinit var session: String
+    private val avatars = arrayListOf(
+        R.drawable.test_user,
+        R.drawable.oso,
+        R.drawable.larry,
+        R.drawable.jesica
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +52,7 @@ class Profile : AppCompatActivity() {
                         showGanadasTotales.text = response.body()?.publicWins.toString()
                         showJugadas.text = response.body()?.privateTotal.toString()
                         showGanadas.text = response.body()?.privateWins.toString()
+                        avatar.setImageResource(avatars[response.body()!!.avatarId])
                     } else {
                         //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
                         Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
