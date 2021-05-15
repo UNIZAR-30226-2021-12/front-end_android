@@ -496,7 +496,7 @@ class TableroActivity : AppCompatActivity() {
                         })
                     delay(500)
                 }
-                else{
+                else if(pedirRobada){
                     //Pedir robar carta al servidor
                     RetrofitClient.instance.draw(TokenRequest(session))
                         .enqueue(object : Callback<TokenResponse> {
