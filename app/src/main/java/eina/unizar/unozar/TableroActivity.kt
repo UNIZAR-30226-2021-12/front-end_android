@@ -66,6 +66,7 @@ class TableroActivity : AppCompatActivity() {
             else if(carta[2] == '2') { return R.drawable.mas_dos_rojo }
             else if(carta[2] == 'C') { return R.drawable.cambio_color_rojo }
             else if(carta[2] == '4') { return R.drawable.mas_cuatro_rojo }
+            else if(carta[2] == 'R') {return R.drawable.cambio_sentido_rojo }
             //else { return 0 }
         }
         else if(carta[1] == 'Y') {
@@ -85,6 +86,7 @@ class TableroActivity : AppCompatActivity() {
             else if(carta[2] == '2') { return R.drawable.mas_dos_amarillo }
             else if(carta[2] == 'C') { return R.drawable.cambio_color_amarillo }
             else if(carta[2] == '4') { return R.drawable.mas_cuatro_amarillo }
+            else if(carta[2] == 'R') {return R.drawable.cambio_sentido_amarillo }
             //else{return 0}
         }
         else if(carta[1] == 'B') {
@@ -104,6 +106,7 @@ class TableroActivity : AppCompatActivity() {
             else if(carta[2] == '2') {return R.drawable.mas_dos_azul }
             else if(carta[2] == 'C') {return R.drawable.cambio_color_azul }
             else if(carta[2] == '4') {return R.drawable.mas_cuatro_azul }
+            else if(carta[2] == 'R') {return R.drawable.cambio_sentido_azul }
             //else { return 0 }
         }
         else if(carta[1] == 'G') {
@@ -123,6 +126,7 @@ class TableroActivity : AppCompatActivity() {
             else if(carta[2] == '2') { return R.drawable.mas_dos_verde }
             else if(carta[2] == 'C') { return R.drawable.cambio_color_verde }
             else if(carta[2] == '4') { return R.drawable.mas_cuatro_verde }
+            else if(carta[2] == 'R') {return R.drawable.cambio_sentido_verde }
             //else { return 0 }
         }
         else if((carta[0] == 'X') && (carta[1] == 'X')) {
@@ -379,7 +383,7 @@ class TableroActivity : AppCompatActivity() {
                 Gamers.add(Gamer(i.toLong(), R.drawable.robotia/*Imagen IA*/, jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
             }
             else{
-                Gamers.add(Gamer(i.toLong(), imgJugadores[i], jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
+                Gamers.add(Gamer(i.toLong(), /*imgJugadores[i]*/R.drawable.larry, jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
             }
         }
         rvGamer.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
