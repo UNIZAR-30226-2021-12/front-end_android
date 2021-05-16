@@ -233,6 +233,7 @@ class TableroActivity : AppCompatActivity() {
     private val numCartasJugadoresActuales  = mutableListOf<Int>()
     var numCartasJugadoresCambiados = false
     lateinit var numCartasJugadoresNuevos : Array<Int>
+    lateinit var imgJugadores : Array<Int>
 
     fun comprobarCartasJugadores() {
         if(numCartasJugadoresActuales.size == 0) {
@@ -259,6 +260,7 @@ class TableroActivity : AppCompatActivity() {
         idJugadoresActuales = intent.getStringArrayExtra("ids")!!
         idJugadoresNuevos = intent.getStringArrayExtra("ids")!!
         jugadoresNuevos = arrayOf("Alberto", "IA")
+        //imgJugadores =
 
 
         actualizar()
@@ -377,7 +379,7 @@ class TableroActivity : AppCompatActivity() {
                 Gamers.add(Gamer(i.toLong(), R.drawable.robotia/*Imagen IA*/, jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
             }
             else{
-                Gamers.add(Gamer(i.toLong(), R.drawable.jesica, jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
+                Gamers.add(Gamer(i.toLong(), imgJugadores[i], jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
             }
         }
         rvGamer.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
