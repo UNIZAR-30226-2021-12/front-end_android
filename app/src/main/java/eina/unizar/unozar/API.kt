@@ -58,7 +58,7 @@ interface API {
         @Body createMatchRequest: CreateMatchRequest
     ): Call<TokenResponse>
 
-    @POST("/game/join")
+    @POST("/game/joinPrivate")
     fun joinPrivate(
         @Body joinPrivateRequest: JoinPrivateRequest
     ): Call<TokenResponse>

@@ -43,6 +43,7 @@ class TableroActivity : AppCompatActivity() {
     internal val initial: Long = 60000
     internal val interval: Long = 1000
     private lateinit var session: String
+    private var myPos: Int = 5
     private var turn: Int = 5
     private var finished = false
     private var done = true
@@ -263,9 +264,9 @@ class TableroActivity : AppCompatActivity() {
         idJugadoresCambiados = arrayOf(false,false,false)
         idJugadoresActuales = intent.getStringArrayExtra("ids")!!
         idJugadoresNuevos = intent.getStringArrayExtra("ids")!!
-        jugadoresNuevos = arrayOf("Alberto", "IA")
+        myPos = intent.getIntExtra("posicion", 0)!!
+        jugadoresNuevos = arrayOf("Gonzalo")
         //imgJugadores =
-
 
         actualizar()
 
@@ -420,7 +421,7 @@ class TableroActivity : AppCompatActivity() {
                                     val prevTurn = turn
                                     turn = response.body()!!.turn
                                     /*** Players info ***/
-                                    miTurno = response.body()!!.turn == 0
+                                    miTurno = response.body()!!.turn == myPos
 
                                     if (miTurno) {
                                         val definirTurno =
