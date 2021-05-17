@@ -15,6 +15,7 @@
             android:id="@+id/rvGamer"
             android:layout_width="300dp"
             android:layout_height="209dp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -111,4 +112,14 @@
             android:layout_height="wrap_content"
             android:text="Pasar" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/game_menu"
+        android:layout_width="44dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-50dp"
+        android:layout_marginEnd="50dp"
+        android:onClick="showMenu"
+        android:src="@drawable/menu_icon" />
+
 </LinearLayout>

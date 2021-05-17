@@ -23,6 +23,7 @@
     <string name="private_game">Private match</string>
     <string name="choose_friend">Choose Friend</string>
     <string name="friends">Friends</string>
+    <string name="pause">Pause</string>
     <string name="exit">Exit</string>
     <string name="chosen_card">Chosen</string>
     <string name="your_turn">Your turn</string>

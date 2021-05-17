@@ -1,7 +1,6 @@
 package eina.unizar.unozar
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.ContextMenu
@@ -28,8 +27,7 @@ import server.response.RoomInfoResponse
 import server.response.TokenResponse
 
 // Gestionar feedback join
-class CreatePrivateMatch : AppCompatActivity() {
-    private lateinit var context: Context
+class PrivateRoom : AppCompatActivity() {
     private var normalCode = 73
     private var inviteCode = 52
     private var players = 2
@@ -44,18 +42,21 @@ class CreatePrivateMatch : AppCompatActivity() {
     private var owner = false
 
 
-    private lateinit var img: Array<ImageView>
+    private lateinit var img: ArrayList<ImageView>
     private var avatars = arrayListOf(
         R.drawable.test_user,
-        R.drawable.oso,
+        R.drawable.robotia,
+        R.drawable.castor,
+        R.drawable.jesica,
         R.drawable.larry,
-        R.drawable.jesica
+        R.drawable.oso
     )
     private lateinit var session: String
     private lateinit var code: String
     private val inviteFriend = Menu.FIRST
     private lateinit var ids: ArrayList<String>
-    private lateinit var idsOtros: ArrayList<String>
+    private lateinit var avatarIds: Map<Int,Int>
+    private lateinit var names: Map<Int,String>
     private  var myPos: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,9 +66,14 @@ class CreatePrivateMatch : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_game)
         setSupportActionBar(match_toolbar)
-        img = arrayOf(player_one, player_two, player_three, player_four)
         ids = ArrayList()
-        idsOtros = ArrayList()
+        avatarIds = mapOf()
+        names = mapOf()
+        img = ArrayList()
+        img.add(player_one)
+        img.add(player_two)
+        img.add(player_three)
+        img.add(player_four)
 
         RetrofitClient.instance.readRoom(TokenRequest(session))
             .enqueue(object : Callback<RoomInfoResponse> {
@@ -85,18 +91,21 @@ class CreatePrivateMatch : AppCompatActivity() {
                 ) {
                     if (response.code() == 200) {
                         session = response.body()?.token.toString()
-                        done = true
                         if ((response.body()!!.playersIds[0]).equals(session.substring(0,32))) {
+                            create.isEnabled = false
                             owner = true
                         }
                         for (i in response.body()!!.playersIds.indices) {
                             ids.add(response.body()!!.playersIds[i])
-                            /*if ((response.body()!!.playersIds[i]).equals("BOT")) {
+                            if ((response.body()!!.playersIds[i]).equals("BOT")) {
+                                avatarIds = avatarIds + Pair(i, 2)
+                                names = names + Pair(i, "IA")
                                 img[i].setImageResource(R.drawable.robotia)
                             } else {
                                 actualizarJugador(response.body()!!.playersIds[i], i)
-                            }*/
+                            }
                         }
+                        done = true
                     } else {
                         Toast.makeText(
                             applicationContext,
@@ -106,11 +115,7 @@ class CreatePrivateMatch : AppCompatActivity() {
                     }
                 }
             })
-
-        create.setOnClickListener {
-            if(owner)
-                start = true
-        }
+        create.setOnClickListener { start = true }
         exit.setOnClickListener { quit = true }
         actualizar()
     }
@@ -128,23 +133,30 @@ class CreatePrivateMatch : AppCompatActivity() {
     }
 
     private fun actualizarJugador(id: String, pos: Int) {
-        RetrofitClient.instance.readPlayer(IdRequest(id))
-            .enqueue(object : Callback<PlayerInfo> {
-                override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
-                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
-                } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
-                    if (response.code() == 200) {
-                        ids.add(id)
-                        img[pos].setImageResource(avatars[response.body()!!.avatarId])
-                    } else {
-                        //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_SHORT).show()
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
+        if (id.equals("BOT")) {
+            img[pos].setImageResource(R.drawable.robotia)
+            avatarIds = avatarIds + Pair(pos, 2)
+            names = names + Pair(pos, "BOT")
+        }
+        else {
+            RetrofitClient.instance.readPlayer(IdRequest(id))
+                .enqueue(object : Callback<PlayerInfo> {
+                    override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
+                        Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
+                    } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
+                        if (response.code() == 200) {
+                            avatarIds = avatarIds + Pair(pos, response.body()!!.avatarId)
+                            names = names + Pair(pos, response.body()!!.alias)
+                            img[pos].setImageResource(avatars[response.body()!!.avatarId])
+                        } else {
+                            //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
-            })
+                })
+        }
     }
-    //XRR
-    //XGR
+
     private fun actualizar(){
         CoroutineScope(Dispatchers.IO).launch {
             while (!started && !gone) {
@@ -155,56 +167,47 @@ class CreatePrivateMatch : AppCompatActivity() {
                         .enqueue(object : Callback<TokenResponse> {
                             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                                 Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
-                            }
-                            override fun onResponse(
-                                call: Call<TokenResponse>,
-                                response: Response<TokenResponse>
-                            ) {
+                            } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                 if (response.code() == 200) {
                                     session = response.body()?.token.toString()
                                     started = true
-                                    done = false
                                     val intent =
-                                        Intent(this@CreatePrivateMatch, TableroActivity::class.java)
+                                        Intent(this@PrivateRoom, TableroActivity::class.java)
                                     intent.putExtra("session", response.body()!!.token)
                                     intent.putExtra("ids", ids.toTypedArray())
+                                    intent.putExtra("myPosition", myPos)
+                                    intent.putExtra("avatars", avatarIds.values.toTypedArray())
+                                    intent.putExtra("names", names.values.toTypedArray())
                                     startActivityForResult(intent, normalCode)
                                 } else {
-                                    Toast.makeText(
-                                        applicationContext,
-                                        response.code(),
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
+                                    Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
                                 }
                             }
                         })
 
                 } else if (quit && done) {     /** Salir de la sala **/
+                    done = false
                     quit = false
                     RetrofitClient.instance.quitMatch(TokenRequest(session))
                         .enqueue(object : Callback<TokenResponse> {
                             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                                //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
-                                Toast.makeText(applicationContext, t.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                 if (response.code() == 200) {
                                     session = response.body()?.token.toString()
                                     gone = true
-                                    done = false
                                     Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_SHORT).show()
                                     val intent = Intent().apply { putExtra("session", response.body()!!.token) }
                                     setResult(Activity.RESULT_OK, intent)
                                     finish()
                                 } else {
-                                    //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_SHORT).show()
-                                    Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(applicationContext, getString(R.string.bad_creation_response), Toast.LENGTH_SHORT).show()
                                 }
                             }
                         })
                 } else if (invite && done) {     /** Invitar amigo **/
                     invite = false
-                    val intent = Intent(this@CreatePrivateMatch, ChooseFriend::class.java)
+                    val intent = Intent(this@PrivateRoom, ChooseFriend::class.java)
                     intent.putExtra("session", session)
                     intent.putExtra("code", code)
                     startActivityForResult(intent, inviteCode)
@@ -213,48 +216,35 @@ class CreatePrivateMatch : AppCompatActivity() {
                     RetrofitClient.instance.readRoom(TokenRequest(session))
                         .enqueue(object : Callback<RoomInfoResponse> {
                             override fun onFailure(call: Call<RoomInfoResponse>, t: Throwable) {
-                                Toast.makeText(
-                                    applicationContext,
-                                    getString(R.string.no_response),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                            override fun onResponse(
-                                call: Call<RoomInfoResponse>,
-                                response: Response<RoomInfoResponse>
-                            ) {
+                                Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
+                            } override fun onResponse(call: Call<RoomInfoResponse>, response: Response<RoomInfoResponse>) {
                                 if (response.code() == 200) {
                                     session = response.body()?.token.toString()
                                     if (response.body()!!.gameStarted) {
                                         started = true
                                         val intent =
-                                            Intent(this@CreatePrivateMatch, TableroActivity::class.java)
+                                            Intent(this@PrivateRoom, TableroActivity::class.java)
                                         intent.putExtra("session", session)
-                                        intent.putExtra("ids", idsOtros.toTypedArray())
+                                        intent.putExtra("ids", ids.toTypedArray())
                                         intent.putExtra("posicion", myPos)
                                         startActivityForResult(intent, normalCode)
-                                    }
-                                    if (response.body()!!.playersIds[0] == session.substring(0,32)) {
-                                        owner = true
-                                    }
-                                    if (ids.size != response.body()!!.playersIds.size) {
+                                    } else {
+                                        if (response.body()!!.playersIds[0] == session.substring(0,32))
+                                            owner = true
+                                        ids = ArrayList()
                                         for (i in response.body()!!.playersIds.indices) {
-                                            if (response.body()!!.playersIds[i] != ids[i] && response.body()!!.playersIds[i] != "BOT") {
-                                                //actualizarJugador(response.body()!!.playersIds[i], i)
+                                            if (i >= ids.size || !(response.body()!!.playersIds[i].equals(ids[i]))) {
+                                                actualizarJugador(response.body()!!.playersIds[i], i)
                                             }
-                                            if (response.body()!!.playersIds[i].equals(session.substring(0,32)))  myPos = i
-                                            else idsOtros.add(response.body()!!.playersIds[i])
+                                            if (response.body()!!.playersIds[i].equals(session.substring(0, 32))) myPos = i
+                                            //Toast.makeText(applicationContext, "Mi posicion: $myPos", Toast.LENGTH_SHORT).show()
+                                            //else idsOtros.add(response.body()!!.playersIds[i])
                                             ids.add(response.body()!!.playersIds[i])
                                         }
                                         done = true
-                                    } else { done = true }
-                                } else {
-                                    Toast.makeText(
-                                        applicationContext,
-                                        response.code(),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    }
+                                } else  {
+                                    Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
                                 }
                             }
                         })
@@ -273,5 +263,24 @@ class CreatePrivateMatch : AppCompatActivity() {
             done = true
         }
         else { super.onActivityResult(requestCode, resultCode, data) }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        RetrofitClient.instance.quitMatch(TokenRequest(session))
+            .enqueue(object : Callback<TokenResponse> {
+                override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
+                } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                    if (response.code() == 200) {
+                        session = response.body()?.token.toString()
+                        Toast.makeText(applicationContext, getString(R.string.quit_game_success), Toast.LENGTH_SHORT).show()
+                        val intent = Intent().apply { putExtra("session", session) }
+                        setResult(Activity.RESULT_OK, intent)
+                    } else {
+                        Toast.makeText(applicationContext, getString(R.string.bad_quit_response), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
     }
 }

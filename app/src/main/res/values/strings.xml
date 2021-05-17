@@ -22,6 +22,7 @@
     <string name="private_game">Partida privada</string>
     <string name="choose_friend">Escoja un amigo</string>
     <string name="friends">Amigos</string>
+    <string name="pause">Pausa</string>
     <string name="exit">Salir</string>
     <string name="chosen_card">Elegida</string>
     <string name="your_turn">Tu turno</string>

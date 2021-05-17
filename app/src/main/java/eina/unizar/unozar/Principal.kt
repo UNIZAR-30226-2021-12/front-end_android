@@ -184,7 +184,7 @@ class Principal : AppCompatActivity() {
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                 if (response.code() == 200) {
                                     Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
-                                    val intent = Intent(this@Principal, CreatePrivateMatch::class.java)
+                                    val intent = Intent(this@Principal, PrivateRoom::class.java)
                                     intent.putExtra("numPlayers", n)
                                     intent.putExtra("numBots", b)
                                     intent.putExtra("session", response.body()?.token)
@@ -216,7 +216,7 @@ class Principal : AppCompatActivity() {
                         } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                             if (response.code() == 200) {
                                 Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
-                                val intent = Intent(this@Principal, CreatePrivateMatch::class.java)
+                                val intent = Intent(this@Principal, PrivateRoom::class.java)
                                 intent.putExtra("session", response.body()?.token)
                                 startActivityForResult(intent, normalCode)
                             } else {
