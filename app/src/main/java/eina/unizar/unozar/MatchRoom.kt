@@ -1,20 +1,14 @@
 package eina.unizar.unozar
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_create_game.*
-import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.custom_alertdialog.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +23,7 @@ import server.response.PlayerInfo
 import server.response.RoomInfoResponse
 import server.response.TokenResponse
 
-class PrivateRoom : AppCompatActivity() {
+class MatchRoom : AppCompatActivity() {
     private var normalCode = 73
     private var inviteCode = 52
     private var players = 2
@@ -55,7 +49,6 @@ class PrivateRoom : AppCompatActivity() {
     )
     private lateinit var session: String
     private lateinit var code: String
-    private val inviteFriend = Menu.FIRST
     private lateinit var ids: ArrayList<String>
     private lateinit var avatarIds: Map<Int,Int>
     private lateinit var names: Map<Int,String>
@@ -175,7 +168,7 @@ class PrivateRoom : AppCompatActivity() {
                                     session = response.body()?.token.toString()
                                     started = true
                                     val intent =
-                                        Intent(this@PrivateRoom, TableroActivity::class.java)
+                                        Intent(this@MatchRoom, TableroActivity::class.java)
                                     intent.putExtra("session", response.body()!!.token)
                                     intent.putExtra("ids", ids.toTypedArray())
                                     intent.putExtra("myPosition", myPos)
@@ -211,7 +204,7 @@ class PrivateRoom : AppCompatActivity() {
                 } else if (invite && done) {     /** Invitar amigo **/
                     done = false
                     invite = false
-                    val intent = Intent(this@PrivateRoom, ChooseFriend::class.java)
+                    val intent = Intent(this@MatchRoom, ChooseFriend::class.java)
                     intent.putExtra("session", session)
                     intent.putExtra("code", code)
                     startActivityForResult(intent, inviteCode)
@@ -228,7 +221,7 @@ class PrivateRoom : AppCompatActivity() {
                                     if (response.body()!!.gameStarted) {
                                         started = true
                                         val intent =
-                                            Intent(this@PrivateRoom, TableroActivity::class.java)
+                                            Intent(this@MatchRoom, TableroActivity::class.java)
                                         intent.putExtra("session", response.body()!!.token)
                                         intent.putExtra("ids", ids.toTypedArray())
                                         intent.putExtra("myPosition", myPos)
@@ -296,13 +289,13 @@ class PrivateRoom : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
+        menuInflater.inflate(R.menu.room_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_profile -> {
+            R.id.action_invite -> {
                 invite = true
             }
         }

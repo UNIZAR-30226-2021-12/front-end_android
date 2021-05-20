@@ -20,7 +20,7 @@
             android:id="@+id/buttonPoner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Poner Carta"
+            android:text="@string/play_card"
             app:layout_constraintBottom_toTopOf="@+id/buttonPedirUno"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -28,7 +28,7 @@
             android:id="@+id/buttonPedirUno"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Unozar"
+            android:text="@string/app_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonPoner" />
 
@@ -36,7 +36,7 @@
             android:id="@+id/buttonRobarCarta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Robar Carta"
+            android:text="@string/draw_card"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonPedirUno" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -50,7 +50,8 @@
         android:onClick="showMenu"
         android:src="@drawable/menu_icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/img" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCard"
@@ -85,14 +86,16 @@
             android:layout_width="65dp"
             android:layout_height="80dp"
             app:layout_constraintStart_toEndOf="@+id/image_record"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/img" />
 
         <ImageView
             android:id="@+id/image_record"
             android:layout_width="65dp"
             android:layout_height="80dp"
             app:layout_constraintBottom_toTopOf="@+id/textView7"
-            app:layout_constraintEnd_toStartOf="@+id/image_cima" />
+            app:layout_constraintEnd_toStartOf="@+id/image_cima"
+            android:contentDescription="@string/img" />
 
         <TextView
             android:id="@+id/textView7"
@@ -120,7 +123,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:text="9 Cartas"
+            android:text=""
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/your_turn" />
 
@@ -129,7 +132,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:text="Tu turno"
+            android:text=""
             app:layout_constraintBottom_toTopOf="@+id/your_cards"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

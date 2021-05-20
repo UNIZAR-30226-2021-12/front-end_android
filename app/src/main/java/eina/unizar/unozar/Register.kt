@@ -1,21 +1,17 @@
 package eina.unizar.unozar
 
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import server.response.PlayerInfo
 import server.response.RegisterUser
 import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import server.request.CreateMatchRequest
 import server.response.LoginUser
 import server.response.TokenResponse
 

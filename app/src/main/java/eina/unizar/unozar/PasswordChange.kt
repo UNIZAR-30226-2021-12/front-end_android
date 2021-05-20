@@ -61,12 +61,16 @@ class PasswordChange : AppCompatActivity() {
     }
 
     private fun validateInput (newPassword:String, repeatPassword:String) : Boolean {
-       if (newPassword.isEmpty()) {
-           new_password.error = getString(R.string.password_format_error)
-       } else if (newPassword != repeatPassword) {
-           new_password.error = getString(R.string.different_passwords)
-           repeat_password.error = getString(R.string.different_passwords)
-       } else return true
+        when {
+            newPassword.isEmpty() -> {
+                new_password.error = getString(R.string.password_format_error)
+            }
+            newPassword != repeatPassword -> {
+                new_password.error = getString(R.string.different_passwords)
+                repeat_password.error = getString(R.string.different_passwords)
+            }
+            else -> return true
+        }
         return false
     }
 }

@@ -1,25 +1,26 @@
 package eina.unizar.unozar
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.ImageButton
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_change_avatar.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import server.request.UpdateRequest
+import server.request.UnlockRequest
+import server.response.TokenResponse
 
 class ChangeAvatar : AppCompatActivity() {
 
     private lateinit var session: String
-    private lateinit var nameAvatar: String
+    private var avatarId = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         session = intent.getStringExtra("session").toString()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_avatar)
-        imageButton.setOnClickListener{
+        /*imageButton.setOnClickListener{
             nameAvatar = "oso"
             cambiarAvatar(nameAvatar)
         }
@@ -34,12 +35,9 @@ class ChangeAvatar : AppCompatActivity() {
         imageButton4.setOnClickListener{
             nameAvatar = "jesica"
             cambiarAvatar(nameAvatar)
-        }
-    }
-
-    private fun cambiarAvatar(avatar: String){
-        /*RetrofitClient.instance.updatePlayer(session.substring(0,32), UpdateRequest(null, null, null, nameAvatar, session))
-            .enqueue(object : Callback<TokenResponsepacomerle.yeah> {
+        }*/
+        RetrofitClient.instance.unlockAvatar(UnlockRequest(avatarId, session))
+            .enqueue(object : Callback<TokenResponse> {
                 override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
@@ -52,7 +50,6 @@ class ChangeAvatar : AppCompatActivity() {
                         Toast.makeText(applicationContext, getString(R.string.bad_update_response) + response.code(), Toast.LENGTH_LONG).show()
                     }
                 }
-            })*/
-        finish()
+            })
     }
 }

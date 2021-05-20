@@ -19,6 +19,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:gravity="center"
+            android:contentDescription="@string/img"
             android:src="@drawable/test_user" />
 
         <EditText
@@ -31,14 +32,19 @@
             android:gravity="center"
             android:focusable="false"
             android:background="@android:color/transparent"
-            android:text="Alias" />
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor"
+            android:text="@string/alias"
+            android:inputType="text" />
 
         <ImageView
             android:id="@+id/edit_alias"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="changeAlias"
+            android:contentDescription="@string/img"
             app:srcCompat="@drawable/edit_alias" />
 
         <TextView
@@ -49,7 +55,7 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Correo elecronico:" />
+            android:text="@string/email" />
 
         <TextView
             android:id="@+id/showEmail2"
@@ -59,7 +65,7 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="manzana@gmail.com" />
+            android:text="" />
 
         <Button
             android:id="@+id/buttonCambiarEmail"
@@ -70,7 +76,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="goToChangeEmail"
-            android:text="Cambiar correo electrónico" />
+            android:text="@string/change_email" />
 
         <Button
             android:id="@+id/buttonCambiarContraseña"
@@ -81,7 +87,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="goToChangePassword"
-            android:text="Cambiar contraseña" />
+            android:text="@string/change_password" />
 
         <Button
             android:id="@+id/buttonCambiarAvatar"
@@ -92,7 +98,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="goToChangeAvatar"
-            android:text="Cambiar avatar" />
+            android:text="@string/change_avatar" />
 
         <TextView
             android:id="@+id/show1"
@@ -102,7 +108,8 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Partidas Totales" />
+            android:textStyle="bold"
+            android:text="@string/total_matches" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -114,23 +121,23 @@
                 android:id="@+id/show2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="150dp"
+                android:layout_marginStart="150dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                android:text="Jugadas: " />
+                android:text="@string/played" />
 
             <TextView
                 android:id="@+id/showJugadasTotales"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
+                android:layout_marginStart="0dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="150dp"
+                android:layout_marginEnd="150dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                android:text="50" />
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
@@ -143,23 +150,23 @@
                 android:id="@+id/show3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="150dp"
+                android:layout_marginStart="150dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                android:text="Ganadas: " />
+                android:text="@string/won" />
 
             <TextView
                 android:id="@+id/showGanadasTotales"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
+                android:layout_marginStart="0dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="150dp"
+                android:layout_marginEnd="150dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                android:text="2" />
+                android:text="" />
         </LinearLayout>
 
         <TextView
@@ -170,7 +177,8 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Partidas con amigos " />
+            android:textStyle="bold"
+            android:text="@string/total_friend_matches" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -182,23 +190,23 @@
                 android:id="@+id/show5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="150dp"
+                android:layout_marginStart="150dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                android:text="Jugadas: " />
+                android:text="@string/played" />
 
             <TextView
                 android:id="@+id/showJugadas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
+                android:layout_marginStart="0dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="150dp"
+                android:layout_marginEnd="150dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                android:text="50" />
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
@@ -211,23 +219,23 @@
                 android:id="@+id/show6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="150dp"
+                android:layout_marginStart="150dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                android:text="Ganadas: " />
+                android:text="@string/won" />
 
             <TextView
                 android:id="@+id/showGanadas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
+                android:layout_marginStart="0dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="150dp"
+                android:layout_marginEnd="150dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                android:text="2" />
+                android:text="" />
         </LinearLayout>
 
         <Button
@@ -239,7 +247,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="deleteAccount"
-            android:text="Eliminar cuenta" />
+            android:text="@string/delete_account" />
 
     </LinearLayout>
 </ScrollView>

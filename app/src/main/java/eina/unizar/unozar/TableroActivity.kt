@@ -148,15 +148,15 @@ class TableroActivity : AppCompatActivity() {
         return R.drawable.cambio_color_verde
     }
 
-    val Cards = mutableListOf<Card>()
-    val Gamers = mutableListOf<Gamer>()
+    private val cards = mutableListOf<Card>()
+    private val gamers = mutableListOf<Gamer>()
 
-    var cimaActual = ""
-    var cimaCambiada = false
-    var cimaNueva = ""
+    private var cimaActual = ""
+    private var cimaCambiada = false
+    private var cimaNueva = ""
 
     var robadaCarta = false
-    var cartaAnadida = false
+    //var cartaAnadida = false
 
     var miTurno = true
 
@@ -228,8 +228,7 @@ class TableroActivity : AppCompatActivity() {
 
     fun cambiarJugadoresYCartas() {
         jugadoresActuales.removeAll(jugadoresActuales)
-        var tamano = jugadoresNuevos.size -1
-        for(i in 0..tamano) {
+        for(i in jugadoresNuevos.indices) {
             if(!idJugadoresCambiados[i]) {
                 jugadoresActuales.add(jugadoresNuevos[i])
             }
@@ -247,7 +246,7 @@ class TableroActivity : AppCompatActivity() {
     private val numCartasJugadoresActuales  = mutableListOf<Int>()
     var numCartasJugadoresCambiados = false
     lateinit var numCartasJugadoresNuevos : Array<Int>
-    lateinit var imgJugadores : Array<Int>
+    //lateinit var imgJugadores : Array<Int>
 
     fun comprobarCartasJugadores() {
         if(numCartasJugadoresActuales.size == 0) {
@@ -293,7 +292,7 @@ class TableroActivity : AppCompatActivity() {
                 //timerText.text = getString(R.string.time_left, timeLeft.toString())
             }
             override fun onFinish() {
-                TODO("Not yet implemented")
+                //
             }
         }
 */
@@ -328,7 +327,7 @@ class TableroActivity : AppCompatActivity() {
         if(nombreRecordado.equals("XXC") || nombreRecordado.equals("XX4")) {
             val builder = AlertDialog.Builder(this)
             val items = arrayOf("Red", "Green", "Yellow", "Blue")
-            /*with(builder)
+            with(builder)
             {
                 setTitle("Elija un color")
                 setItems(items) { _, which ->
@@ -368,79 +367,44 @@ class TableroActivity : AppCompatActivity() {
                     }
                 }
                 show()
-            }*/
-            builder.setTitle("Elija un color")
-            builder.setItems(items) { _, i: Int ->
-                if(i == 0 && nombreRecordado == "XXC") {
-                    nombreRecordado = "XRC"
-                    colorSelected = "R"
-                }
-                else if(i == 1 && nombreRecordado == "XXC") {
-                    nombreRecordado = "XGC"
-                    colorSelected = "G"
-                }
-                else if(i == 2 && nombreRecordado == "XXC") {
-                    nombreRecordado = "XYC"
-                    colorSelected = "Y"
-                }
-                else if(i == 3 && nombreRecordado == "XXC") {
-                    nombreRecordado = "XBC"
-                    colorSelected = "B"
-                }
-                else if(i == 0 && nombreRecordado == "XX4") {
-                    nombreRecordado = "XR4"
-                    colorSelected = "R"
-                }
-                else if(i == 1 && nombreRecordado == "XX4") {
-                    nombreRecordado = "XG4"
-                    colorSelected = "G"
-                }
-                else if(i == 2 && nombreRecordado == "XX4") {
-                    nombreRecordado = "XY4"
-                    colorSelected = "Y"
-                }
-                else if(i == 3 && nombreRecordado == "XX4") {
-                    nombreRecordado = "XB4"
-                    colorSelected = "B"
-                }
             }
         }
         ponerCarta = true
     }
 
     private fun anyadirCartas() {
-        Cards.clear()
+        cards.clear()
         val tamano = manoActual.size - 1
-        Cards.add(Card(1, "inicio", R.drawable.inicio))
+        cards.add(Card(1, "inicio", R.drawable.inicio))
         for(i in 0..tamano) {
-            Cards.add(Card(i.toLong(), manoActual[i], traductorCartasToInt(manoActual[i])))
+            cards.add(Card(i.toLong(), manoActual[i], traductorCartasToInt(manoActual[i])))
         }
-        Cards.add(Card(1, "fin", R.drawable.fin))
+        cards.add(Card(1, "fin", R.drawable.fin))
 
         rvCard.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         //var adapter = CardAdapter(Cards)
         rvCard.apply{
-            adapter = CardAdapter(Cards)
+            adapter = CardAdapter(cards)
         }
     }
 
     fun anyadirGamers() {
-        Gamers.clear()
+        gamers.clear()
         for(i in idJugadoresActuales.indices) {
             var turno = ""
             if (!(idJugadoresActuales[i].equals(session.substring(0,32)))) {
                 if (i == turn) turno = "Su turno"
                 if((jugadoresActuales[i]).equals("IA")){
-                    Gamers.add(Gamer(i.toLong(), avatars[avatarIds[i].toInt()], jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
+                    gamers.add(Gamer(i.toLong(), avatars[avatarIds[i].toInt()], jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
                 }
                 else{
-                    Gamers.add(Gamer(i.toLong(), avatars[avatarIds[i].toInt()], jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
+                    gamers.add(Gamer(i.toLong(), avatars[avatarIds[i].toInt()], jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
                 }
             }
 
         }
         rvGamer.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val adapter = GamerAdapter(Gamers)
+        val adapter = GamerAdapter(gamers)
         rvGamer.adapter = adapter
     }
 
@@ -546,7 +510,7 @@ class TableroActivity : AppCompatActivity() {
                                             winner = i
                                         }
                                     }
-                                    val prevTurn = turn
+                                    //val prevTurn = turn
                                     turn = response.body()!!.turn
                                     /*** Players info ***/
                                     miTurno = response.body()!!.turn == myPos
@@ -591,10 +555,10 @@ class TableroActivity : AppCompatActivity() {
                                         recordCambiado = false
                                     }
 
-                                    if (prevTurn != turn) {  // Cambio de turno
-                                        /*timer.cancel()
-                                            timer.start()*/
-                                    }
+                                    /*if (prevTurn != turn) {  // Cambio de turno
+                                        timer.cancel()
+                                        timer.start()
+                                    }*/
                                     done = true
                                 } else {
                                     Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()

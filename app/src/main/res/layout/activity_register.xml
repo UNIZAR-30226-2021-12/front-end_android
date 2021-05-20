@@ -59,7 +59,7 @@
             android:id="@+id/textView2"
             android:layout_width="340dp"
             android:layout_height="28dp"
-            android:text="@string/mail"
+            android:text="@string/email"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/register_email"
             app:layout_constraintEnd_toEndOf="parent"

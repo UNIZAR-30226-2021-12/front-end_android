@@ -4,13 +4,10 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.text.Editable
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_change_email.*
@@ -26,7 +23,7 @@ import server.response.TokenResponse
 
 class Profile : AppCompatActivity() {
 
-    private var CODE = 73
+    private var normalCode = 73
     private lateinit var session: String
     private val avatars = arrayListOf(
         R.drawable.test_user,
@@ -59,8 +56,8 @@ class Profile : AppCompatActivity() {
                     if (response.code() == 200) {
                         showAlias.setText(response.body()?.alias, TextView.BufferType.EDITABLE)
                         showEmail2.text = response.body()?.email
-                        showJugadasTotales.text = response.body()?.publicTotal.toString()
-                        showGanadasTotales.text = response.body()?.publicWins.toString()
+                        showJugadasTotales.text = (response.body()!!.publicTotal + response.body()!!.privateTotal).toString()
+                        showGanadasTotales.text = (response.body()!!.publicWins + response.body()!!.privateWins).toString()
                         showJugadas.text = response.body()?.privateTotal.toString()
                         showGanadas.text = response.body()?.privateWins.toString()
                         avatar.setImageResource(avatars[response.body()!!.avatarId])
@@ -76,25 +73,25 @@ class Profile : AppCompatActivity() {
     fun goToChangeEmail(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent(this, EmailChange::class.java)
         intent.putExtra("session", session)
-        startActivityForResult(intent, CODE)
+        startActivityForResult(intent, normalCode)
     }
 
     fun goToChangePassword(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent(this, PasswordChange::class.java)
         intent.putExtra("session", session)
-        startActivityForResult(intent, CODE)
+        startActivityForResult(intent, normalCode)
     }
 
     fun goToChangeAvatar(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent(this, ChangeAvatar::class.java)
         intent.putExtra("session", session)
-        startActivityForResult(intent, CODE)
+        startActivityForResult(intent, normalCode)
     }
 
     fun changeAlias(@Suppress("UNUSED_PARAMETER") view: View) {
         edit_alias.setImageResource(R.drawable.save_icon)
         showAlias.isFocusable = true
-        showAlias.setSelection(0);
+        showAlias.setSelection(0)
         edit_alias.setOnClickListener {
             RetrofitClient.instance.updatePlayer(UpdateRequest(null, showAlias.text.toString().trim(), null, session))
                 .enqueue(object : Callback<TokenResponse> {
@@ -140,7 +137,7 @@ class Profile : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == CODE) {
+        if (resultCode == Activity.RESULT_OK && requestCode == normalCode) {
             session = data!!.getStringExtra("session").toString()
             updateInfo()
         } else { super.onActivityResult(requestCode, resultCode, data) }

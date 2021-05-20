@@ -27,6 +27,11 @@ interface API {
         @Body updateRequest: UpdateRequest
     ): Call<TokenResponse>
 
+    @POST("/player/unlock")
+    fun unlockAvatar(
+        @Body unlockRequest: UnlockRequest
+    ): Call<TokenResponse>
+
     @HTTP(method = "DELETE", path = "/player/delete", hasBody = true)
     fun deleteAccount(
         @Body delete: TokenRequest

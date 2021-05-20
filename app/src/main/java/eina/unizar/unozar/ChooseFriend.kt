@@ -27,7 +27,7 @@ import server.response.FriendsListResponse
 
 class ChooseFriend : AppCompatActivity() {
 
-    private var CODE = 73
+    private var normalCode = 73
     private val add = Menu.FIRST
     private lateinit var session: String
     private lateinit var code: String
@@ -99,7 +99,7 @@ class ChooseFriend : AppCompatActivity() {
             intent.putExtra(Intent.EXTRA_SUBJECT,
                 getString(R.string.email_message, code)
             )
-            startActivityForResult(intent, CODE)
+            startActivityForResult(intent, normalCode)
         }
         addFriend.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int -> }
         addFriend.show()
@@ -127,7 +127,7 @@ class ChooseFriend : AppCompatActivity() {
     }
 
     override fun onActivityResult (requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == CODE) {
+        if (requestCode == normalCode) {
             val intent = Intent().apply { putExtra("session", session) }
             setResult(Activity.RESULT_OK, intent)
             finish()

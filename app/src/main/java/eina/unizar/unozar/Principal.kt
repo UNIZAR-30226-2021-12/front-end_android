@@ -8,7 +8,6 @@ import android.util.Log.d
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +21,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import server.request.*
-import server.response.GameInfoResponse
 import server.response.PlayerInfo
 import server.response.TokenResponse
 
@@ -136,7 +134,7 @@ class Principal : AppCompatActivity() {
                     } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                         if (response.code() == 200) {
                             Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
-                            val intent = Intent(this@Principal, CreatePublicMatch::class.java)
+                            val intent = Intent(this@Principal, MatchRoom::class.java)
                             intent.putExtra("numPlayers", n)
                             intent.putExtra("numBots", 0)
                             intent.putExtra("session", response.body()?.token)
@@ -181,7 +179,7 @@ class Principal : AppCompatActivity() {
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                 if (response.code() == 200) {
                                     Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
-                                    val intent = Intent(this@Principal, PrivateRoom::class.java)
+                                    val intent = Intent(this@Principal, MatchRoom::class.java)
                                     intent.putExtra("numPlayers", n)
                                     intent.putExtra("numBots", b)
                                     intent.putExtra("session", response.body()?.token)
@@ -213,7 +211,7 @@ class Principal : AppCompatActivity() {
                         } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                             if (response.code() == 200) {
                                 Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
-                                val intent = Intent(this@Principal, PrivateRoom::class.java)
+                                val intent = Intent(this@Principal, MatchRoom::class.java)
                                 intent.putExtra("session", response.body()?.token)
                                 startActivityForResult(intent, normalCode)
                             } else {

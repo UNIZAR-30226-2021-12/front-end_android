@@ -28,7 +28,6 @@ import server.response.TokenResponse
 class Friends : AppCompatActivity() {
 
     private lateinit var session: String
-    private lateinit var code: String
     private lateinit var friends: ArrayList<FriendInfo>
     private lateinit var adapter: FriendsListAdapter
     private val avatars = arrayListOf(
