@@ -8,11 +8,13 @@ import android.util.Log.d
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_principal.*
+import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.activity_tablero.*
 import kotlinx.android.synthetic.main.custom_alertdialog.*
 import kotlinx.android.synthetic.main.custom_alertdialog.view.*
@@ -54,9 +56,28 @@ class Principal : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_profile -> {
-                val intent = Intent(this, Profile::class.java)
-                intent.putExtra("session", session)
-                startActivityForResult(intent, normalCode)
+                RetrofitClient.instance.readPlayer(IdRequest(session.substring(0, 32)))
+                    .enqueue(object : Callback<PlayerInfo> {
+                        override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
+                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
+                            if (response.code() == 200) {
+                                val intent = Intent(this@Principal, Profile::class.java)
+                                intent.putExtra("session", session)
+                                intent.putExtra("avatar", response.body()!!.avatarId)
+                                intent.putExtra("alias", response.body()!!.alias)
+                                intent.putExtra("email", response.body()!!.email)
+                                intent.putExtra("private_matches", response.body()?.privateTotal.toString())
+                                intent.putExtra("private_wins", response.body()?.privateWins.toString())
+                                intent.putExtra("public_matches", response.body()?.publicTotal.toString())
+                                intent.putExtra("public_wins", response.body()?.publicWins.toString())
+                                startActivityForResult(intent, normalCode)
+                            } else {
+                                //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    })
             }
             R.id.action_logout -> {
                 val intent = Intent(this, Login::class.java)
@@ -97,31 +118,6 @@ class Principal : AppCompatActivity() {
                         }
                     })
             }
-            R.id.action_draw -> {
-                RetrofitClient.instance.readGame(TokenRequest(session))
-                    .enqueue(object : Callback<GameInfoResponse> {
-                        override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
-                            Toast.makeText(
-                                applicationContext,
-                                getString(R.string.no_response),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-
-                        override fun onResponse(
-                            call: Call<GameInfoResponse>,
-                            response: Response<GameInfoResponse>
-                        ) {
-                            if (response.code() == 200) {
-                                session = response.body()?.token.toString()
-                            } else Toast.makeText(
-                                applicationContext,
-                                response.code(),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    })
-            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -131,7 +127,8 @@ class Principal : AppCompatActivity() {
         val numPlayers = arrayOf("2", "3", "4")
         numP.setTitle(getString(R.string.number_of_players))
         numP.setItems(numPlayers) { _: DialogInterface, i: Int ->
-            RetrofitClient.instance.createMatch(CreateMatchRequest(false, numPlayers[i].toInt(), 0, session))
+            n = numPlayers[i].toInt()
+            RetrofitClient.instance.joinPublic(JoinPublicRequest(n, session))
                 .enqueue(object : Callback<TokenResponse> {
                     override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                         //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()

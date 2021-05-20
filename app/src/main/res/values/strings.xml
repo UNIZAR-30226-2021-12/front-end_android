@@ -26,9 +26,10 @@
     <string name="exit">Salir</string>
     <string name="chosen_card">Elegida</string>
     <string name="your_turn">Tu turno</string>
-    <string name="your_cards">%1$s Cartas</string>
     <string name="not_your_turn">No es tu turno</string>
+    <string name="not_owner">No eres el dueño de la sala</string>
     <string name="play_card">Poner carta</string>
+    <string name="your_cards">%1$s Cartas</string>
     <string name="time_left">Tiempo restante: %1$s</string>
     <!-- DIALOG TEXT -->
     <string name="alert">¡Cuidado!</string>
@@ -71,6 +72,7 @@
     <string name="email_change_success">Ha actualizado su dirección de correo electrónico con éxito</string>
     <string name="password_change_success">Ha actualizado su contraseña con éxito</string>
     <string name="avatar_change_success">Ha actualizado su avatar con éxito</string>
+    <string name="alias_change_success">Ha actualizado su alias con éxito</string>
     <string name="refresh_success">Sesión actualizada</string>
     <string name="quit_game_success">Ha salido de la partida</string>
     <!-- INVITE EMAIL -->

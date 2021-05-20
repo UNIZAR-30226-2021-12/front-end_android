@@ -32,7 +32,7 @@ class CardAdapter(val cards: List<Card>):RecyclerView.Adapter<CardAdapter.CardHo
             view.setOnClickListener{
                 //main.showRecord(card.image,view.card_image)
                 //Si la carta es válida, permite cogerla
-                if(!(card.name).equals("inicio") && !(card.name).equals("fin")){ //No se pueden coger las cartas del inicio y del fin
+                if(!((card.name).equals("inicio")) && !((card.name).equals("fin"))){ //No se pueden coger las cartas del inicio y del fin
                     posCambiado = card.id
                     record = card.image
                     nombreRecordado = card.name

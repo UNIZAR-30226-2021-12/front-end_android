@@ -44,7 +44,6 @@ class Friends : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friends)
         session = intent.getStringExtra("session").toString()
-        code = intent.getStringExtra("code").toString()
         friends = ArrayList()
         getFriendsRequest()
 
@@ -64,9 +63,9 @@ class Friends : AppCompatActivity() {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<FriendsListResponse>, response: Response<FriendsListResponse>) {
                     if (response.code() == 200) {
-                        var i = 0
                         session = response.body()?.token.toString()
-                        while (i < response.body()!!.avatarIds?.size!!) {
+                        var i = 0
+                        while (i < response.body()!!.avatarIds!!.size) {
                             friends.add(FriendInfo(
                                 response.body()!!.friendIds?.get(i),
                                 response.body()!!.alias?.get(i),

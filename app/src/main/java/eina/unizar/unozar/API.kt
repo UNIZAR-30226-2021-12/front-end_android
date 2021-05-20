@@ -63,6 +63,11 @@ interface API {
         @Body joinPrivateRequest: JoinPrivateRequest
     ): Call<TokenResponse>
 
+    @POST("/game/joinPublic")
+    fun joinPublic(
+        @Body joinPublicRequest: JoinPublicRequest
+    ): Call<TokenResponse>
+
     @POST("/game/quit")
     fun quitMatch(
         @Body delete: TokenRequest

@@ -19,9 +19,9 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:gravity="center"
-            android:src="@drawable/apple_17_2" />
+            android:src="@drawable/test_user" />
 
-        <TextView
+        <EditText
             android:id="@+id/showAlias"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,13 +29,17 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:gravity="center"
+            android:focusable="false"
+            android:background="@android:color/transparent"
             android:text="Alias" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/edit_alias"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
+            android:clickable="true"
+            android:onClick="changeAlias"
+            app:srcCompat="@drawable/edit_alias" />
 
         <TextView
             android:id="@+id/showEmail1"

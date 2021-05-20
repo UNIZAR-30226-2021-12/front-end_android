@@ -28,8 +28,9 @@
     <string name="chosen_card">Chosen</string>
     <string name="your_turn">Your turn</string>
     <string name="not_your_turn">It\'s not your turn</string>
-    <string name="your_cards">%1$s Cards</string>
+    <string name="not_owner">You are not the room owner</string>
     <string name="play_card">Play card</string>
+    <string name="your_cards">%1$s Cards</string>
     <string name="time_left">Time left: %1$s</string>
     <!-- DIALOG TEXT -->
     <string name="alert">Careful! </string>
@@ -72,6 +73,7 @@
     <string name="email_change_success">You have successfully updated your email address </string>
     <string name="password_change_success">You have updated your password successfully </string>
     <string name="avatar_change_success">Your avatar was updated successfully</string>
+    <string name="alias_change_success">Your alias was updated successfully</string>
     <string name="refresh_success">Updated session </string>
     <string name="quit_game_success">You left the game</string>
     <!-- INVITE EMAIL -->

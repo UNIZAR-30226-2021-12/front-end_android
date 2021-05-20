@@ -1,6 +1,7 @@
 package eina.unizar.unozar
 
 import adapter.FriendsListAdapter
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -50,6 +51,8 @@ class ChooseFriend : AppCompatActivity() {
         getFriendsRequest()
 
         registerForContextMenu(add_friend_list)
+
+        exit.setOnClickListener { cancel() }
     }
 
     private fun getFriendsRequest() {
@@ -98,8 +101,14 @@ class ChooseFriend : AppCompatActivity() {
             )
             startActivityForResult(intent, CODE)
         }
-        addFriend.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
+        addFriend.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int -> }
         addFriend.show()
+    }
+
+    private fun cancel() {
+        val intent = Intent().apply { putExtra("session", session) }
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View?, menuInfo: ContextMenuInfo?) {
@@ -119,7 +128,8 @@ class ChooseFriend : AppCompatActivity() {
 
     override fun onActivityResult (requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == CODE) {
-            session = data!!.getStringExtra("session").toString()
+            val intent = Intent().apply { putExtra("session", session) }
+            setResult(Activity.RESULT_OK, intent)
             finish()
         } else { super.onActivityResult(requestCode, resultCode, data) }
     }
