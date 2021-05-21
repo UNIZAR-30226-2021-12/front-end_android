@@ -336,18 +336,22 @@ class TableroActivity : AppCompatActivity() {
                     if(items[which].equals("Red") && nombreRecordado == "XXC") {
                         nombreRecordado = "XRC"
                         colorSelected = "R"
+                        ponerCarta = true
                     }
                     else if(items[which].equals("Green") && nombreRecordado == "XXC") {
                         nombreRecordado = "XGC"
                         colorSelected = "G"
+                        ponerCarta = true
                     }
                     else if(items[which].equals("Blue") && nombreRecordado == "XXC") {
                         nombreRecordado = "XBC"
                         colorSelected = "B"
+                        ponerCarta = true
                     }
                     else if(items[which].equals("Yellow") && nombreRecordado == "XXC") {
                         nombreRecordado = "XYC"
                         colorSelected = "Y"
+                        ponerCarta = true
                     }
                     else if(items[which].equals("Red") && nombreRecordado == "XX4") {
                         nombreRecordado = "XR4"
@@ -356,20 +360,23 @@ class TableroActivity : AppCompatActivity() {
                     else if(items[which].equals("Green") && nombreRecordado == "XX4") {
                         nombreRecordado = "XG4"
                         colorSelected = "G"
+                        ponerCarta = true
                     }
                     else if(items[which].equals("Blue") && nombreRecordado == "XX4") {
                         nombreRecordado = "XB4"
                         colorSelected = "B"
+                        ponerCarta = true
                     }
                     else if(items[which].equals("Yellow") && nombreRecordado == "XX4") {
                         nombreRecordado = "XY4"
                         colorSelected = "Y"
+                        ponerCarta = true
                     }
                 }
                 show()
             }
         }
-        ponerCarta = true
+        else{ponerCarta = true}
     }
 
     private fun anyadirCartas() {
