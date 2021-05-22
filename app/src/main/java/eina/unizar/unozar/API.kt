@@ -27,6 +27,11 @@ interface API {
         @Body updateRequest: UpdateRequest
     ): Call<TokenResponse>
 
+    @POST("/player/getDailyGift")
+    fun getDailyGift(
+        @Body tokenRequest: TokenRequest
+    ): Call<GiftResponse>
+
     @POST("/player/unlock")
     fun unlockAvatar(
         @Body unlockRequest: UnlockRequest

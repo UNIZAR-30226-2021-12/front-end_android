@@ -43,9 +43,11 @@ class MatchRoom : AppCompatActivity() {
         R.drawable.test_user,
         R.drawable.robotia,
         R.drawable.castor,
+        R.drawable.flippy,
         R.drawable.jesica,
         R.drawable.larry,
-        R.drawable.oso
+        R.drawable.oso,
+        R.drawable.slendid
     )
     private lateinit var session: String
     private lateinit var code: String

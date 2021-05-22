@@ -55,11 +55,12 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCard"
-        android:layout_width="332dp"
-        android:layout_height="117dp"
-        android:layout_marginStart="26dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_width="327dp"
+        android:layout_height="176dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvGamer"
@@ -72,35 +73,49 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="263dp"
+        android:layout_height="251dp"
         android:layout_gravity="center"
-        android:layout_marginTop="68dp"
-        android:layout_marginEnd="72dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/tablero3"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvGamer">
 
         <ImageView
             android:id="@+id/image_cima"
             android:layout_width="65dp"
             android:layout_height="80dp"
+            android:layout_marginTop="72dp"
+            android:contentDescription="@string/img"
             app:layout_constraintStart_toEndOf="@+id/image_record"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/img" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/image_record"
             android:layout_width="65dp"
             android:layout_height="80dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView7"
-            app:layout_constraintEnd_toStartOf="@+id/image_cima"
-            android:contentDescription="@string/img" />
+            android:layout_marginStart="34dp"
+            android:layout_marginTop="72dp"
+            android:contentDescription="@string/img"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_mazo"
+            android:layout_width="65dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="72dp"
+            android:contentDescription="@string/img"
+            android:src="@drawable/reverso"
+            app:layout_constraintStart_toEndOf="@+id/image_cima"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="34dp"
             android:text="@string/chosen_card"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_record" />
@@ -112,10 +127,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="5dp"
-        android:layout_marginBottom="42dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="100dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/rvCard"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
@@ -136,6 +151,4 @@
             app:layout_constraintBottom_toTopOf="@+id/your_cards"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

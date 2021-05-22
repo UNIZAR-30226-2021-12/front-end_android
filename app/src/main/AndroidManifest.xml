@@ -99,6 +99,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MatchRoom" />
         </activity>
+        <activity
+            android:name=".Tienda"
+            android:label="@string/app_name"
+            android:parentActivityName=".Principal" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Principal" />
+        </activity>
     </application>
 
 </manifest>

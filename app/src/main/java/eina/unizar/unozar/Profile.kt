@@ -25,6 +25,7 @@ class Profile : AppCompatActivity() {
 
     private var normalCode = 73
     private lateinit var session: String
+    private lateinit var unlocked: ArrayList<Int>
     private val avatars = arrayListOf(
         R.drawable.test_user,
         R.drawable.oso,
@@ -43,6 +44,7 @@ class Profile : AppCompatActivity() {
         showJugadas.text = intent.getStringExtra("public_matches")
         showGanadas.text = intent.getStringExtra("public_wins")
         avatar.setImageResource(avatars[intent.getIntExtra("avatar", 0)])
+        unlocked = ArrayList()
     }
 
     private fun updateInfo() {
@@ -60,6 +62,7 @@ class Profile : AppCompatActivity() {
                         showGanadasTotales.text = (response.body()!!.publicWins + response.body()!!.privateWins).toString()
                         showJugadas.text = response.body()?.privateTotal.toString()
                         showGanadas.text = response.body()?.privateWins.toString()
+                        unlocked = response.body()!!.unlockable
                         avatar.setImageResource(avatars[response.body()!!.avatarId])
                     } else {
                         //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
@@ -85,6 +88,7 @@ class Profile : AppCompatActivity() {
     fun goToChangeAvatar(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent(this, ChangeAvatar::class.java)
         intent.putExtra("session", session)
+        intent.putExtra("unlocked", unlocked.map { it.toString() }.toTypedArray())
         startActivityForResult(intent, normalCode)
     }
 

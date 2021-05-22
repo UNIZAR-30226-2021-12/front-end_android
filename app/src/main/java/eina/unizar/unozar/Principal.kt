@@ -21,6 +21,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import server.request.*
+import server.response.GiftResponse
 import server.response.PlayerInfo
 import server.response.TokenResponse
 
@@ -30,6 +31,7 @@ class Principal : AppCompatActivity() {
     private var n = 2
     private lateinit var session: String
     private lateinit var players: AlertDialog.Builder
+    private var myMoney = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,20 +88,36 @@ class Principal : AppCompatActivity() {
                 intent.putExtra("session", session)
                 startActivityForResult(intent, normalCode)
             }
-            R.id.action_refresh -> {
-                RetrofitClient.instance.refreshToken(TokenRequest(session))
-                    .enqueue(object : Callback<TokenResponse> {
-                        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+            R.id.action_prize -> {
+                RetrofitClient.instance.getDailyGift(TokenRequest(session))
+                    .enqueue(object : Callback<GiftResponse> {
+                        override fun onFailure(call: Call<GiftResponse>, t: Throwable) {
                             Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                        } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                        } override fun onResponse(call: Call<GiftResponse>, response: Response<GiftResponse>) {
                             if (response.code() == 200) {
                                 session = response.body()?.token.toString()
-                                Toast.makeText(applicationContext, getString(R.string.refresh_success), Toast.LENGTH_LONG).show()
+                                val premio = response.body()!!.gift.toString()
+                                val builder = AlertDialog.Builder(this@Principal)
+                                with(builder)
+                                {
+                                    setTitle("Enhorabuena")
+                                    setMessage("Has ganado un premio de $premio monedas")
+                                    val neutralButtonClick = null
+                                    setPositiveButton("OK",neutralButtonClick)
+                                    show()
+                                }
+                                updateInfo()
                             } else {
                                 Toast.makeText(applicationContext, getString(R.string.bad_refresh_response), Toast.LENGTH_LONG).show()
                             }
                         }
                     })
+            }
+            R.id.action_shop -> {
+                val intent = Intent(this, Tienda::class.java)
+                intent.putExtra("session", session)
+                intent.putExtra("money", myMoney)
+                startActivityForResult(intent, normalCode)
             }
             R.id.action_delete_game -> {
                 RetrofitClient.instance.quitMatch(TokenRequest(session))
@@ -233,7 +251,10 @@ class Principal : AppCompatActivity() {
                 override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
-                    if (response.code() == 200) { money.text = response.body()?.money.toString() }
+                    if (response.code() == 200) {
+                        money.text = response.body()?.money.toString()
+                        myMoney = response.body()!!.money
+                    }
                     else {
                         //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
                         Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
@@ -246,18 +267,5 @@ class Principal : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == normalCode) {
             session = data!!.getStringExtra("session").toString()
         } else { super.onActivityResult(requestCode, resultCode, data) }
-    }
-
-    fun takeGift(){
-        val builder = AlertDialog.Builder(this)
-        var premio = "30"
-        with(builder)
-        {
-            setTitle("Enhorabuena")
-            setMessage("Has ganado un premio de " + premio + " puntos")
-            val neutralButtonClick = null
-            setPositiveButton("OK",neutralButtonClick)
-            show()
-        }
     }
 }

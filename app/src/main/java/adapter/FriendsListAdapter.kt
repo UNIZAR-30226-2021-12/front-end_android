@@ -50,8 +50,6 @@ class FriendsListAdapter(private val context: Activity, private val friends: Arr
             holder = row.tag as ViewHolder
         }
 
-        /*val inflater = LayoutInflater.from(context)
-        val rowView = inflater.inflate(R.layout.activity_friends_row, parent, false)*/
         val friend = getItem(position) as FriendInfo
 
         holder.avatar.setImageResource(friend.avatar!!)

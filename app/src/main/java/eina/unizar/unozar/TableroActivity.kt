@@ -44,9 +44,11 @@ class TableroActivity : AppCompatActivity() {
         R.drawable.test_user,
         R.drawable.robotia,
         R.drawable.castor,
+        R.drawable.flippy,
         R.drawable.jesica,
         R.drawable.larry,
-        R.drawable.oso
+        R.drawable.oso,
+        R.drawable.slendid
     )
     private var myPos: Int = 5
     private var turn: Int = 5
@@ -156,7 +158,6 @@ class TableroActivity : AppCompatActivity() {
     private var cimaNueva = ""
 
     var robadaCarta = false
-    //var cartaAnadida = false
 
     var miTurno = true
 
@@ -199,8 +200,7 @@ class TableroActivity : AppCompatActivity() {
 
     fun cambiarMano() {
         manoActual.removeAll(manoActual)
-        val tamano = manoNueva.size -1
-        for(i in 0..tamano) { manoActual.add(manoNueva[i]) }
+        for(i in manoNueva.indices) { manoActual.add(manoNueva[i]) }
     }
 
     private val jugadoresActuales = mutableListOf<String>()
@@ -212,18 +212,14 @@ class TableroActivity : AppCompatActivity() {
     private lateinit var idJugadoresCambiados : Array<Boolean>
 
     fun comprobarIdsJugadores() {
-        var i = 0
         var cont = 0
-        while (i < idJugadoresActuales.size) {
+        for (i in idJugadoresActuales.indices) {
              if (!(idJugadoresActuales[i]).equals(idJugadoresNuevos[i])) {
                  cont++
                  idJugadoresCambiados[i] = true
              }
-             i++
         }
-        if(cont > 0){
-            jugadoresCambiados = true
-        }
+        if (cont > 0) { jugadoresCambiados = true }
     }
 
     fun cambiarJugadoresYCartas() {
@@ -246,7 +242,6 @@ class TableroActivity : AppCompatActivity() {
     private val numCartasJugadoresActuales  = mutableListOf<Int>()
     var numCartasJugadoresCambiados = false
     lateinit var numCartasJugadoresNuevos : Array<Int>
-    //lateinit var imgJugadores : Array<Int>
 
     fun comprobarCartasJugadores() {
         if(numCartasJugadoresActuales.size == 0) {
@@ -279,9 +274,6 @@ class TableroActivity : AppCompatActivity() {
         myPos = intent.getIntExtra("myPosition", 0)
         avatarIds = intent.getStringArrayExtra("avatars")!!
         jugadoresNuevos = intent.getStringArrayExtra("names")!!
-        //jugadoresNuevos = arrayOf("Gonzalo", "Alberto")
-        //Toast.makeText(applicationContext, "Mi posición: $myPos", Toast.LENGTH_SHORT).show()
-        //imgJugadores =
 
         actualizar()
 
@@ -376,23 +368,19 @@ class TableroActivity : AppCompatActivity() {
                 show()
             }
         }
-        else{ponerCarta = true}
+        else { ponerCarta = true }
     }
 
     private fun anyadirCartas() {
         cards.clear()
-        val tamano = manoActual.size - 1
         cards.add(Card(1, "inicio", R.drawable.inicio))
-        for(i in 0..tamano) {
+        for(i in manoActual.indices) {
             cards.add(Card(i.toLong(), manoActual[i], traductorCartasToInt(manoActual[i])))
         }
         cards.add(Card(1, "fin", R.drawable.fin))
 
         rvCard.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        //var adapter = CardAdapter(Cards)
-        rvCard.apply{
-            adapter = CardAdapter(cards)
-        }
+        rvCard.apply{ adapter = CardAdapter(cards) }
     }
 
     fun anyadirGamers() {
@@ -461,6 +449,10 @@ class TableroActivity : AppCompatActivity() {
                                 }
                             }
                         })
+                    if (manoActual.size -1 == 0) {
+                        finished = true
+                        winner = myPos
+                    }
                 } else if(pause && done) {
                     pause = false
                     done = false
@@ -483,6 +475,7 @@ class TableroActivity : AppCompatActivity() {
                 } else if(quit && done) {
                     quit = false
                     done = false
+                    gone = true
                     //Pedir robar carta al servidor
                     RetrofitClient.instance.quitMatch(TokenRequest(session))
                         .enqueue(object : Callback<TokenResponse> {
@@ -491,7 +484,6 @@ class TableroActivity : AppCompatActivity() {
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                 if (response.code() == 200) {
                                     session = response.body()?.token.toString()
-                                    gone = true
                                     Toast.makeText(applicationContext, getString(R.string.quit_game_success), Toast.LENGTH_SHORT).show()
                                     val intent = Intent().apply { putExtra("session", response.body()!!.token) }
                                     setResult(Activity.RESULT_OK, intent)
@@ -593,42 +585,6 @@ class TableroActivity : AppCompatActivity() {
         popup.show()
     }
 
-    /*private val PAUSE_ID = Menu.FIRST
-    private val EXIT_ID = Menu.FIRST + 1
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val result = super.onCreateOptionsMenu(menu)
-        menu.add(Menu.NONE, PAUSE_ID, Menu.NONE, "Pausar Partida")
-        menu.add(Menu.NONE, EXIT_ID, Menu.NONE, "Salir de Partida")
-        return result
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            PAUSE_ID -> { return true }
-            EXIT_ID -> {
-                RetrofitClient.instance.quitMatch(TokenRequest(session))
-                    .enqueue(object : Callback<TokenResponse> {
-                        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
-                        } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-                            if (response.code() == 200) {
-                                session = response.body()?.token.toString()
-                                Toast.makeText(applicationContext, getString(R.string.quit_game_success), Toast.LENGTH_SHORT).show()
-                                val intent = Intent().apply { putExtra("session", response.body()!!.token) }
-                                setResult(Activity.RESULT_OK, intent)
-                                finish()
-                            } else {
-                                Toast.makeText(applicationContext, getString(R.string.bad_quit_response), Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    })
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }*/
-
     override fun onDestroy() {
         super.onDestroy()
         if (!gone) {
@@ -639,6 +595,8 @@ class TableroActivity : AppCompatActivity() {
                 builder.setTitle(mensaje)
                 builder.setPositiveButton("Volver") { _: DialogInterface, _: Int -> finish() }
                 builder.show()
+            } else {
+                Toast.makeText(applicationContext, "Has sido expulsado de la partida por inactividad", Toast.LENGTH_SHORT).show()
             }
             gone = true
             RetrofitClient.instance.quitMatch(TokenRequest(session))
@@ -648,7 +606,6 @@ class TableroActivity : AppCompatActivity() {
                     } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                         if (response.code() == 200) {
                             session = response.body()?.token.toString()
-                            Toast.makeText(applicationContext, getString(R.string.quit_game_success), Toast.LENGTH_SHORT).show()
                             val intent = Intent().apply { putExtra("session", session) }
                             setResult(Activity.RESULT_OK, intent)
                         } else {

@@ -15,8 +15,11 @@
             <item android:id="@+id/action_friends"
                 android:title="@string/friends"
                 app:showAsAction="never"/>
-            <item android:id="@+id/action_refresh"
-                android:title="Refrescarse"
+            <item android:id="@+id/action_prize"
+                android:title="Premio"
+                app:showAsAction="never"/>
+            <item android:id="@+id/action_shop"
+                android:title="Tienda"
                 app:showAsAction="never"/>
             <item android:id="@+id/action_delete_game"
                 android:title="Borrar partida"
