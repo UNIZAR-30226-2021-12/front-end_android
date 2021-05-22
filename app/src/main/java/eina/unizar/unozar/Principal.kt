@@ -247,4 +247,17 @@ class Principal : AppCompatActivity() {
             session = data!!.getStringExtra("session").toString()
         } else { super.onActivityResult(requestCode, resultCode, data) }
     }
+
+    fun takeGift(){
+        val builder = AlertDialog.Builder(this)
+        var premio = "30"
+        with(builder)
+        {
+            setTitle("Enhorabuena")
+            setMessage("Has ganado un premio de " + premio + " puntos")
+            val neutralButtonClick = null
+            setPositiveButton("OK",neutralButtonClick)
+            show()
+        }
+    }
 }
