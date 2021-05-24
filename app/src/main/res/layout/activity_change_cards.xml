@@ -38,8 +38,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="72dp"
+        android:text="@string/choose_card"
         android:textColor="#000000"
-        android:text="@string/choose_avatar"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,8 +51,8 @@
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="21dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="25dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/go_back"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,9 +69,9 @@
             tools:layout_editor_absoluteY="121dp">
 
             <ImageButton
-                android:id="@+id/avatar_one"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:id="@+id/card_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/player_border"
                 android:contentDescription="@string/img"
                 android:scaleType="centerCrop"
@@ -80,12 +80,12 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@drawable/test_user" />
+                tools:src="@drawable/reverso1" />
 
             <ImageButton
-                android:id="@+id/avatar_two"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:id="@+id/card_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/player_border"
                 android:contentDescription="@string/img"
@@ -94,13 +94,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/avatar_one"
+                app:layout_constraintTop_toBottomOf="@+id/card_one"
                 tools:srcCompat="@drawable/empty" />
 
             <ImageButton
-                android:id="@+id/avatar_three"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:id="@+id/card_three"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/player_border"
                 android:contentDescription="@string/img"
@@ -109,13 +109,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/avatar_two"
+                app:layout_constraintTop_toBottomOf="@+id/card_two"
                 tools:srcCompat="@drawable/empty" />
 
             <ImageButton
-                android:id="@+id/avatar_four"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:id="@+id/card_four"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/player_border"
                 android:contentDescription="@string/img"
@@ -124,7 +124,22 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/avatar_three"
+                app:layout_constraintTop_toBottomOf="@+id/card_three"
+                tools:srcCompat="@drawable/empty" />
+
+            <ImageButton
+                android:id="@+id/card_five"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/player_border"
+                android:contentDescription="@string/img"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_four"
                 tools:srcCompat="@drawable/empty" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

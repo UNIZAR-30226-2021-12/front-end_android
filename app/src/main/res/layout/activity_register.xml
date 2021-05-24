@@ -22,6 +22,7 @@
             android:layout_width="340dp"
             android:layout_height="28dp"
             android:text="@string/alias"
+            android:textColor="#000000"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/register_alias"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,13 +36,13 @@
             android:layout_height="44dp"
             android:background="@drawable/edit_text_border"
             android:ems="10"
+            android:importantForAutofill="no"
             android:inputType="textPersonName"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            android:importantForAutofill="no"
             tools:ignore="LabelFor" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -60,6 +61,7 @@
             android:layout_width="340dp"
             android:layout_height="28dp"
             android:text="@string/email"
+            android:textColor="#000000"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/register_email"
             app:layout_constraintEnd_toEndOf="parent"
@@ -73,13 +75,13 @@
             android:layout_height="44dp"
             android:background="@drawable/edit_text_border"
             android:ems="10"
+            android:importantForAutofill="no"
             android:inputType="textEmailAddress"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
-            android:importantForAutofill="no"
             tools:ignore="LabelFor" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -98,6 +100,7 @@
             android:layout_width="340dp"
             android:layout_height="28dp"
             android:text="@string/password"
+            android:textColor="#000000"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/register_password"
             app:layout_constraintEnd_toEndOf="parent"
@@ -111,13 +114,13 @@
             android:layout_height="44dp"
             android:background="@drawable/edit_text_border"
             android:ems="10"
+            android:importantForAutofill="no"
             android:inputType="textPassword"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3"
-            android:importantForAutofill="no"
             tools:ignore="LabelFor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -137,6 +140,7 @@
             android:layout_width="340dp"
             android:layout_height="28dp"
             android:text="@string/repeat_password"
+            android:textColor="#000000"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/register_password_repeat"
             app:layout_constraintEnd_toEndOf="parent"
@@ -150,13 +154,13 @@
             android:layout_height="44dp"
             android:background="@drawable/edit_text_border"
             android:ems="10"
+            android:importantForAutofill="no"
             android:inputType="textPassword"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4"
-            android:importantForAutofill="no"
             tools:ignore="LabelFor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -190,14 +194,14 @@
             style="@android:style/Widget.Holo.Button"
             android:layout_width="128dp"
             android:layout_height="50dp"
+            android:onClick="goToLogin"
             android:text="@string/login"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5"
-            app:layout_constraintVertical_bias="1.0"
-            android:onClick="goToLogin"/>
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/textView5"
@@ -205,6 +209,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="56dp"
             android:text="@string/registered"
+            android:textColor="#000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -219,22 +224,23 @@
         android:background="#2196F3"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/AppTheme"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="158dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
         android:text="@string/app_name"
         android:textColor="#EA8E05"
         android:textSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

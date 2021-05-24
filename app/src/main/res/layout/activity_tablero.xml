@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/play_card"
+            android:textColor="#000000"
             app:layout_constraintBottom_toTopOf="@+id/buttonPedirUno"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -29,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
+            android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonPoner" />
 
@@ -37,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/draw_card"
+            android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonPedirUno" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -73,14 +76,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout5"
-        android:layout_width="263dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="14dp"
         android:layout_marginBottom="5dp"
-        android:background="@drawable/tablero3"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout6"
+        app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvGamer">
 
@@ -91,6 +95,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginBottom="64dp"
             android:text="@string/chosen_card"
+            android:textColor="#000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.156"
@@ -115,7 +120,7 @@
             android:layout_width="65dp"
             android:layout_height="80dp"
             android:contentDescription="@string/img"
-            android:src="@drawable/reverso"
+            android:src="@drawable/reverso1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.828"
@@ -152,6 +157,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
+            android:textColor="#000000"
             android:text=""
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/your_turn" />
@@ -161,6 +167,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
+            android:textColor="#000000"
             android:text=""
             app:layout_constraintBottom_toTopOf="@+id/your_cards"
             app:layout_constraintStart_toStartOf="parent" />
@@ -170,9 +177,9 @@
         android:id="@+id/timer_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="160dp"
+        android:layout_marginStart="236dp"
         android:layout_marginBottom="24dp"
         android:text=""
         app:layout_constraintBottom_toTopOf="@+id/rvCard"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout6" />
 </androidx.constraintlayout.widget.ConstraintLayout>

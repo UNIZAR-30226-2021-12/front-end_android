@@ -25,16 +25,12 @@ class Profile : AppCompatActivity() {
 
     private var normalCode = 73
     private lateinit var session: String
-    private lateinit var unlocked: ArrayList<Int>
     private var avatars = arrayListOf(
         R.drawable.test_user,
         R.drawable.robotia,
-        R.drawable.castor,
-        R.drawable.flippy,
-        R.drawable.jesica,
-        R.drawable.larry,
-        R.drawable.oso,
-        R.drawable.slendid
+        R.drawable.avatar2,
+        R.drawable.avatar3,
+        R.drawable.avatar4
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +44,6 @@ class Profile : AppCompatActivity() {
         showJugadas.text = intent.getStringExtra("public_matches")
         showGanadas.text = intent.getStringExtra("public_wins")
         avatar.setImageResource(avatars[intent.getIntExtra("avatar", 0)])
-        unlocked = ArrayList()
     }
 
     private fun updateInfo() {
@@ -56,9 +51,7 @@ class Profile : AppCompatActivity() {
             .enqueue(object : Callback<PlayerInfo> {
                 override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                }
-
-                override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
+                } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                     if (response.code() == 200) {
                         showAlias.setText(response.body()?.alias, TextView.BufferType.EDITABLE)
                         showEmail2.text = response.body()?.email
@@ -66,7 +59,6 @@ class Profile : AppCompatActivity() {
                         showGanadasTotales.text = (response.body()!!.publicWins + response.body()!!.privateWins).toString()
                         showJugadas.text = response.body()?.privateTotal.toString()
                         showGanadas.text = response.body()?.privateWins.toString()
-                        unlocked = response.body()!!.unlockable
                         avatar.setImageResource(avatars[response.body()!!.avatarId])
                     } else {
                         //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
@@ -92,7 +84,6 @@ class Profile : AppCompatActivity() {
     fun goToChangeAvatar(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent(this, ChangeAvatar::class.java)
         intent.putExtra("session", session)
-        intent.putExtra("unlocked", unlocked.map { it.toString() }.toTypedArray())
         intent.putExtra("owned", intent.getIntExtra("avatar", 0))
         startActivityForResult(intent, normalCode)
     }
@@ -102,7 +93,7 @@ class Profile : AppCompatActivity() {
         showAlias.isFocusable = true
         showAlias.setSelection(0)
         edit_alias.setOnClickListener {
-            RetrofitClient.instance.updatePlayer(UpdateRequest(null, showAlias.text.toString().trim(), null, session))
+            RetrofitClient.instance.updatePlayer(UpdateRequest(10, null, showAlias.text.toString().trim(), null, session, 10, 10))
                 .enqueue(object : Callback<TokenResponse> {
                     override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
@@ -119,7 +110,6 @@ class Profile : AppCompatActivity() {
                 })
             edit_alias.setOnClickListener { changeAlias(this.view) }
         }
-
     }
 
     fun deleteAccount(@Suppress("UNUSED_PARAMETER") view: View) {
@@ -150,5 +140,11 @@ class Profile : AppCompatActivity() {
             session = data!!.getStringExtra("session").toString()
             updateInfo()
         } else { super.onActivityResult(requestCode, resultCode, data) }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val intent = Intent().apply { putExtra("session", session) }
+        setResult(Activity.RESULT_OK, intent)
     }
 }

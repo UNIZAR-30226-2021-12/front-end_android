@@ -33,7 +33,7 @@ import server.response.TokenResponse
         check.setMessage(getString(R.string.email_change_alert_message))
         check.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int ->
             if (validateInput(newEmail)) {
-                RetrofitClient.instance.updatePlayer(UpdateRequest(newEmail, null, null, session))
+                RetrofitClient.instance.updatePlayer(UpdateRequest(10, newEmail, null, null, session, 10, 10))
                     .enqueue(object : Callback<TokenResponse> {
                         override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                             Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()

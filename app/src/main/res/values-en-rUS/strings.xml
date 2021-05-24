@@ -14,7 +14,9 @@
     <string name="public_game">Public match</string>
     <string name="private_game">Private match</string>
     <string name="choose_friend">Choose Friend</string>
-    <string name="choose_avatar">Choose a new avatar</string>
+    <string name="choose_avatar">Choose an avatar</string>
+    <string name="choose_board">Choose a board</string>
+    <string name="choose_card">Choose a reverse card image</string>
     <string name="chosen_card">Chosen</string>
     <string name="your_turn">Your turn</string>
     <string name="not_your_turn">It\'s not your turn</string>
@@ -23,12 +25,23 @@
     <string name="your_cards">%1$s Cards</string>
     <string name="time_left">Time left: %1$s</string>
     <string name="players_ready">Players %1$s/%2$s</string>
+    <string name="bet">Bet %1$s</string>
     <string name="total_matches">Total matches</string>
     <string name="total_friend_matches">Matches with friends</string>
     <string name="played">Played: </string>
     <string name="won">Wins: </string>
     <string name="kicked">You were kicked due to inactivity</string>
+    <string name="cant_play">You can\'t play that card</string>
     <string name="error_happened">An error occurred</string>
+    <string name="not_enough_money">You can\'t afford this</string>
+    <string name="game_full">The room is full</string>
+    <string name="buy">Buy</string>
+    <string name="avatars">Avatars</string>
+    <string name="boards">Boards</string>
+    <string name="cards">Cards</string>
+    <string name="avatar_price">250</string>
+    <string name="board_price">500</string>
+    <string name="card_price">750</string>
     <string name="img">Image</string>
     <!-- MENU OPTIONS -->
     <string name="friends">Friends</string>
@@ -62,6 +75,8 @@
     <string name="email_change_alert_message">You are going to change the email associated with your account, do you want to continue? </string>
     <string name="password_change_alert_message">You are going to change your account\'s password, do you want to continue? </string>
     <string name="avatar_change_alert_message">You are about to change your account\'s avatar, do you want to continue?</string>
+    <string name="board_change_alert_message">You are about to change your match board\'s appearance, do you want to continue?</string>
+    <string name="cards_change_alert_message">You are about to change your card\'s reverse appearance, do you want to continue?</string>
     <string name="public_match_dialog">Do you want to create a new public game or join one already created? </string>
     <string name="private_match_dialog">Do you want to create a new private game or join one already created? </string>
     <string name="number_of_players">Number of players </string>
@@ -93,6 +108,8 @@
     <string name="email_change_success">You have successfully updated your email address </string>
     <string name="password_change_success">Your password was updated successfully </string>
     <string name="avatar_change_success">Your avatar was updated successfully</string>
+    <string name="board_change_success">Your match board\'s appearance was updated successfully</string>
+    <string name="cards_change_success">Your card\'s reverse appearance was updated successfully</string>
     <string name="alias_change_success">Your alias was updated successfully</string>
     <string name="refresh_success">Updated session </string>
     <string name="quit_game_success">You left the game</string>

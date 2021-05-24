@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import kotlinx.android.synthetic.main.activity_change_avatar.*
+import kotlinx.android.synthetic.main.activity_change_cards.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,14 +17,14 @@ import server.request.UpdateRequest
 import server.response.PlayerInfo
 import server.response.TokenResponse
 
-class ChangeAvatar : AppCompatActivity() {
+class ChangeCards : AppCompatActivity() {
 
-    private var avatars = arrayListOf(
-        R.drawable.test_user,
-        R.drawable.robotia,
-        R.drawable.avatar2,
-        R.drawable.avatar3,
-        R.drawable.avatar4
+    private var cards = arrayListOf(
+        R.drawable.reverso1,
+        R.drawable.reverso2,
+        R.drawable.reverso3,
+        R.drawable.reverso4,
+        R.drawable.reverso5
     )
     private  var owned = 0
     private lateinit var session: String
@@ -32,26 +32,32 @@ class ChangeAvatar : AppCompatActivity() {
         session = intent.getStringExtra("session").toString()
         owned = intent.getIntExtra("owned", 0)
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_change_cards)
         RetrofitClient.instance.readPlayer(IdRequest(session.substring(0, 32)))
             .enqueue(object : Callback<PlayerInfo> {
                 override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                     if (response.code() == 200) {
-                        if (response.body()!!.unlockedAvatars.size > 1) {
-                            avatar_two.visibility = VISIBLE
-                            avatar_two.setImageResource(avatars[(response.body()!!.unlockedAvatars[1])])
-                            avatar_two.setOnClickListener { changeAvatar(response.body()!!.unlockedAvatars[1]) }
+                        if (response.body()!!.unlockedCards.size > 1) {
+                            card_two.visibility = VISIBLE
+                            card_two.setImageResource(cards[(response.body()!!.unlockedCards[1])])
+                            card_two.setOnClickListener { changeCards(response.body()!!.unlockedCards[1]) }
                         }
-                        if (response.body()!!.unlockedAvatars.size > 2) {
-                            avatar_three.visibility = VISIBLE
-                            avatar_three.setImageResource(avatars[(response.body()!!.unlockedAvatars[2])])
-                            avatar_three.setOnClickListener { changeAvatar(response.body()!!.unlockedAvatars[2]) }
+                        if (response.body()!!.unlockedCards.size > 2) {
+                            card_three.visibility = VISIBLE
+                            card_three.setImageResource(cards[(response.body()!!.unlockedCards[2])])
+                            card_three.setOnClickListener { changeCards(response.body()!!.unlockedCards[2]) }
                         }
-                        if (response.body()!!.unlockedAvatars.size > 3) {
-                            avatar_four.visibility = VISIBLE
-                            avatar_four.setImageResource(avatars[(response.body()!!.unlockedAvatars[3])])
-                            avatar_four.setOnClickListener { changeAvatar(response.body()!!.unlockedAvatars[3]) }
+                        if (response.body()!!.unlockedCards.size > 3) {
+                            card_four.visibility = VISIBLE
+                            card_four.setImageResource(cards[(response.body()!!.unlockedCards[3])])
+                            card_four.setOnClickListener { changeCards(response.body()!!.unlockedCards[3]) }
+                        }
+                        if (response.body()!!.unlockedCards.size > 4) {
+                            card_five.visibility = VISIBLE
+                            card_five.setImageResource(cards[(response.body()!!.unlockedCards[4])])
+                            card_five.setOnClickListener { changeCards(response.body()!!.unlockedCards[4]) }
                         }
                     } else {
                         //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
@@ -59,24 +65,23 @@ class ChangeAvatar : AppCompatActivity() {
                     }
                 }
             })
-        setContentView(R.layout.activity_change_avatar)
 
         go_back.setOnClickListener {
             val intent = Intent().apply { putExtra("session", session) }
             setResult(Activity.RESULT_OK, intent)
         }
-        avatar_one.setImageResource(avatars[0])
-        avatar_one.setOnClickListener { changeAvatar(0) }
+        card_one.setImageResource(cards[0])
+        card_one.setOnClickListener { changeCards(0) }
 
     }
 
-    private fun changeAvatar(i: Int) {
+    private fun changeCards(i: Int) {
         if (i == owned) Toast.makeText(applicationContext, getString(R.string.avatar_in_use), Toast.LENGTH_LONG).show()
         else {
             val check = AlertDialog.Builder(this)
-            check.setTitle(getString(R.string.avatar_change_alert_message))
+            check.setTitle(getString(R.string.cards_change_alert_message))
             check.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int ->
-                RetrofitClient.instance.updatePlayer(UpdateRequest(i, null, null, null, session, 10, 10))
+                RetrofitClient.instance.updatePlayer(UpdateRequest(10, null, null, null, session, 10, i))
                     .enqueue(object : Callback<TokenResponse> {
                         override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                             Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
@@ -84,7 +89,7 @@ class ChangeAvatar : AppCompatActivity() {
                             if (response.code() == 200) {
                                 val intent = Intent().apply { putExtra("session", response.body()!!.token) }
                                 setResult(Activity.RESULT_OK, intent)
-                                Toast.makeText(applicationContext, getString(R.string.avatar_change_success), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, getString(R.string.cards_change_success), Toast.LENGTH_LONG).show()
                                 finish()
                             } else {
                                 //Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()

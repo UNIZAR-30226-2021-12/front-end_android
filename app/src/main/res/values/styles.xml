@@ -6,7 +6,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     <style name="ToolbarTheme">
-        <item name="android:textColorPrimary">#F39100</item>
+        <item name="android:textColorPrimary">#2196F3</item>
         <item name="android:itemTextAppearance">@style/menu</item>
     </style>
     <style name="menu" parent="@android:style/TextAppearance.Widget.IconMenu.Item">

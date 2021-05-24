@@ -32,8 +32,18 @@ interface API {
         @Body tokenRequest: TokenRequest
     ): Call<GiftResponse>
 
-    @POST("/player/unlock")
+    @POST("/player/unlockAvatar")
     fun unlockAvatar(
+        @Body unlockRequest: UnlockRequest
+    ): Call<TokenResponse>
+
+    @POST("/player/unlockBoard")
+    fun unlockBoard(
+        @Body unlockRequest: UnlockRequest
+    ): Call<TokenResponse>
+
+    @POST("/player/unlockCards")
+    fun unlockCard(
         @Body unlockRequest: UnlockRequest
     ): Call<TokenResponse>
 
@@ -42,15 +52,15 @@ interface API {
         @Body delete: TokenRequest
     ): Call<Void>
 
-    @POST("/player/refreshToken")
-    fun refreshToken(
-        @Body refreshRequest: TokenRequest
-    ): Call<TokenResponse>
-
     @POST("/player/addFriend")
     fun addFriend(
         @Body addFriendRequest: AddFriendRequest
     ): Call<TokenResponse>
+
+    @POST("/player/addMoney")
+    fun addMoney(
+        @Body tokenRequest: TokenRequest
+    ): Call<Void>
 
     @POST("/player/deleteFriend")
     fun deleteFriend(

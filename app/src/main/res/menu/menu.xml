@@ -9,8 +9,11 @@
             <item android:id="@+id/action_profile"
                 android:title="@string/profile"
                 app:showAsAction="never"/>
-            <item android:id="@+id/action_logout"
-                android:title="@string/logout"
+            <item android:id="@+id/change_board"
+                android:title="Cambiar tablero"
+                app:showAsAction="never"/>
+            <item android:id="@+id/change_reverse"
+                android:title="Cambiar reverso"
                 app:showAsAction="never"/>
             <item android:id="@+id/action_friends"
                 android:title="@string/friends"
@@ -21,8 +24,14 @@
             <item android:id="@+id/action_shop"
                 android:title="Tienda"
                 app:showAsAction="never"/>
+            <item android:id="@+id/action_logout"
+                android:title="@string/logout"
+                app:showAsAction="never"/>
             <item android:id="@+id/action_delete_game"
                 android:title="Borrar partida"
+                app:showAsAction="never"/>
+            <item android:id="@+id/add_money"
+                android:title="$$ Dame pasta $$"
                 app:showAsAction="never"/>
         </menu>
     </item>

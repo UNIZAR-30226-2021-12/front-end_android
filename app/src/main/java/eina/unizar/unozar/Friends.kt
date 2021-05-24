@@ -30,11 +30,12 @@ class Friends : AppCompatActivity() {
     private lateinit var session: String
     private lateinit var friends: ArrayList<FriendInfo>
     private lateinit var adapter: FriendsListAdapter
-    private val avatars = arrayListOf(
+    private var avatars = arrayListOf(
         R.drawable.test_user,
-        R.drawable.oso,
-        R.drawable.larry,
-        R.drawable.jesica
+        R.drawable.robotia,
+        R.drawable.avatar2,
+        R.drawable.avatar3,
+        R.drawable.avatar4
     )
 
     private val delete = Menu.FIRST

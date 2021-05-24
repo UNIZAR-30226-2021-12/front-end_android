@@ -22,6 +22,7 @@
             android:layout_width="340dp"
             android:layout_height="28dp"
             android:text="@string/new_mail"
+            android:textColor="#000000"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/new_email"
             app:layout_constraintEnd_toEndOf="parent"
@@ -139,18 +140,18 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:text="@string/app_name"
         android:textColor="#EA8E05"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.025" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/cancel_button"

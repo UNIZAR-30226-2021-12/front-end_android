@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import kotlinx.android.synthetic.main.activity_change_avatar.*
+import kotlinx.android.synthetic.main.activity_change_board.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,14 +17,12 @@ import server.request.UpdateRequest
 import server.response.PlayerInfo
 import server.response.TokenResponse
 
-class ChangeAvatar : AppCompatActivity() {
+class ChangeBoard : AppCompatActivity() {
 
-    private var avatars = arrayListOf(
-        R.drawable.test_user,
-        R.drawable.robotia,
-        R.drawable.avatar2,
-        R.drawable.avatar3,
-        R.drawable.avatar4
+    private var boards = arrayListOf(
+        R.drawable.empty,
+        R.drawable.tablero2,
+        R.drawable.tablero3
     )
     private  var owned = 0
     private lateinit var session: String
@@ -38,20 +36,15 @@ class ChangeAvatar : AppCompatActivity() {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                     if (response.code() == 200) {
-                        if (response.body()!!.unlockedAvatars.size > 1) {
-                            avatar_two.visibility = VISIBLE
-                            avatar_two.setImageResource(avatars[(response.body()!!.unlockedAvatars[1])])
-                            avatar_two.setOnClickListener { changeAvatar(response.body()!!.unlockedAvatars[1]) }
+                        if (response.body()!!.unlockedBoards.size > 1) {
+                            board_two.visibility = VISIBLE
+                            board_two.setImageResource(boards[(response.body()!!.unlockedBoards[1])])
+                            board_two.setOnClickListener { changeBoard(response.body()!!.unlockedBoards[1]) }
                         }
-                        if (response.body()!!.unlockedAvatars.size > 2) {
-                            avatar_three.visibility = VISIBLE
-                            avatar_three.setImageResource(avatars[(response.body()!!.unlockedAvatars[2])])
-                            avatar_three.setOnClickListener { changeAvatar(response.body()!!.unlockedAvatars[2]) }
-                        }
-                        if (response.body()!!.unlockedAvatars.size > 3) {
-                            avatar_four.visibility = VISIBLE
-                            avatar_four.setImageResource(avatars[(response.body()!!.unlockedAvatars[3])])
-                            avatar_four.setOnClickListener { changeAvatar(response.body()!!.unlockedAvatars[3]) }
+                        if (response.body()!!.unlockedBoards.size > 2) {
+                            board_three.visibility = VISIBLE
+                            board_three.setImageResource(boards[(response.body()!!.unlockedBoards[2])])
+                            board_three.setOnClickListener { changeBoard(response.body()!!.unlockedBoards[2]) }
                         }
                     } else {
                         //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
@@ -59,24 +52,23 @@ class ChangeAvatar : AppCompatActivity() {
                     }
                 }
             })
-        setContentView(R.layout.activity_change_avatar)
+        setContentView(R.layout.activity_change_board)
 
         go_back.setOnClickListener {
             val intent = Intent().apply { putExtra("session", session) }
             setResult(Activity.RESULT_OK, intent)
         }
-        avatar_one.setImageResource(avatars[0])
-        avatar_one.setOnClickListener { changeAvatar(0) }
+        board_one.setOnClickListener { changeBoard(0) }
 
     }
 
-    private fun changeAvatar(i: Int) {
+    private fun changeBoard(i: Int) {
         if (i == owned) Toast.makeText(applicationContext, getString(R.string.avatar_in_use), Toast.LENGTH_LONG).show()
         else {
             val check = AlertDialog.Builder(this)
-            check.setTitle(getString(R.string.avatar_change_alert_message))
+            check.setTitle(getString(R.string.board_change_alert_message))
             check.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int ->
-                RetrofitClient.instance.updatePlayer(UpdateRequest(i, null, null, null, session, 10, 10))
+                RetrofitClient.instance.updatePlayer(UpdateRequest(10, null, null, null, session, i, 10))
                     .enqueue(object : Callback<TokenResponse> {
                         override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                             Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
@@ -84,7 +76,7 @@ class ChangeAvatar : AppCompatActivity() {
                             if (response.code() == 200) {
                                 val intent = Intent().apply { putExtra("session", response.body()!!.token) }
                                 setResult(Activity.RESULT_OK, intent)
-                                Toast.makeText(applicationContext, getString(R.string.avatar_change_success), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, getString(R.string.board_change_success), Toast.LENGTH_LONG).show()
                                 finish()
                             } else {
                                 //Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()

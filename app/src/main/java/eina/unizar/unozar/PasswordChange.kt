@@ -33,7 +33,7 @@ class PasswordChange : AppCompatActivity() {
         check.setMessage(getString(R.string.password_change_alert_message))
         check.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int ->
             if (validateInput(newPassword, repeatPassword)) {
-                RetrofitClient.instance.updatePlayer(UpdateRequest(null, null, newPassword, session))
+                RetrofitClient.instance.updatePlayer(UpdateRequest(10, null, null, newPassword, session, 10, 10))
                     .enqueue(object : Callback<TokenResponse> {
                         override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                             Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()

@@ -37,22 +37,19 @@ class MatchRoom : AppCompatActivity() {
     private var done = false
     private var quit = false
     private var owner = false
-    private var ready = 1
 
 
     private lateinit var img: ArrayList<ImageView>
     private var avatars = arrayListOf(
         R.drawable.test_user,
         R.drawable.robotia,
-        R.drawable.castor,
-        R.drawable.flippy,
-        R.drawable.jesica,
-        R.drawable.larry,
-        R.drawable.oso,
-        R.drawable.slendid
+        R.drawable.avatar2,
+        R.drawable.avatar3,
+        R.drawable.avatar4
     )
     private lateinit var session: String
     private lateinit var code: String
+    private var isPublic = false
     private lateinit var ids: ArrayList<String>
     private lateinit var avatarIds: Map<Int,Int>
     private lateinit var names: Map<Int,String>
@@ -65,8 +62,9 @@ class MatchRoom : AppCompatActivity() {
         players = intent.getIntExtra("numPlayers", 0)
         bots = intent.getIntExtra("numBots", 0)
         session = intent.getStringExtra("session").toString()
+        isPublic = intent.getBooleanExtra("public", true)
 
-        if (intent.getBooleanExtra("public", true)) {
+        if (isPublic) {
             room_type.text = getString(R.string.public_game)
         } else room_type.text = getString(R.string.private_game)
 
@@ -90,6 +88,7 @@ class MatchRoom : AppCompatActivity() {
                         players_ready.text = getString(R.string.players_ready, (bots+1).toString(), players.toString())
                         if (players > 2) avatar_three.visibility = VISIBLE
                         if (players > 3) avatar_four.visibility = VISIBLE
+                        if(isPublic) apuesta.text = getString(R.string.bet, response.body()!!.bet.toString())
                         session = response.body()?.token.toString()
                         if ((response.body()!!.playersIds[0]).equals(session.substring(0,32))) {
                             owner = true
@@ -106,7 +105,9 @@ class MatchRoom : AppCompatActivity() {
                 }
             })
         create.setOnClickListener {
-            if (owner) start = true
+            if (owner && ids.size == players) {
+                start = true
+            }
             else Toast.makeText(applicationContext, getString(R.string.not_owner), Toast.LENGTH_SHORT).show()
         }
         exit.setOnClickListener { quit = true }
@@ -116,20 +117,20 @@ class MatchRoom : AppCompatActivity() {
     private fun actualizarJugador(id: String, pos: Int) {
         if (id.equals("BOT")) {
             img[pos].setImageResource(avatars[1])
-            avatarIds += Pair(pos, 1)
-            names += Pair(pos, "BOT")
+            avatarIds = avatarIds + Pair(pos, 1)
+            names = names + Pair(pos, "BOT")
         }
         else {
-            avatarIds += Pair(pos, 0)
-            names += Pair(pos, "Yo")
+            avatarIds = avatarIds + Pair(pos, 0)
+            names = names + Pair(pos, "Yo")
             RetrofitClient.instance.readPlayer(IdRequest(id))
                 .enqueue(object : Callback<PlayerInfo> {
                     override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                     } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                         if (response.code() == 200) {
-                            avatarIds += Pair(pos, response.body()!!.avatarId)
-                            names += Pair(pos, response.body()!!.alias)
+                            avatarIds = avatarIds + Pair(pos, response.body()!!.avatarId)
+                            names = names + Pair(pos, response.body()!!.alias)
                             img[pos].setImageResource(avatars[response.body()!!.avatarId])
                         } else {
                             Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_SHORT).show()
@@ -282,7 +283,8 @@ class MatchRoom : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_invite -> {
-                invite = true
+                if (ids.size < players)  invite = true
+                else Toast.makeText(applicationContext, getString(R.string.game_full), Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)
