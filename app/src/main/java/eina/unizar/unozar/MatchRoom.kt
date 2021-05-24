@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +37,7 @@ class MatchRoom : AppCompatActivity() {
     private var done = false
     private var quit = false
     private var owner = false
+    private var ready = 1
 
 
     private lateinit var img: ArrayList<ImageView>
@@ -57,21 +59,26 @@ class MatchRoom : AppCompatActivity() {
     private  var myPos: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        players = intent.getIntExtra("numPlayers", 0)
-        bots = intent.getIntExtra("numBots", 0)
-        session = intent.getStringExtra("session").toString()
-        code = ""
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_game)
         setSupportActionBar(match_toolbar)
+        players = intent.getIntExtra("numPlayers", 0)
+        bots = intent.getIntExtra("numBots", 0)
+        session = intent.getStringExtra("session").toString()
+
+        if (intent.getBooleanExtra("public", true)) {
+            room_type.text = getString(R.string.public_game)
+        } else room_type.text = getString(R.string.private_game)
+
+        code = ""
         ids = ArrayList()
         avatarIds = mapOf()
         names = mapOf()
         img = ArrayList()
-        img.add(player_one)
-        img.add(player_two)
-        img.add(player_three)
-        img.add(player_four)
+        img.add(avatar_one)
+        img.add(avatar_two)
+        img.add(avatar_three)
+        img.add(avatar_four)
 
         RetrofitClient.instance.readRoom(TokenRequest(session))
             .enqueue(object : Callback<RoomInfoResponse> {
@@ -79,20 +86,17 @@ class MatchRoom : AppCompatActivity() {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                 } override fun onResponse(call: Call<RoomInfoResponse>, response: Response<RoomInfoResponse>) {
                     if (response.code() == 200) {
+                        players = response.body()!!.maxPlayers
+                        players_ready.text = getString(R.string.players_ready, (bots+1).toString(), players.toString())
+                        if (players > 2) avatar_three.visibility = VISIBLE
+                        if (players > 3) avatar_four.visibility = VISIBLE
                         session = response.body()?.token.toString()
                         if ((response.body()!!.playersIds[0]).equals(session.substring(0,32))) {
                             owner = true
                         }
                         for (i in response.body()!!.playersIds.indices) {
                             if(!(response.body()!!.playersIds[i].equals("EMPTY"))) {
-                                /*ids.add(response.body()!!.playersIds[i])
-                                if ((response.body()!!.playersIds[i]).equals("BOT")) {
-                                    avatarIds += Pair(i, 1)
-                                    names += Pair(i, "IA")
-                                    img[i].setImageResource(avatars[1])
-                                } else {
-                                    actualizarJugador(response.body()!!.playersIds[i], i)
-                                }*/actualizarJugador(response.body()!!.playersIds[i], i)
+                                actualizarJugador(response.body()!!.playersIds[i], i)
                             }
                         }
                         done = true
@@ -109,48 +113,29 @@ class MatchRoom : AppCompatActivity() {
         actualizar()
     }
 
-    /*override fun onCreateContextMenu(menu: ContextMenu, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        menu.add(Menu.NONE, inviteFriend, Menu.NONE, "Invitar amigo")
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) { inviteFriend -> {
-            invite = true
-            return true }}
-        return super.onContextItemSelected(item)
-    }*/
-
     private fun actualizarJugador(id: String, pos: Int) {
         if (id.equals("BOT")) {
             img[pos].setImageResource(avatars[1])
-            avatarIds = avatarIds + Pair(pos, 1)
-            names = names + Pair(pos, "BOT")
+            avatarIds += Pair(pos, 1)
+            names += Pair(pos, "BOT")
         }
         else {
-            avatarIds = avatarIds + Pair(pos, 0)
-            names = names + Pair(pos, "Yo")
+            avatarIds += Pair(pos, 0)
+            names += Pair(pos, "Yo")
             RetrofitClient.instance.readPlayer(IdRequest(id))
                 .enqueue(object : Callback<PlayerInfo> {
                     override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                     } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                         if (response.code() == 200) {
-                            avatarIds = avatarIds + Pair(pos, response.body()!!.avatarId)
-                            names = names + Pair(pos, response.body()!!.alias)
+                            avatarIds += Pair(pos, response.body()!!.avatarId)
+                            names += Pair(pos, response.body()!!.alias)
                             img[pos].setImageResource(avatars[response.body()!!.avatarId])
                         } else {
-                            //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_SHORT).show()
-                            Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_SHORT).show()
                         }
                     }
                 })
-
-
-            /*val addFriend = AlertDialog.Builder(this@PrivateRoom)
-            addFriend.setTitle(avatarIds.values.toTypedArray())
-            addFriend.setPositiveButton(getString(R.string.add_button)) { _: DialogInterface, _: Int -> }
-            addFriend.show()*/
         }
     }
 
@@ -240,11 +225,10 @@ class MatchRoom : AppCompatActivity() {
                                                     actualizarJugador(response.body()!!.playersIds[i], i)
                                                 }
                                                 if (response.body()!!.playersIds[i].equals(session.substring(0, 32))) myPos = i
-                                                //Toast.makeText(applicationContext, "Mi posicion: $myPos", Toast.LENGTH_SHORT).show()
-                                                //else idsOtros.add(response.body()!!.playersIds[i])
                                                 ids.add(response.body()!!.playersIds[i])
                                             }
                                         }
+                                        players_ready.text = getString(R.string.players_ready, ids.size.toString(), players.toString())
                                         done = true
                                     }
                                 } else  {

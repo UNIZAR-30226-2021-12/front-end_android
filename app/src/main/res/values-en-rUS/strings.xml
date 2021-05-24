@@ -14,16 +14,21 @@
     <string name="public_game">Public match</string>
     <string name="private_game">Private match</string>
     <string name="choose_friend">Choose Friend</string>
+    <string name="choose_avatar">Choose a new avatar</string>
     <string name="chosen_card">Chosen</string>
     <string name="your_turn">Your turn</string>
     <string name="not_your_turn">It\'s not your turn</string>
     <string name="not_owner">You are not the room owner</string>
+    <string name="avatar_in_use">This avatar is already in use</string>
     <string name="your_cards">%1$s Cards</string>
     <string name="time_left">Time left: %1$s</string>
+    <string name="players_ready">Players %1$s/%2$s</string>
     <string name="total_matches">Total matches</string>
     <string name="total_friend_matches">Matches with friends</string>
     <string name="played">Played: </string>
     <string name="won">Wins: </string>
+    <string name="kicked">You were kicked due to inactivity</string>
+    <string name="error_happened">An error occurred</string>
     <string name="img">Image</string>
     <!-- MENU OPTIONS -->
     <string name="friends">Friends</string>
@@ -45,6 +50,7 @@
     <string name="change_password">Change password</string>
     <string name="change_avatar">Change avatar</string>
     <string name="add_friend">Add friend</string>
+    <string name="go_back">Return</string>
     <!-- DIALOG TEXT -->
     <string name="alert">Careful! </string>
     <string name="choose">Choose</string>
@@ -53,8 +59,9 @@
     <string name="add_to_game">¿Do you want to invite %1$s to your game?</string>
     <string name="delete_friend_message">Do you want to delete this player from your friends list? </string>
     <string name="delete_account_alert_message">You are permanently deleting your account, do you want to continue? </string>
-    <string name="email_update_alert_message">You are going to change the email associated with your account, do you want to continue? </string>
-    <string name="password_update_alert_message">You are going to change your account password, do you want to continue? </string>
+    <string name="email_change_alert_message">You are going to change the email associated with your account, do you want to continue? </string>
+    <string name="password_change_alert_message">You are going to change your account\'s password, do you want to continue? </string>
+    <string name="avatar_change_alert_message">You are about to change your account\'s avatar, do you want to continue?</string>
     <string name="public_match_dialog">Do you want to create a new public game or join one already created? </string>
     <string name="private_match_dialog">Do you want to create a new private game or join one already created? </string>
     <string name="number_of_players">Number of players </string>
@@ -84,7 +91,7 @@
     <string name="bad_play_card_response">Error while playing that card, try again</string>
     <!-- SERVER CALL SUCCESS -->
     <string name="email_change_success">You have successfully updated your email address </string>
-    <string name="password_change_success">You have updated your password successfully </string>
+    <string name="password_change_success">Your password was updated successfully </string>
     <string name="avatar_change_success">Your avatar was updated successfully</string>
     <string name="alias_change_success">Your alias was updated successfully</string>
     <string name="refresh_success">Updated session </string>

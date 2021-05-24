@@ -39,7 +39,7 @@ class Principal : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         session = intent.getStringExtra("session").toString()
-        updateInfo()
+        this.updateMoney()
         val numPlayers = arrayOf("2", "3", "4")
         players = AlertDialog.Builder(this)
         players.setTitle(getString(R.string.number_of_players))
@@ -106,7 +106,7 @@ class Principal : AppCompatActivity() {
                                     setPositiveButton("OK",neutralButtonClick)
                                     show()
                                 }
-                                updateInfo()
+                                this@Principal.updateMoney()
                             } else {
                                 Toast.makeText(applicationContext, getString(R.string.bad_refresh_response), Toast.LENGTH_LONG).show()
                             }
@@ -156,6 +156,7 @@ class Principal : AppCompatActivity() {
                             intent.putExtra("numPlayers", n)
                             intent.putExtra("numBots", 0)
                             intent.putExtra("session", response.body()?.token)
+                            intent.putExtra("public", true)
                             startActivityForResult(intent, normalCode)
                         } else {
                             Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
@@ -201,6 +202,7 @@ class Principal : AppCompatActivity() {
                                     intent.putExtra("numPlayers", n)
                                     intent.putExtra("numBots", b)
                                     intent.putExtra("session", response.body()?.token)
+                                    intent.putExtra("public", false)
                                     startActivityForResult(intent, normalCode)
                                 } else {
                                     //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
@@ -231,6 +233,7 @@ class Principal : AppCompatActivity() {
                                 Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
                                 val intent = Intent(this@Principal, MatchRoom::class.java)
                                 intent.putExtra("session", response.body()?.token)
+                                intent.putExtra("public", false)
                                 startActivityForResult(intent, normalCode)
                             } else {
                                 //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
@@ -245,7 +248,7 @@ class Principal : AppCompatActivity() {
         choose.show()
     }
 
-    private fun updateInfo() {
+    private fun updateMoney() {
         RetrofitClient.instance.readPlayer(IdRequest(session.substring(0, 32)))
             .enqueue(object : Callback<PlayerInfo> {
                 override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
@@ -266,6 +269,7 @@ class Principal : AppCompatActivity() {
     override fun onActivityResult (requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == normalCode) {
             session = data!!.getStringExtra("session").toString()
+            updateMoney()
         } else { super.onActivityResult(requestCode, resultCode, data) }
     }
 }

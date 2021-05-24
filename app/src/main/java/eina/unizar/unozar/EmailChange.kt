@@ -30,7 +30,7 @@ import server.response.TokenResponse
         val newEmail = new_email.text.toString().trim()
         val check = AlertDialog.Builder(this)
         check.setTitle(getString(R.string.alert))
-        check.setMessage(getString(R.string.email_update_alert_message))
+        check.setMessage(getString(R.string.email_change_alert_message))
         check.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int ->
             if (validateInput(newEmail)) {
                 RetrofitClient.instance.updatePlayer(UpdateRequest(newEmail, null, null, session))

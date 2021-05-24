@@ -13,16 +13,21 @@
     <string name="public_game">Partida pública</string>
     <string name="private_game">Partida privada</string>
     <string name="choose_friend">Escoja un amigo</string>
+    <string name="choose_avatar">Elija un avatar</string>
     <string name="chosen_card">Elegida</string>
     <string name="your_turn">Tu turno</string>
     <string name="not_your_turn">No es tu turno</string>
     <string name="not_owner">No eres el dueño de la sala</string>
+    <string name="avatar_in_use">Ya estás usando ese avatar</string>
     <string name="your_cards">%1$s Cartas</string>
     <string name="time_left">Tiempo restante: %1$s</string>
+    <string name="players_ready">Jugadores %1$s/%2$s</string>
     <string name="total_matches">Partidas totales</string>
     <string name="total_friend_matches">Partidas con amigos</string>
     <string name="played">Jugadas: </string>
     <string name="won">Ganadas: </string>
+    <string name="kicked">Ha sido expulsado de la partida por inactividad</string>
+    <string name="error_happened">Ha ocurrido un error</string>
     <string name="img">Imagen</string>
     <!-- MENU OPTIONS -->
     <string name="friends">Amigos</string>
@@ -44,6 +49,7 @@
     <string name="change_password">Cambiar contraseña</string>
     <string name="change_avatar">Cambiar avatar</string>
     <string name="add_friend">Añadir amigo</string>
+    <string name="go_back">Volver</string>
     <!-- DIALOG TEXT -->
     <string name="alert">¡Cuidado!</string>
     <string name="choose">Elija</string>
@@ -51,9 +57,10 @@
     <string name="add_friend_message">Escriba aquí el email de su amigo</string>
     <string name="add_to_game">¿Quiere invitar a %1$s a la partida?</string>
     <string name="delete_friend_message">¿Quiere eliminar a este jugador de su lista de amigos? </string>
-    <string name="delete_account_alert_message">Va a eliminar su cuenta de forma permanente, ¿desea continuar?</string>
-    <string name="email_update_alert_message">Va a cambiar el correo electrónico asociado a su cuenta, ¿desea continuar?</string>
-    <string name="password_update_alert_message">Va a cambiar la contraseña de su cuenta, ¿desea continuar?</string>
+    <string name="delete_account_alert_message">Está a punto de eliminar su cuenta de forma permanente, ¿desea continuar?</string>
+    <string name="email_change_alert_message">Está a punto de cambiar el correo electrónico asociado a su cuenta, ¿desea continuar?</string>
+    <string name="password_change_alert_message">Está a punto de cambiar la contraseña de su cuenta, ¿desea continuar?</string>
+    <string name="avatar_change_alert_message">Está a punto de cambiar el avatar de su cuenta, ¿desea continuar?</string>
     <string name="public_match_dialog">¿Quiere crear una nueva partida pública o unirse a una ya creada?</string>
     <string name="private_match_dialog">¿Quiere crear una nueva partida privada o unirse a una ya creada?</string>
     <string name="number_of_players">Número de jugadores</string>
@@ -89,5 +96,5 @@
     <string name="refresh_success">Sesión actualizada</string>
     <string name="quit_game_success">Ha salido de la partida</string>
     <!-- INVITE EMAIL -->
-    <string name="email_message">Escribe este código en la app para unirte a una partida: %1$s</string>
+    <string name="email_message">Escriba este código en la app para unirse a la partida: %1$s</string>
 </resources>

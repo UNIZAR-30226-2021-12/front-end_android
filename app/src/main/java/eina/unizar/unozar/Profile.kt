@@ -26,11 +26,15 @@ class Profile : AppCompatActivity() {
     private var normalCode = 73
     private lateinit var session: String
     private lateinit var unlocked: ArrayList<Int>
-    private val avatars = arrayListOf(
+    private var avatars = arrayListOf(
         R.drawable.test_user,
-        R.drawable.oso,
+        R.drawable.robotia,
+        R.drawable.castor,
+        R.drawable.flippy,
+        R.drawable.jesica,
         R.drawable.larry,
-        R.drawable.jesica
+        R.drawable.oso,
+        R.drawable.slendid
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,6 +93,7 @@ class Profile : AppCompatActivity() {
         val intent = Intent(this, ChangeAvatar::class.java)
         intent.putExtra("session", session)
         intent.putExtra("unlocked", unlocked.map { it.toString() }.toTypedArray())
+        intent.putExtra("owned", intent.getIntExtra("avatar", 0))
         startActivityForResult(intent, normalCode)
     }
 

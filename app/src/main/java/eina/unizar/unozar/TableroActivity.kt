@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.MenuInflater
 import android.view.View
 import android.widget.Toast
@@ -35,9 +36,9 @@ var record = 0
 
 class TableroActivity : AppCompatActivity() {
 
-    /*internal lateinit var timer : CountDownTimer
-    internal val initial: Long = 60000
-    internal val interval: Long = 1000*/
+    private lateinit var timer : CountDownTimer
+    private val initial: Long = 60000
+    private val interval: Long = 1000
     private lateinit var session: String
     private lateinit var avatarIds: Array<String>
     private var avatars = arrayListOf(
@@ -58,6 +59,7 @@ class TableroActivity : AppCompatActivity() {
     private var done = true
     private var pause = false
     private var quit = false
+    private var kicked = false
     private var ponerCarta = false
 
     private fun traductorCartasToInt(carta: String): Int {
@@ -278,16 +280,16 @@ class TableroActivity : AppCompatActivity() {
         actualizar()
 
         /* Tiempo de turno */
-        /*timer = object: CountDownTimer(initial, interval) {
+        timer = object: CountDownTimer(initial, interval) {
             override fun onTick(millisUntilFinished: Long) {
                 val timeLeft = millisUntilFinished / 1000
-                //timerText.text = getString(R.string.time_left, timeLeft.toString())
+                timer_text.text = getString(R.string.time_left, timeLeft.toString())
             }
             override fun onFinish() {
                 //
             }
         }
-*/
+
         buttonPoner.setOnClickListener {
             if(miTurno && !cartaPuesta) ponerCarta()
         }
@@ -405,7 +407,7 @@ class TableroActivity : AppCompatActivity() {
 
     private fun actualizar() {
         CoroutineScope(Dispatchers.IO).launch {
-            while(!finished && !gone) {
+            while(!finished && !gone && !kicked) {
                 if(pedirRobada && done) {
                     pedirRobada = false
                     done = false
@@ -509,7 +511,7 @@ class TableroActivity : AppCompatActivity() {
                                             winner = i
                                         }
                                     }
-                                    //val prevTurn = turn
+                                    val prevTurn = turn
                                     turn = response.body()!!.turn
                                     /*** Players info ***/
                                     miTurno = response.body()!!.turn == myPos
@@ -554,14 +556,16 @@ class TableroActivity : AppCompatActivity() {
                                         recordCambiado = false
                                     }
 
-                                    /*if (prevTurn != turn) {  // Cambio de turno
+                                    if (prevTurn != turn) {  // Cambio de turno
                                         timer.cancel()
                                         timer.start()
-                                    }*/
+                                    }
                                     done = true
                                 } else {
                                     Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
+                                    kicked = true
                                     done = true
+                                    finish()
                                 }
                             }
                         })
@@ -588,15 +592,17 @@ class TableroActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         if (!gone) {
-            if (finished) {
-                val builder = AlertDialog.Builder(this@TableroActivity)
-                var mensaje = "DERROTA"
-                if(winner == 0) mensaje = "¡¡VICTORIA!!"
-                builder.setTitle(mensaje)
-                builder.setPositiveButton("Volver") { _: DialogInterface, _: Int -> finish() }
-                builder.show()
-            } else {
-                Toast.makeText(applicationContext, "Has sido expulsado de la partida por inactividad", Toast.LENGTH_SHORT).show()
+            when {
+                finished -> {
+                    val builder = AlertDialog.Builder(this@TableroActivity)
+                    var mensaje = "DERROTA"
+                    if(winner == 0) mensaje = "¡¡VICTORIA!!"
+                    builder.setTitle(mensaje)
+                    builder.setPositiveButton("Volver") { _: DialogInterface, _: Int -> finish() }
+                    builder.show()
+                }
+                kicked -> Toast.makeText(applicationContext, getString(R.string.kicked), Toast.LENGTH_SHORT).show()
+                else -> Toast.makeText(applicationContext, getString(R.string.error_happened), Toast.LENGTH_SHORT).show()
             }
             gone = true
             RetrofitClient.instance.quitMatch(TokenRequest(session))
