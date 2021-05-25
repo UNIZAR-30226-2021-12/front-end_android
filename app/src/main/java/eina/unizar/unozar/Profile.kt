@@ -44,6 +44,7 @@ class Profile : AppCompatActivity() {
         showJugadas.text = intent.getStringExtra("public_matches")
         showGanadas.text = intent.getStringExtra("public_wins")
         avatar.setImageResource(avatars[intent.getIntExtra("avatar", 0)])
+        edit_alias.setOnClickListener { changeAlias() }
     }
 
     private fun updateInfo() {
@@ -88,7 +89,7 @@ class Profile : AppCompatActivity() {
         startActivityForResult(intent, normalCode)
     }
 
-    fun changeAlias(@Suppress("UNUSED_PARAMETER") view: View) {
+    fun changeAlias() {
         edit_alias.setImageResource(R.drawable.save_icon)
         showAlias.isFocusable = true
         showAlias.setSelection(0)
@@ -108,7 +109,7 @@ class Profile : AppCompatActivity() {
                         }
                     }
                 })
-            edit_alias.setOnClickListener { changeAlias(this.view) }
+            edit_alias.setOnClickListener { changeAlias() }
         }
     }
 

@@ -3,13 +3,14 @@ package eina.unizar.unozar
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log.d
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_create_game.*
+import kotlinx.android.synthetic.main.activity_room.*
 import kotlinx.android.synthetic.main.custom_alertdialog.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,11 +54,13 @@ class MatchRoom : AppCompatActivity() {
     private lateinit var ids: ArrayList<String>
     private lateinit var avatarIds: Map<Int,Int>
     private lateinit var names: Map<Int,String>
-    private  var myPos: Int = 0
+    private var myPos: Int = 0
+    private var myBoard: Int = 0
+    private var myCard: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_game)
+        setContentView(R.layout.activity_room)
         setSupportActionBar(match_toolbar)
         players = intent.getIntExtra("numPlayers", 0)
         bots = intent.getIntExtra("numBots", 0)
@@ -105,10 +108,15 @@ class MatchRoom : AppCompatActivity() {
                 }
             })
         create.setOnClickListener {
-            if (owner && ids.size == players) {
-                start = true
+            if (owner) {
+                d("Test", "listos: " + ids.size.toString() + ". Capacidad: " + players.toString())
+                if (ids.size == players)
+                    start = true
+                else
+                    Toast.makeText(applicationContext, "Faltan jugadores", Toast.LENGTH_SHORT).show()
             }
-            else Toast.makeText(applicationContext, getString(R.string.not_owner), Toast.LENGTH_SHORT).show()
+            else
+                Toast.makeText(applicationContext, getString(R.string.not_owner), Toast.LENGTH_SHORT).show()
         }
         exit.setOnClickListener { quit = true }
         actualizar()
@@ -129,6 +137,10 @@ class MatchRoom : AppCompatActivity() {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                     } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                         if (response.code() == 200) {
+                            if (id.equals(session.substring(0,32))) {
+                                myBoard = response.body()!!.boardId
+                                myCard = response.body()!!.cardId
+                            }
                             avatarIds = avatarIds + Pair(pos, response.body()!!.avatarId)
                             names = names + Pair(pos, response.body()!!.alias)
                             img[pos].setImageResource(avatars[response.body()!!.avatarId])
@@ -162,6 +174,8 @@ class MatchRoom : AppCompatActivity() {
                                     intent.putExtra("myPosition", myPos)
                                     intent.putExtra("avatars", avatarIds.values.map { it.toString() }.toTypedArray())
                                     intent.putExtra("names", names.values.toTypedArray())
+                                    intent.putExtra("board", myBoard)
+                                    intent.putExtra("card", myCard)
                                     startActivityForResult(intent, normalCode)
                                 } else {
                                     Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
@@ -215,6 +229,9 @@ class MatchRoom : AppCompatActivity() {
                                         intent.putExtra("myPosition", myPos)
                                         intent.putExtra("avatars", avatarIds.values.map { it.toString() }.toTypedArray())
                                         intent.putExtra("names", names.values.toTypedArray())
+                                        intent.putExtra("board", myBoard)
+                                        intent.putExtra("card", myCard)
+                                        gone = true
                                         startActivityForResult(intent, normalCode)
                                     } else {
                                         if (response.body()!!.playersIds[0] == session.substring(0,32))
@@ -244,35 +261,21 @@ class MatchRoom : AppCompatActivity() {
     }
 
     override fun onActivityResult (requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == normalCode) {
-            setResult(Activity.RESULT_OK, data)
-            finish()
-        } else if (resultCode == Activity.RESULT_OK && requestCode == inviteCode) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == inviteCode) {
             session = data!!.getStringExtra("session").toString()
             done = true
         }
-        else { super.onActivityResult(requestCode, resultCode, data) }
+        else {
+            setResult(Activity.RESULT_OK, data)
+            finish()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (!gone) {
-            RetrofitClient.instance.quitMatch(TokenRequest(session))
-                .enqueue(object : Callback<TokenResponse> {
-                    override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                        Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
-                    } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-                        if (response.code() == 200) {
-                            session = response.body()?.token.toString()
-                            Toast.makeText(applicationContext, getString(R.string.quit_game_success), Toast.LENGTH_SHORT).show()
-                            val intent = Intent().apply { putExtra("session", session) }
-                            setResult(Activity.RESULT_OK, intent)
-                        } else {
-                            Toast.makeText(applicationContext, getString(R.string.bad_quit_response), Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                })
-        }
+        val intent = Intent().apply { putExtra("session", session) }
+        setResult(Activity.RESULT_OK, intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

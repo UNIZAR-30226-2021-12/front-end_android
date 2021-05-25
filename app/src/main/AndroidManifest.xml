@@ -76,6 +76,22 @@
                 android:value=".Profile" />
         </activity>
         <activity
+            android:name=".ChangeBoard"
+            android:label="@string/app_name"
+            android:parentActivityName=".Principal" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Principal" />
+        </activity>
+        <activity
+            android:name=".ChangeCards"
+            android:label="@string/app_name"
+            android:parentActivityName=".Principal" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Principal" />
+        </activity>
+        <activity
             android:name=".TableroActivity"
             android:label="@string/app_name"
             android:parentActivityName=".MatchRoom" >

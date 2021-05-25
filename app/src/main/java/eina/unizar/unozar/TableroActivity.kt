@@ -44,6 +44,18 @@ class TableroActivity : AppCompatActivity() {
         R.drawable.avatar3,
         R.drawable.avatar4
     )
+    private var boards = arrayListOf(
+        R.drawable.empty,
+        R.drawable.tablero2,
+        R.drawable.tablero3
+    )
+    private var backCards = arrayListOf(
+        R.drawable.reverso1,
+        R.drawable.reverso2,
+        R.drawable.reverso3,
+        R.drawable.reverso4,
+        R.drawable.reverso5
+    )
     private var myPos: Int = 5
     private var turn: Int = 5
     private var finished = false
@@ -223,7 +235,6 @@ class TableroActivity : AppCompatActivity() {
             }
         }
         numCartasJugadoresActuales.removeAll(numCartasJugadoresActuales)
-        //tamano = numCartasJugadoresNuevos.size -1
         for(i in numCartasJugadoresNuevos.indices) {
             numCartasJugadoresActuales.add(numCartasJugadoresNuevos[i])
         }
@@ -264,15 +275,23 @@ class TableroActivity : AppCompatActivity() {
         myPos = intent.getIntExtra("myPosition", 0)
         avatarIds = intent.getStringArrayExtra("avatars")!!
         jugadoresNuevos = intent.getStringArrayExtra("names")!!
+        if(intent.getIntExtra("board", 0) != 0)
+            board_layout.setBackgroundResource(boards[intent.getIntExtra("board", 0)])
+        image_mazo.setBackgroundResource(backCards[intent.getIntExtra("card", 0)])
 
         actualizar()
 
         buttonPoner.setOnClickListener {
             pause = false
             if(miTurno && !cartaPuesta) {
-                if (cimaActual[0] == nombreRecordado[0] || cimaActual[1] == nombreRecordado[1] || cimaActual[2]=='X')
+                if (cimaActual[0].isDigit() && cimaActual[0] == nombreRecordado[0])
                     ponerCarta()
-                else Toast.makeText(applicationContext, getString(R.string.cant_play), Toast.LENGTH_SHORT).show()
+                else if ((cimaActual[1] != 'X' && cimaActual[1] == nombreRecordado[1]) || nombreRecordado[1] == 'X')
+                    ponerCarta()
+                else if (cimaActual[2] != 'X' && cimaActual[2] == nombreRecordado[2])
+                    ponerCarta()
+                else
+                    Toast.makeText(applicationContext, getString(R.string.cant_play), Toast.LENGTH_SHORT).show()
             }
         }
         buttonPedirUno.setOnClickListener{
@@ -304,54 +323,58 @@ class TableroActivity : AppCompatActivity() {
         //Si es una +4 o un cambia color
         if(nombreRecordado.equals("XXC") || nombreRecordado.equals("XX4")) {
             val builder = AlertDialog.Builder(this)
-            val items = arrayOf("Red", "Green", "Yellow", "Blue")
+            val items = arrayOf(
+                getString(R.string.red),
+                getString(R.string.green),
+                getString(R.string.yellow),
+                getString(R.string.blue)
+            )
             with(builder)
             {
                 setTitle("Elija un color")
                 setItems(items) { _, which ->
                     //Poner carta
-                    Toast.makeText(applicationContext, items[which] + " is clicked", Toast.LENGTH_SHORT).show()
-                    if(items[which].equals("Red") && nombreRecordado == "XXC") {
+                    if(items[which].equals(getString(R.string.red)) && nombreRecordado == "XXC") {
                         nombreRecordado = "XRC"
                         colorSelected = "R"
                         ponerCarta = true
                         pause = false
                     }
-                    else if(items[which].equals("Green") && nombreRecordado == "XXC") {
+                    else if(items[which].equals(getString(R.string.green)) && nombreRecordado == "XXC") {
                         nombreRecordado = "XGC"
                         colorSelected = "G"
                         ponerCarta = true
                         pause = false
                     }
-                    else if(items[which].equals("Blue") && nombreRecordado == "XXC") {
+                    else if(items[which].equals(getString(R.string.blue)) && nombreRecordado == "XXC") {
                         nombreRecordado = "XBC"
                         colorSelected = "B"
                         ponerCarta = true
                         pause = false
                     }
-                    else if(items[which].equals("Yellow") && nombreRecordado == "XXC") {
+                    else if(items[which].equals(getString(R.string.yellow)) && nombreRecordado == "XXC") {
                         nombreRecordado = "XYC"
                         colorSelected = "Y"
                         ponerCarta = true
                         pause = false
                     }
-                    else if(items[which].equals("Red") && nombreRecordado == "XX4") {
+                    else if(items[which].equals(getString(R.string.red)) && nombreRecordado == "XX4") {
                         nombreRecordado = "XR4"
                         colorSelected = "R"
                     }
-                    else if(items[which].equals("Green") && nombreRecordado == "XX4") {
+                    else if(items[which].equals(getString(R.string.green)) && nombreRecordado == "XX4") {
                         nombreRecordado = "XG4"
                         colorSelected = "G"
                         ponerCarta = true
                         pause = false
                     }
-                    else if(items[which].equals("Blue") && nombreRecordado == "XX4") {
+                    else if(items[which].equals(getString(R.string.blue)) && nombreRecordado == "XX4") {
                         nombreRecordado = "XB4"
                         colorSelected = "B"
                         ponerCarta = true
                         pause = false
                     }
-                    else if(items[which].equals("Yellow") && nombreRecordado == "XX4") {
+                    else if(items[which].equals(getString(R.string.yellow)) && nombreRecordado == "XX4") {
                         nombreRecordado = "XY4"
                         colorSelected = "Y"
                         ponerCarta = true
@@ -445,10 +468,6 @@ class TableroActivity : AppCompatActivity() {
                                 }
                             }
                         })
-                    if (manoActual.size -1 == 0) {
-                        finished = true
-                        winner = myPos
-                    }
                 } else if(pause && done) {
                     done = false
                     //Pedir robar carta al servidor
@@ -501,7 +520,15 @@ class TableroActivity : AppCompatActivity() {
                                     for (i in response.body()!!.playersNumCards.indices) {
                                         if (response.body()!!.playersNumCards[i] == 0) {
                                             finished = true
+                                            gone = true
                                             winner = i
+                                            val builder = AlertDialog.Builder(this@TableroActivity)
+                                            var mensaje = "DERROTA"
+                                            if (winner == myPos) mensaje = "¡¡VICTORIA!!"
+                                            builder.setTitle(mensaje)
+                                            builder.setPositiveButton("Volver") { _: DialogInterface, _: Int -> finish() }
+                                            builder.show()
+                                            finish()
                                         }
                                     }
                                     turn = response.body()!!.turn
@@ -584,22 +611,15 @@ class TableroActivity : AppCompatActivity() {
                 finished -> {
                     val builder = AlertDialog.Builder(this@TableroActivity)
                     var mensaje = "DERROTA"
-                    if (winner == 0) mensaje = "¡¡VICTORIA!!"
+                    if (winner == myPos) mensaje = "¡¡VICTORIA!!"
                     builder.setTitle(mensaje)
                     builder.setPositiveButton("Volver") { _: DialogInterface, _: Int -> finish() }
                     builder.show()
                 }
-                kicked -> Toast.makeText(
-                    applicationContext,
-                    getString(R.string.kicked),
-                    Toast.LENGTH_SHORT
-                ).show()
-                else -> Toast.makeText(
-                    applicationContext,
-                    getString(R.string.error_happened),
-                    Toast.LENGTH_SHORT
-                ).show()
+                kicked -> Toast.makeText(applicationContext, getString(R.string.kicked), Toast.LENGTH_SHORT).show()
             }
         }
+        val intent = Intent().apply { putExtra("session", session) }
+        setResult(Activity.RESULT_OK, intent)
     }
 }

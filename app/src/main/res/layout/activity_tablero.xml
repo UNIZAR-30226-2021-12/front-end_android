@@ -75,7 +75,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout5"
+        android:id="@+id/board_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_gravity="center"

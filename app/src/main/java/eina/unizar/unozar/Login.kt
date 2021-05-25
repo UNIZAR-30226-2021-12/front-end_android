@@ -19,7 +19,7 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        RetrofitClient.instance.authentication(LoginUser("alberto.lardies@gmail.com", "alberto"))
+        RetrofitClient.instance.authentication(LoginUser("alberto2@gmail.com", "alberto"))
             .enqueue(object : Callback<TokenResponse> {
                 override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()

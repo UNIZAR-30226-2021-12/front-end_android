@@ -42,6 +42,8 @@
     <string name="avatar_price">250</string>
     <string name="board_price">500</string>
     <string name="card_price">750</string>
+    <string name="priv">Private</string>
+    <string name="pub">Public</string>
     <string name="img">Image</string>
     <!-- MENU OPTIONS -->
     <string name="friends">Friends</string>
@@ -64,6 +66,9 @@
     <string name="change_avatar">Change avatar</string>
     <string name="add_friend">Add friend</string>
     <string name="go_back">Return</string>
+    <string name="join_with_code">Join with code</string>
+    <string name="create_match">Create match</string>
+    <string name="search_public">Search for public match</string>
     <!-- DIALOG TEXT -->
     <string name="alert">Careful! </string>
     <string name="choose">Choose</string>
@@ -88,6 +93,10 @@
     <string name="create_button">Create</string>
     <string name="join_button">Join</string>
     <string name="delete_button">Delete</string>
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="yellow">Yellow</string>
+    <string name="blue">Blue</string>
     <!-- INPUT ERRORS -->
     <string name="email_format_error">Write a valid email </string>
     <string name="alias_format_error">Please write a valid alias</string>

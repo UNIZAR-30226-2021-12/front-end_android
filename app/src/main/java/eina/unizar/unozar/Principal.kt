@@ -12,10 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import kotlinx.android.synthetic.main.activity_create_game.*
 import kotlinx.android.synthetic.main.activity_principal.*
-import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.activity_tablero.*
 import kotlinx.android.synthetic.main.custom_alertdialog.*
 import kotlinx.android.synthetic.main.custom_alertdialog.view.*
 import retrofit2.Call
@@ -55,30 +52,33 @@ class Principal : AppCompatActivity() {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                     if (response.code() == 200) {
+                        d("gameId :", response.body()!!.gameId)
                         if(!(response.body()!!.gameId.equals("NONE"))) {
                             RetrofitClient.instance.readRoom(TokenRequest(session))
                                 .enqueue(object : Callback<RoomInfoResponse> {
                                     override fun onFailure(call: Call<RoomInfoResponse>, t: Throwable) {
                                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
-                                    } override fun onResponse(call: Call<RoomInfoResponse>, response: Response<RoomInfoResponse>) {
-                                        if (response.code() == 200) {
-                                            session = response.body()?.token.toString()
-                                            for (i in response.body()!!.playersIds.indices) {
-                                                if (response.body()!!.playersIds[i].equals(session.substring(0, 32))) myPos = i
-                                                if(!(response.body()!!.playersIds[i].equals("EMPTY"))) {
-                                                    actualizarJugador(response.body()!!.playersIds[i], i)
+                                    } override fun onResponse(call: Call<RoomInfoResponse>, response1: Response<RoomInfoResponse>) {
+                                        if (response1.code() == 200) {
+                                            session = response1.body()?.token.toString()
+                                            for (i in response1.body()!!.playersIds.indices) {
+                                                if (response1.body()!!.playersIds[i].equals(session.substring(0, 32))) myPos = i
+                                                if(!(response1.body()!!.playersIds[i].equals("EMPTY"))) {
+                                                    actualizarJugador(response1.body()!!.playersIds[i], i)
                                                 }
                                             }
                                             val intent =
                                                 Intent(this@Principal, TableroActivity::class.java)
-                                            intent.putExtra("session", response.body()!!.token)
+                                            intent.putExtra("session", response1.body()!!.token)
                                             intent.putExtra("ids", ids.toTypedArray())
                                             intent.putExtra("myPosition", myPos)
                                             intent.putExtra("avatars", avatarIds.values.map { it.toString() }.toTypedArray())
                                             intent.putExtra("names", names.values.toTypedArray())
+                                            intent.putExtra("board", response.body()!!.boardId)
+                                            intent.putExtra("card", response.body()!!.cardId)
                                             startActivityForResult(intent, normalCode)
                                         } else {
-                                            Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(applicationContext, response1.code(), Toast.LENGTH_SHORT).show()
                                         }
                                     }
                                 })
@@ -96,6 +96,9 @@ class Principal : AppCompatActivity() {
         players.setItems(numPlayers) { _: DialogInterface, i: Int ->
             n = numPlayers[i].toInt()
         }
+        create_match.setOnClickListener { createMatch() }
+        search_public.setOnClickListener { searchPublic() }
+        join_match.setOnClickListener { joinWithCode() }
     }
 
     private fun actualizarJugador(id: String, pos: Int) {
@@ -260,42 +263,53 @@ class Principal : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun publicMatch(@Suppress("UNUSED_PARAMETER") view: View) {
-        val numP = AlertDialog.Builder(this)
-        val numPlayers = arrayOf("2", "3", "4")
-        numP.setTitle(getString(R.string.number_of_players))
-        numP.setItems(numPlayers) { _: DialogInterface, i: Int ->
-            n = numPlayers[i].toInt()
-            RetrofitClient.instance.joinPublic(JoinPublicRequest(n, session))
-                .enqueue(object : Callback<TokenResponse> {
-                    override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                        //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
-                    } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-                        if (response.code() == 200) {
-                            Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
-                            val intent = Intent(this@Principal, MatchRoom::class.java)
-                            intent.putExtra("numPlayers", n)
-                            intent.putExtra("numBots", 0)
-                            intent.putExtra("session", response.body()?.token)
-                            intent.putExtra("public", true)
-                            startActivityForResult(intent, normalCode)
-                        } else {
-                            Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                            //Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                        }
-                    }
-                })
-        }
-        numP.show()
-    }
-
-    fun privateMatch(@Suppress("UNUSED_PARAMETER") view: View) {
-        var b: Int
+    private fun createMatch() {
         val choose = AlertDialog.Builder(this)
         choose.setTitle(getString(R.string.choose))
         choose.setMessage(getString(R.string.private_match_dialog))
-        choose.setPositiveButton(getString(R.string.create_button)) { _: DialogInterface, _: Int ->
+        choose.setPositiveButton(getString(R.string.pub)) { _: DialogInterface, _: Int ->
+            val numP = AlertDialog.Builder(this)
+            val numPlayers = arrayOf("2", "3", "4")
+            numP.setTitle(getString(R.string.number_of_players))
+            numP.setItems(numPlayers) { _: DialogInterface, i: Int ->
+                n = numPlayers[i].toInt()
+                val code = AlertDialog.Builder(this)
+                val customLayout: View = layoutInflater.inflate(R.layout.custom_alertdialog, null)
+                code.setView(customLayout)
+                code.setTitle("Determine la apuesta")
+                code.setPositiveButton(getString(R.string.create_button)) { _: DialogInterface, _: Int ->
+                    val myBet = customLayout.inputCode.text.toString().trim().toInt()
+                    if (myBet <= myMoney) {
+                        RetrofitClient.instance.createMatch(CreateMatchRequest(false, n, 0, myBet, session))
+                            .enqueue(object : Callback<TokenResponse> {
+                                override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                                    //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                                } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                                    if (response.code() == 200) {
+                                        Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                                        val intent = Intent(this@Principal, MatchRoom::class.java)
+                                        intent.putExtra("numPlayers", n)
+                                        intent.putExtra("numBots", 0)
+                                        intent.putExtra("session", response.body()?.token)
+                                        intent.putExtra("public", true)
+                                        intent.putExtra("bet", myBet)
+                                        startActivityForResult(intent, normalCode)
+                                    } else {
+                                        //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                    }
+                                }
+                            })
+                    } else  Toast.makeText(applicationContext, getString(R.string.not_enough_money), Toast.LENGTH_LONG).show()
+                }
+                code.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
+                code.show()
+            }
+            numP.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int -> }
+            numP.show()
+        }
+        choose.setNegativeButton(getString(R.string.priv)) { _: DialogInterface, _: Int ->
             val numP = AlertDialog.Builder(this)
             val numPlayers = arrayOf("2", "3", "4")
             numP.setTitle(getString(R.string.number_of_players))
@@ -310,9 +324,8 @@ class Principal : AppCompatActivity() {
                     numBots = arrayOf("0", "1")
                 bots.setTitle(getString(R.string.number_of_bots))
                 bots.setItems(numBots) { _: DialogInterface, j: Int ->
-                    b = numBots[j].toInt()
-                    d("Test", "numPlayers: $n, numBots: $b")
-                    RetrofitClient.instance.createMatch(CreateMatchRequest(true, n, b, session))
+                    val b = numBots[j].toInt()
+                    RetrofitClient.instance.createMatch(CreateMatchRequest(true, n, b, 0, session))
                         .enqueue(object : Callback<TokenResponse> {
                             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                                 //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
@@ -339,35 +352,64 @@ class Principal : AppCompatActivity() {
             numP.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int -> }
             numP.show()
         }
-        choose.setNegativeButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->
-            val code = AlertDialog.Builder(this)
-            val customLayout: View = layoutInflater.inflate(R.layout.custom_alertdialog, null)
-            code.setView(customLayout)
-            code.setTitle(getString(R.string.code))
-            code.setPositiveButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->
-                RetrofitClient.instance.joinPrivate(JoinPrivateRequest(customLayout.inputCode.text.toString().trim(), session))
-                    .enqueue(object : Callback<TokenResponse> {
-                        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                            //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                            Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
-                        } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-                            if (response.code() == 200) {
-                                Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
-                                val intent = Intent(this@Principal, MatchRoom::class.java)
-                                intent.putExtra("session", response.body()?.token)
-                                intent.putExtra("public", false)
-                                startActivityForResult(intent, normalCode)
-                            } else {
-                                //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                            }
-                        }
-                    })
-            }
-            code.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
-            code.show()
-        }
         choose.show()
+    }
+
+    fun searchPublic() {
+        val numP = AlertDialog.Builder(this)
+        val numPlayers = arrayOf("2", "3", "4")
+        numP.setTitle(getString(R.string.number_of_players))
+        numP.setItems(numPlayers) { _: DialogInterface, i: Int ->
+            n = numPlayers[i].toInt()
+            RetrofitClient.instance.joinPublic(JoinPublicRequest(n, session))
+                .enqueue(object : Callback<TokenResponse> {
+                    override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                        Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                    } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                        if (response.code() == 200) {
+                            Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                            val intent = Intent(this@Principal, MatchRoom::class.java)
+                            intent.putExtra("numPlayers", n)
+                            intent.putExtra("numBots", 0)
+                            intent.putExtra("session", response.body()?.token)
+                            intent.putExtra("public", true)
+                            startActivityForResult(intent, normalCode)
+                        } else {
+                            Toast.makeText(applicationContext, getString(R.string.bad_creation_response), Toast.LENGTH_LONG).show()
+                        }
+                    }
+                })
+        }
+        numP.show()
+    }
+
+    fun joinWithCode() {
+        val code = AlertDialog.Builder(this)
+        val customLayout: View = layoutInflater.inflate(R.layout.custom_alertdialog, null)
+        code.setView(customLayout)
+        code.setTitle(getString(R.string.code))
+        code.setPositiveButton(getString(R.string.join_button)) { _: DialogInterface, _: Int ->
+            RetrofitClient.instance.joinPrivate(JoinPrivateRequest(customLayout.inputCode.text.toString().trim(), session))
+                .enqueue(object : Callback<TokenResponse> {
+                    override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                        //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                    } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                        if (response.code() == 200) {
+                            Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
+                            val intent = Intent(this@Principal, MatchRoom::class.java)
+                            intent.putExtra("session", response.body()?.token)
+                            intent.putExtra("public", false)
+                            startActivityForResult(intent, normalCode)
+                        } else {
+                            //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                        }
+                    }
+                })
+        }
+        code.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
+        code.show()
     }
 
     private fun updateMoney() {

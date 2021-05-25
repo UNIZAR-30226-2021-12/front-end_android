@@ -41,6 +41,8 @@
     <string name="avatar_price">250</string>
     <string name="board_price">500</string>
     <string name="card_price">750</string>
+    <string name="priv">Privada</string>
+    <string name="pub">Pública</string>
     <string name="img">Imagen</string>
     <!-- MENU OPTIONS -->
     <string name="friends">Amigos</string>
@@ -63,6 +65,9 @@
     <string name="change_avatar">Cambiar avatar</string>
     <string name="add_friend">Añadir amigo</string>
     <string name="go_back">Volver</string>
+    <string name="join_with_code">Unirse con código</string>
+    <string name="create_match">Crear partida</string>
+    <string name="search_public">Buscar partida pública</string>
     <!-- DIALOG TEXT -->
     <string name="alert">¡Cuidado!</string>
     <string name="choose">Elija</string>
@@ -87,6 +92,10 @@
     <string name="create_button">Crear</string>
     <string name="join_button">Unirme</string>
     <string name="delete_button">Borrar</string>
+    <string name="red">Rojo</string>
+    <string name="green">Verde</string>
+    <string name="yellow">Amarillo</string>
+    <string name="blue">Azul</string>
     <!-- INPUT ERRORS -->
     <string name="alias_format_error">Escriba un alias válido</string>
     <string name="email_format_error">Escriba un email válido</string>
