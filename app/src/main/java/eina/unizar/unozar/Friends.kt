@@ -21,11 +21,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import server.request.AddFriendRequest
+import server.request.IdRequest
 import server.request.TokenRequest
 import server.response.FriendsListResponse
+import server.response.PlayerInfo
 import server.response.TokenResponse
 
 class Friends : AppCompatActivity() {
+    private var normalCode = 73
 
     private lateinit var session: String
     private lateinit var friends: ArrayList<FriendInfo>
@@ -38,7 +41,8 @@ class Friends : AppCompatActivity() {
         R.drawable.avatar4
     )
 
-    private val delete = Menu.FIRST
+    private val profile = Menu.FIRST
+    private val delete = Menu.FIRST+1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +69,7 @@ class Friends : AppCompatActivity() {
                     if (response.code() == 200) {
                         session = response.body()?.token.toString()
                         var i = 0
+                        friends = ArrayList()
                         while (i < response.body()!!.avatarIds!!.size) {
                             friends.add(FriendInfo(
                                 response.body()!!.friendIds?.get(i),
@@ -118,36 +123,68 @@ class Friends : AppCompatActivity() {
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View?, menuInfo: ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
+        menu.add(Menu.NONE, profile, Menu.NONE, "Ver perfil")
         menu.add(Menu.NONE, delete, Menu.NONE, "Eliminar")
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) { delete -> {
-            val info = item.menuInfo as AdapterContextMenuInfo
-            val friend = AlertDialog.Builder(this)
-            friend.setTitle(getString(R.string.delete_friend_message))
-            friend.setPositiveButton(getString(R.string.delete_button)) { _: DialogInterface, _: Int ->
-                RetrofitClient.instance.deleteFriend(AddFriendRequest(session, friends[info.position].id.toString()))
-                    .enqueue(object : Callback<TokenResponse> {
-                        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                            //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                            Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
-                        } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+        when (item.itemId) {
+            delete -> {
+                val info = item.menuInfo as AdapterContextMenuInfo
+                val friend = AlertDialog.Builder(this)
+                friend.setTitle(getString(R.string.delete_friend_message))
+                friend.setPositiveButton(getString(R.string.delete_button)) { _: DialogInterface, _: Int ->
+                    RetrofitClient.instance.deleteFriend(AddFriendRequest(session, friends[info.position].id.toString()))
+                        .enqueue(object : Callback<TokenResponse> {
+                            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                                //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                            } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                                if (response.code() == 200) {
+                                    session = response.body()?.token.toString()
+                                    getFriendsRequest()
+                                } else {
+                                    //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                                    Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        })
+                }
+                friend.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
+                friend.show()
+                return true
+            }
+            profile -> {
+                val info = item.menuInfo as AdapterContextMenuInfo
+                RetrofitClient.instance.readPlayer(IdRequest(friends[info.position].id.toString()))
+                    .enqueue(object : Callback<PlayerInfo> {
+                        override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
+                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                             if (response.code() == 200) {
-                                Toast.makeText(applicationContext, "Amigo borrado", Toast.LENGTH_LONG).show()
-                                val intent = Intent().apply { putExtra("session", response.body()?.token.toString()) }
-                                setResult(Activity.RESULT_OK, intent)
+                                val intent = Intent(this@Friends, FriendProfile::class.java)
+                                intent.putExtra("avatar", response.body()!!.avatarId)
+                                intent.putExtra("alias", response.body()!!.alias)
+                                intent.putExtra("email", response.body()!!.email)
+                                intent.putExtra("total_matches", (response.body()!!.privateTotal) + response.body()!!.publicTotal).toString()
+                                intent.putExtra("total_wins", (response.body()!!.privateWins + response.body()!!.publicWins).toString())
+                                intent.putExtra("friend_matches", response.body()!!.privateTotal.toString())
+                                intent.putExtra("friend_wins", response.body()!!.privateWins.toString())
+                                startActivityForResult(intent, normalCode)
                             } else {
-                                //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                                //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
                                 Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                             }
                         }
                     })
             }
-            friend.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->}
-            friend.show()
-            return true
-        }}
+        }
         return super.onContextItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent().apply { putExtra("session", session) }
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 }

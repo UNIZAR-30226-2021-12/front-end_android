@@ -113,13 +113,14 @@
     <string name="bad_quit_response">It´s not possible to quit the game</string>
     <string name="bad_read_response">Couldn\'t read your account info</string>
     <string name="bad_play_card_response">Error while playing that card, try again</string>
+    <string name="price_already_collected">Daily price already collected</string>
     <!-- SERVER CALL SUCCESS -->
-    <string name="email_change_success">You have successfully updated your email address </string>
-    <string name="password_change_success">Your password was updated successfully </string>
-    <string name="avatar_change_success">Your avatar was updated successfully</string>
-    <string name="board_change_success">Your match board\'s appearance was updated successfully</string>
-    <string name="cards_change_success">Your card\'s reverse appearance was updated successfully</string>
-    <string name="alias_change_success">Your alias was updated successfully</string>
+    <string name="email_change_success">Email address updated successfully</string>
+    <string name="password_change_success">Password updated successfully</string>
+    <string name="avatar_change_success">Avatar updated successfully</string>
+    <string name="board_change_success">Board\'s appearance updated successfully</string>
+    <string name="cards_change_success">Card\'s reverse appearance updated successfully</string>
+    <string name="alias_change_success">Alias updated successfully</string>
     <string name="refresh_success">Updated session </string>
     <string name="quit_game_success">You left the game</string>
     <!-- INVITE EMAIL -->

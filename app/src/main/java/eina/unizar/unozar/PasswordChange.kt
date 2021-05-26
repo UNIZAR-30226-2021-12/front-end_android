@@ -73,4 +73,10 @@ class PasswordChange : AppCompatActivity() {
         }
         return false
     }
+
+    override fun onBackPressed() {
+        val intent = Intent().apply { putExtra("session", session) }
+        setResult(Activity.RESULT_OK, intent)
+        finish()
+    }
 }

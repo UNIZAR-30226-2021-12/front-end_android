@@ -57,6 +57,7 @@ class ChangeBoard : AppCompatActivity() {
         go_back.setOnClickListener {
             val intent = Intent().apply { putExtra("session", session) }
             setResult(Activity.RESULT_OK, intent)
+            finish()
         }
         board_one.setOnClickListener { changeBoard(0) }
 
@@ -88,5 +89,11 @@ class ChangeBoard : AppCompatActivity() {
             check.setNegativeButton(getString(R.string.alert_negative_button)) { _: DialogInterface, _: Int -> }
             check.show()
         }
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent().apply { putExtra("session", session) }
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 }

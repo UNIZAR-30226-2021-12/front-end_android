@@ -52,6 +52,14 @@
                 android:value=".Principal" />
         </activity>
         <activity
+            android:name=".FriendProfile"
+            android:label="@string/app_name"
+            android:parentActivityName=".Friends" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Friends" />
+        </activity>
+        <activity
             android:name=".PasswordChange"
             android:label="@string/app_name"
             android:parentActivityName=".Profile" >

@@ -66,10 +66,6 @@ class ChooseFriend : AppCompatActivity() {
                     if (response.code() == 200) {
                         var i = 0
                         session = response.body()?.token.toString()
-                        /*val emailArray = response.body()!!.emails
-                        val aliasArray = response.body()!!.alias
-                        val avatarArray = response.body()!!.avatarIds
-                        val idArray = response.body()!!.friendIds*/
                         while (i < response.body()!!.avatarIds?.size!!) {
                             Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
                             friends.add(FriendInfo(
@@ -97,7 +93,8 @@ class ChooseFriend : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto: $email")
             intent.putExtra(Intent.EXTRA_EMAIL, "UNOZAR")
-            intent.putExtra(Intent.EXTRA_SUBJECT,
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+            intent.putExtra(Intent.EXTRA_TEXT,
                 getString(R.string.email_message, code)
             )
             startActivityForResult(intent, normalCode)
@@ -133,5 +130,11 @@ class ChooseFriend : AppCompatActivity() {
             setResult(Activity.RESULT_OK, intent)
             finish()
         } else { super.onActivityResult(requestCode, resultCode, data) }
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent().apply { putExtra("session", session) }
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 }

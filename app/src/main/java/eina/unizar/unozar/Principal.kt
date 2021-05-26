@@ -46,6 +46,7 @@ class Principal : AppCompatActivity() {
         ids = ArrayList()
         avatarIds = mapOf()
         names = mapOf()
+        d("token", session.substring(0,32))
         RetrofitClient.instance.readPlayer(IdRequest(session.substring(0, 32)))
             .enqueue(object : Callback<PlayerInfo> {
                 override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
@@ -144,10 +145,10 @@ class Principal : AppCompatActivity() {
                                 intent.putExtra("avatar", response.body()!!.avatarId)
                                 intent.putExtra("alias", response.body()!!.alias)
                                 intent.putExtra("email", response.body()!!.email)
-                                intent.putExtra("private_matches", response.body()?.privateTotal.toString())
-                                intent.putExtra("private_wins", response.body()?.privateWins.toString())
-                                intent.putExtra("public_matches", response.body()?.publicTotal.toString())
-                                intent.putExtra("public_wins", response.body()?.publicWins.toString())
+                                intent.putExtra("total_matches", (response.body()!!.publicTotal + response.body()!!.privateTotal).toString())
+                                intent.putExtra("total_wins", (response.body()!!.publicWins + response.body()!!.privateWins).toString())
+                                intent.putExtra("friend_matches", response.body()?.privateTotal.toString())
+                                intent.putExtra("friend_wins", response.body()?.privateWins.toString())
                                 startActivityForResult(intent, normalCode)
                             } else {
                                 //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
@@ -211,15 +212,15 @@ class Principal : AppCompatActivity() {
                                 val builder = AlertDialog.Builder(this@Principal)
                                 with(builder)
                                 {
-                                    setTitle("Enhorabuena")
-                                    setMessage("Has ganado un premio de $premio monedas")
+                                    setTitle("¡Enhorabuena!")
+                                    setMessage("Ha ganado $premio monedas")
                                     val neutralButtonClick = null
                                     setPositiveButton("OK",neutralButtonClick)
                                     show()
                                 }
                                 this@Principal.updateMoney()
                             } else {
-                                Toast.makeText(applicationContext, getString(R.string.bad_refresh_response), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, getString(R.string.price_already_collected), Toast.LENGTH_LONG).show()
                             }
                         }
                     })

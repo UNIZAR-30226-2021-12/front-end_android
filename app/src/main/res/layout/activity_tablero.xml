@@ -20,6 +20,7 @@
             android:id="@+id/buttonPoner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="#BCC7FF"
             android:text="@string/play_card"
             android:textColor="#000000"
             app:layout_constraintBottom_toTopOf="@+id/buttonPedirUno"
@@ -27,8 +28,9 @@
 
         <Button
             android:id="@+id/buttonPedirUno"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="#FF7D55"
             android:text="@string/app_name"
             android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,6 +40,7 @@
             android:id="@+id/buttonRobarCarta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="#ABFBAE"
             android:text="@string/draw_card"
             android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
@@ -173,13 +176,4 @@
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/timer_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="236dp"
-        android:layout_marginBottom="24dp"
-        android:text=""
-        app:layout_constraintBottom_toTopOf="@+id/rvCard"
-        app:layout_constraintStart_toEndOf="@+id/constraintLayout6" />
 </androidx.constraintlayout.widget.ConstraintLayout>

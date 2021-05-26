@@ -67,4 +67,10 @@ import server.response.TokenResponse
         } else return true
         return false
     }
+
+     override fun onBackPressed() {
+         val intent = Intent().apply { putExtra("session", session) }
+         setResult(Activity.RESULT_OK, intent)
+         finish()
+     }
 }

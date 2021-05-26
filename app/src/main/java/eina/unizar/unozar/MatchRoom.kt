@@ -1,6 +1,7 @@
 package eina.unizar.unozar
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log.d
@@ -9,6 +10,7 @@ import android.view.MenuItem
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_room.*
 import kotlinx.android.synthetic.main.custom_alertdialog.view.*
@@ -244,7 +246,8 @@ class MatchRoom : AppCompatActivity() {
                                                 }
                                                 if (response.body()!!.playersIds[i].equals(session.substring(0, 32))) myPos = i
                                                 ids.add(response.body()!!.playersIds[i])
-                                            }
+                                            } else
+                                                img[i].setImageResource(R.drawable.empty)
                                         }
                                         players_ready.text = getString(R.string.players_ready, ids.size.toString(), players.toString())
                                         done = true
@@ -265,9 +268,12 @@ class MatchRoom : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == inviteCode) {
             session = data!!.getStringExtra("session").toString()
             done = true
-        }
-        else {
+        } else if (resultCode == Activity.RESULT_OK && requestCode == normalCode) {
             setResult(Activity.RESULT_OK, data)
+            finish()
+        } else {
+            val intent = Intent().apply { putExtra("session", session) }
+            setResult(Activity.RESULT_OK, intent)
             finish()
         }
     }
@@ -276,6 +282,14 @@ class MatchRoom : AppCompatActivity() {
         super.onDestroy()
         val intent = Intent().apply { putExtra("session", session) }
         setResult(Activity.RESULT_OK, intent)
+    }
+
+    override fun onBackPressed() {
+        val builder = AlertDialog.Builder(this@MatchRoom)
+        builder.setTitle("¿Desea abandonar la sala?")
+        builder.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int -> quit = true }
+        builder.setNegativeButton(getString(R.string.alert_negative_button)) { _: DialogInterface, _: Int -> }
+        builder.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

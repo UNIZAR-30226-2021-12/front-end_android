@@ -37,12 +37,12 @@ class Profile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         session = intent.getStringExtra("session").toString()
-        showAlias.setText(intent.getStringExtra("alias"), TextView.BufferType.EDITABLE)
-        showEmail2.text = intent.getStringExtra("email")
-        showJugadasTotales.text = intent.getStringExtra("private_matches")
-        showGanadasTotales.text = intent.getStringExtra("private_wins")
-        showJugadas.text = intent.getStringExtra("public_matches")
-        showGanadas.text = intent.getStringExtra("public_wins")
+        my_alias.setText(intent.getStringExtra("alias"), TextView.BufferType.EDITABLE)
+        my_email.text = intent.getStringExtra("email")
+        total_played.text = intent.getStringExtra("total_matches")
+        total_wins.text = intent.getStringExtra("total_wins")
+        private_played.text = intent.getStringExtra("friend_matches")
+        private_wins.text = intent.getStringExtra("friend_wins")
         avatar.setImageResource(avatars[intent.getIntExtra("avatar", 0)])
         edit_alias.setOnClickListener { changeAlias() }
     }
@@ -54,12 +54,12 @@ class Profile : AppCompatActivity() {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                     if (response.code() == 200) {
-                        showAlias.setText(response.body()?.alias, TextView.BufferType.EDITABLE)
-                        showEmail2.text = response.body()?.email
-                        showJugadasTotales.text = (response.body()!!.publicTotal + response.body()!!.privateTotal).toString()
-                        showGanadasTotales.text = (response.body()!!.publicWins + response.body()!!.privateWins).toString()
-                        showJugadas.text = response.body()?.privateTotal.toString()
-                        showGanadas.text = response.body()?.privateWins.toString()
+                        my_alias.setText(response.body()?.alias, TextView.BufferType.EDITABLE)
+                        my_email.text = response.body()?.email
+                        total_played.text = (response.body()!!.publicTotal + response.body()!!.privateTotal).toString()
+                        total_wins.text = (response.body()!!.publicWins + response.body()!!.privateWins).toString()
+                        private_played.text = response.body()?.privateTotal.toString()
+                        private_wins.text = response.body()?.privateWins.toString()
                         avatar.setImageResource(avatars[response.body()!!.avatarId])
                     } else {
                         //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
@@ -91,10 +91,10 @@ class Profile : AppCompatActivity() {
 
     fun changeAlias() {
         edit_alias.setImageResource(R.drawable.save_icon)
-        showAlias.isFocusable = true
-        showAlias.setSelection(0)
+        my_alias.isFocusable = true
+        my_alias.setSelection(0)
         edit_alias.setOnClickListener {
-            RetrofitClient.instance.updatePlayer(UpdateRequest(10, null, showAlias.text.toString().trim(), null, session, 10, 10))
+            RetrofitClient.instance.updatePlayer(UpdateRequest(10, null, my_alias.text.toString().trim(), null, session, 10, 10))
                 .enqueue(object : Callback<TokenResponse> {
                     override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
@@ -103,7 +103,7 @@ class Profile : AppCompatActivity() {
                             session = response.body()!!.token
                             Toast.makeText(applicationContext, getString(R.string.alias_change_success), Toast.LENGTH_LONG).show()
                             edit_alias.setImageResource(R.drawable.edit_alias)
-                            showAlias.isFocusable = false
+                            my_alias.isFocusable = false
                         } else {
                             Toast.makeText(applicationContext, getString(R.string.bad_update_response) + response.code(), Toast.LENGTH_LONG).show()
                         }
@@ -134,6 +134,12 @@ class Profile : AppCompatActivity() {
         }
         check.setNegativeButton(getString(R.string.alert_negative_button)) { _: DialogInterface, _: Int -> }
         check.show()
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent().apply { putExtra("session", session) }
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

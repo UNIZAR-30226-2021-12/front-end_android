@@ -64,6 +64,7 @@ class ChangeAvatar : AppCompatActivity() {
         go_back.setOnClickListener {
             val intent = Intent().apply { putExtra("session", session) }
             setResult(Activity.RESULT_OK, intent)
+            finish()
         }
         avatar_one.setImageResource(avatars[0])
         avatar_one.setOnClickListener { changeAvatar(0) }
@@ -96,5 +97,11 @@ class ChangeAvatar : AppCompatActivity() {
             check.setNegativeButton(getString(R.string.alert_negative_button)) { _: DialogInterface, _: Int -> }
             check.show()
         }
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent().apply { putExtra("session", session) }
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 }

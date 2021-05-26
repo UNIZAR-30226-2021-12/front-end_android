@@ -148,7 +148,6 @@ class TableroActivity : AppCompatActivity() {
             if(carta[2] == 'C') { return R.drawable.cambio_color_base }
             else if(carta[2] == '4') { return R.drawable.mas_cuatro_base }
         }
-        Toast.makeText(applicationContext, "La carta no existe", Toast.LENGTH_SHORT).show()
         return R.drawable.cambio_color_verde
     }
 
@@ -299,6 +298,8 @@ class TableroActivity : AppCompatActivity() {
                 if (manoActual.size == 2) {
                     haDichoUnozar = true
                     Toast.makeText(applicationContext, "UNOZAR", Toast.LENGTH_SHORT).show()
+                    buttonPedirUno.setTextColor(0xFFFFFFF)
+                    buttonPedirUno.setBackgroundColor(0x4C4845)
                 } else
                     Toast.makeText(applicationContext, "No puedes", Toast.LENGTH_SHORT).show()
             }
@@ -439,6 +440,11 @@ class TableroActivity : AppCompatActivity() {
                                     Toast.makeText(applicationContext, "Carta robada", Toast.LENGTH_SHORT).show()
                                     robadaCarta = true
                                     done = true
+                                    if (haDichoUnozar) {
+                                        haDichoUnozar = false
+                                        buttonPedirUno.setTextColor(0x000000)
+                                        buttonPedirUno.setBackgroundColor(0xFF7D55)
+                                    }
                                 } else {
                                     Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
                                     done = true
@@ -456,8 +462,11 @@ class TableroActivity : AppCompatActivity() {
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                 if (response.code() == 200) {
                                     session = response.body()?.token.toString()
-                                    haDichoUnozar = false
-                                    Toast.makeText(applicationContext, "Carta puesta", Toast.LENGTH_SHORT).show()
+                                    if (haDichoUnozar) {
+                                        haDichoUnozar = false
+                                        buttonPedirUno.setTextColor(0x000000)
+                                        buttonPedirUno.setBackgroundColor(0xFF7D55)
+                                    }
                                     nombreRecordado = ""
                                     record = 0
                                     recordCambiado = true
@@ -498,7 +507,6 @@ class TableroActivity : AppCompatActivity() {
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                 if (response.code() == 200) {
                                     session = response.body()?.token.toString()
-                                    Toast.makeText(applicationContext, getString(R.string.quit_game_success), Toast.LENGTH_SHORT).show()
                                     val intent = Intent().apply { putExtra("session", response.body()!!.token) }
                                     setResult(Activity.RESULT_OK, intent)
                                     finish()
@@ -526,9 +534,12 @@ class TableroActivity : AppCompatActivity() {
                                             var mensaje = "DERROTA"
                                             if (winner == myPos) mensaje = "¡¡VICTORIA!!"
                                             builder.setTitle(mensaje)
-                                            builder.setPositiveButton("Volver") { _: DialogInterface, _: Int -> finish() }
+                                            builder.setPositiveButton("Volver") { _: DialogInterface, _: Int ->
+                                                val intent = Intent().apply { putExtra("session", session) }
+                                                setResult(Activity.RESULT_OK, intent)
+                                                finish()
+                                            }
                                             builder.show()
-                                            finish()
                                         }
                                     }
                                     turn = response.body()!!.turn
@@ -569,7 +580,6 @@ class TableroActivity : AppCompatActivity() {
                                         runOnUiThread { cambiarCima() }
                                         cimaCambiada = false
                                     }
-
                                     if (recordCambiado) {
                                         runOnUiThread { image_record.setImageResource(record) }
                                         recordCambiado = false
@@ -606,20 +616,15 @@ class TableroActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (gone) {
-            when {
-                finished -> {
-                    val builder = AlertDialog.Builder(this@TableroActivity)
-                    var mensaje = "DERROTA"
-                    if (winner == myPos) mensaje = "¡¡VICTORIA!!"
-                    builder.setTitle(mensaje)
-                    builder.setPositiveButton("Volver") { _: DialogInterface, _: Int -> finish() }
-                    builder.show()
-                }
-                kicked -> Toast.makeText(applicationContext, getString(R.string.kicked), Toast.LENGTH_SHORT).show()
-            }
-        }
         val intent = Intent().apply { putExtra("session", session) }
         setResult(Activity.RESULT_OK, intent)
+    }
+
+    override fun onBackPressed() {
+        val builder = AlertDialog.Builder(this@TableroActivity)
+        builder.setTitle("¿Desea salir de la partida?")
+        builder.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int -> quit = true }
+        builder.setNegativeButton(getString(R.string.alert_negative_button)) {_: DialogInterface, _: Int -> }
+        builder.show()
     }
 }
