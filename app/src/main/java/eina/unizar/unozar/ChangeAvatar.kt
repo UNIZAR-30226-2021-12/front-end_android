@@ -53,9 +53,6 @@ class ChangeAvatar : AppCompatActivity() {
                             avatar_four.setImageResource(avatars[(response.body()!!.unlockedAvatars[3])])
                             avatar_four.setOnClickListener { changeAvatar(response.body()!!.unlockedAvatars[3]) }
                         }
-                    } else {
-                        //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                     }
                 }
             })
@@ -88,8 +85,7 @@ class ChangeAvatar : AppCompatActivity() {
                                 Toast.makeText(applicationContext, getString(R.string.avatar_change_success), Toast.LENGTH_LONG).show()
                                 finish()
                             } else {
-                                //Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()
-                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()
                             }
                         }
                     })

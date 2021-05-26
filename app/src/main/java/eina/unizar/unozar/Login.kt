@@ -19,7 +19,7 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        RetrofitClient.instance.authentication(LoginUser("735976@unizar.es", "alberto"))
+        RetrofitClient.instance.authentication(LoginUser("735976@unizar.es", "gato"))
             .enqueue(object : Callback<TokenResponse> {
                 override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
@@ -29,8 +29,7 @@ class Login : AppCompatActivity() {
                         intent.putExtra("session", response.body()?.token)
                         startActivity(intent)
                     } else {
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                        //Toast.makeText(applicationContext, getString(R.string.bad_login_response), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, getString(R.string.bad_login_response), Toast.LENGTH_LONG).show()
                     }
                 }
             })
@@ -51,8 +50,7 @@ class Login : AppCompatActivity() {
                             intent.putExtra("session", response.body()?.token)
                             startActivity(intent)
                         } else {
-                            Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                            //Toast.makeText(applicationContext, getString(R.string.bad_login_response), Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, getString(R.string.bad_login_response), Toast.LENGTH_LONG).show()
                         }
                     }
                 })

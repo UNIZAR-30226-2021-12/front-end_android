@@ -161,7 +161,7 @@ class Friends : AppCompatActivity() {
                                 intent.putExtra("avatar", response.body()!!.avatarId)
                                 intent.putExtra("alias", response.body()!!.alias)
                                 intent.putExtra("email", response.body()!!.email)
-                                intent.putExtra("total_matches", (response.body()!!.privateTotal) + response.body()!!.publicTotal).toString()
+                                intent.putExtra("total_matches", ((response.body()!!.privateTotal) + response.body()!!.publicTotal).toString())
                                 intent.putExtra("total_wins", (response.body()!!.privateWins + response.body()!!.publicWins).toString())
                                 intent.putExtra("friend_matches", response.body()!!.privateTotal.toString())
                                 intent.putExtra("friend_wins", response.body()!!.privateWins.toString())

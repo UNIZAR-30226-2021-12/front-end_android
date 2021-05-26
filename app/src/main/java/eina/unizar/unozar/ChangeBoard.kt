@@ -33,7 +33,7 @@ class ChangeBoard : AppCompatActivity() {
         RetrofitClient.instance.readPlayer(IdRequest(session.substring(0, 32)))
             .enqueue(object : Callback<PlayerInfo> {
                 override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
-                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                 } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                     if (response.code() == 200) {
                         if (response.body()!!.unlockedBoards.size > 1) {
@@ -46,9 +46,6 @@ class ChangeBoard : AppCompatActivity() {
                             board_three.setImageResource(boards[(response.body()!!.unlockedBoards[2])])
                             board_three.setOnClickListener { changeBoard(response.body()!!.unlockedBoards[2]) }
                         }
-                    } else {
-                        //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                     }
                 }
             })
@@ -64,7 +61,7 @@ class ChangeBoard : AppCompatActivity() {
     }
 
     private fun changeBoard(i: Int) {
-        if (i == owned) Toast.makeText(applicationContext, getString(R.string.avatar_in_use), Toast.LENGTH_LONG).show()
+        if (i == owned) Toast.makeText(applicationContext, getString(R.string.avatar_in_use), Toast.LENGTH_SHORT).show()
         else {
             val check = AlertDialog.Builder(this)
             check.setTitle(getString(R.string.board_change_alert_message))
@@ -72,16 +69,16 @@ class ChangeBoard : AppCompatActivity() {
                 RetrofitClient.instance.updatePlayer(UpdateRequest(10, null, null, null, session, i, 10))
                     .enqueue(object : Callback<TokenResponse> {
                         override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                         } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                             if (response.code() == 200) {
                                 val intent = Intent().apply { putExtra("session", response.body()!!.token) }
                                 setResult(Activity.RESULT_OK, intent)
-                                Toast.makeText(applicationContext, getString(R.string.board_change_success), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, getString(R.string.board_change_success), Toast.LENGTH_SHORT).show()
                                 finish()
                             } else {
-                                //Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()
-                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                //Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
                             }
                         }
                     })

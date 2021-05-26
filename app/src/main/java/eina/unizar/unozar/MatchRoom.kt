@@ -272,8 +272,7 @@ class MatchRoom : AppCompatActivity() {
             setResult(Activity.RESULT_OK, data)
             finish()
         } else {
-            val intent = Intent().apply { putExtra("session", session) }
-            setResult(Activity.RESULT_OK, intent)
+            setResult(Activity.RESULT_OK, data)
             finish()
         }
     }

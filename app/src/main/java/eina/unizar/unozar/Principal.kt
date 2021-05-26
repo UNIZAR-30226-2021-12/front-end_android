@@ -356,7 +356,7 @@ class Principal : AppCompatActivity() {
         choose.show()
     }
 
-    fun searchPublic() {
+    private fun searchPublic() {
         val numP = AlertDialog.Builder(this)
         val numPlayers = arrayOf("2", "3", "4")
         numP.setTitle(getString(R.string.number_of_players))

@@ -93,7 +93,6 @@ class Tienda : AppCompatActivity() {
                             money.text = (myMoney - avatarPrice).toString()
                             setResult(Activity.RESULT_OK, intent)
                             Toast.makeText(applicationContext, getString(R.string.avatar_change_success), Toast.LENGTH_LONG).show()
-                            finish()
                         } else {
                             Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()
                         }
@@ -117,7 +116,6 @@ class Tienda : AppCompatActivity() {
                             money.text = (myMoney - boardPrice).toString()
                             setResult(Activity.RESULT_OK, intent)
                             Toast.makeText(applicationContext, getString(R.string.avatar_change_success), Toast.LENGTH_LONG).show()
-                            finish()
                         } else {
                             Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()
                         }
@@ -141,7 +139,6 @@ class Tienda : AppCompatActivity() {
                             money.text = (myMoney - cardPrice).toString()
                             setResult(Activity.RESULT_OK, intent)
                             Toast.makeText(applicationContext, getString(R.string.avatar_change_success), Toast.LENGTH_LONG).show()
-                            finish()
                         } else {
                             Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()
                         }
