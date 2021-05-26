@@ -114,6 +114,9 @@
     <string name="bad_read_response">Couldn\'t read your account info</string>
     <string name="bad_play_card_response">Error while playing that card, try again</string>
     <string name="price_already_collected">Daily price already collected</string>
+    <string name="bad_friend_add_response">Failed to add friend</string>
+    <string name="bad_delete_friend_response">Failed to delete friend</string>
+    <string name="bad_friend_profile_response">Failed to access your friend\'s profile</string>
     <!-- SERVER CALL SUCCESS -->
     <string name="email_change_success">Email address updated successfully</string>
     <string name="password_change_success">Password updated successfully</string>

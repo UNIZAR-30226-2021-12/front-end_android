@@ -60,8 +60,7 @@ class ChooseFriend : AppCompatActivity() {
         RetrofitClient.instance.getFriends(TokenRequest(session))
             .enqueue(object : Callback<FriendsListResponse> {
                 override fun onFailure(call: Call<FriendsListResponse>, t: Throwable) {
-                    //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<FriendsListResponse>, response: Response<FriendsListResponse>) {
                     if (response.code() == 200) {
                         var i = 0

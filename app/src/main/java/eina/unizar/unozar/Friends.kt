@@ -64,7 +64,7 @@ class Friends : AppCompatActivity() {
         RetrofitClient.instance.getFriends(TokenRequest(session))
             .enqueue(object : Callback<FriendsListResponse> {
                 override fun onFailure(call: Call<FriendsListResponse>, t: Throwable) {
-                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                 } override fun onResponse(call: Call<FriendsListResponse>, response: Response<FriendsListResponse>) {
                     if (response.code() == 200) {
                         session = response.body()?.token.toString()
@@ -82,7 +82,7 @@ class Friends : AppCompatActivity() {
                         adapter = FriendsListAdapter(this@Friends, friends)
                         add_friend_list.adapter = adapter
                     } else {
-                        Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_SHORT).show()
                     }
                 }
             })
@@ -97,16 +97,13 @@ class Friends : AppCompatActivity() {
             RetrofitClient.instance.addFriend(AddFriendRequest(session, customLayout.inputCode.text.toString().trim()))
                 .enqueue(object : Callback<TokenResponse> {
                     override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                        //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                     } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                         if (response.code() == 200) {
                             session = response.body()?.token.toString()
-                            Toast.makeText(applicationContext, "Amigo añadido", Toast.LENGTH_LONG).show()
                             getFriendsRequest()
                         } else {
-                            //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                            Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, getString(R.string.bad_friend_add_response), Toast.LENGTH_SHORT).show()
                         }
                     }
                 })
@@ -137,15 +134,13 @@ class Friends : AppCompatActivity() {
                     RetrofitClient.instance.deleteFriend(AddFriendRequest(session, friends[info.position].id.toString()))
                         .enqueue(object : Callback<TokenResponse> {
                             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                                //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                                Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                 if (response.code() == 200) {
                                     session = response.body()?.token.toString()
                                     getFriendsRequest()
                                 } else {
-                                    //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                                    Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                    Toast.makeText(applicationContext, getString(R.string.bad_delete_friend_response), Toast.LENGTH_SHORT).show()
                                 }
                             }
                         })
@@ -159,7 +154,7 @@ class Friends : AppCompatActivity() {
                 RetrofitClient.instance.readPlayer(IdRequest(friends[info.position].id.toString()))
                     .enqueue(object : Callback<PlayerInfo> {
                         override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
-                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                         } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                             if (response.code() == 200) {
                                 val intent = Intent(this@Friends, FriendProfile::class.java)
@@ -172,8 +167,7 @@ class Friends : AppCompatActivity() {
                                 intent.putExtra("friend_wins", response.body()!!.privateWins.toString())
                                 startActivityForResult(intent, normalCode)
                             } else {
-                                //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
-                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, getString(R.string.bad_friend_profile_response), Toast.LENGTH_SHORT).show()
                             }
                         }
                     })

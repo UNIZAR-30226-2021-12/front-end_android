@@ -113,6 +113,9 @@
     <string name="bad_read_response">No se han podido cargar los datos de su cuenta</string>
     <string name="bad_play_card_response">Error al jugar la carta, inténtelo de nuevo</string>
     <string name="price_already_collected">Ya ha recogido su premio de hoy</string>
+    <string name="bad_friend_add_response">Error al añadir amigo</string>
+    <string name="bad_delete_friend_response">Error al eliminar amigo</string>
+    <string name="bad_friend_profile_response">Error al acceder al perfil de su amigo</string>
     <!-- SERVER CALL SUCCESS -->
     <string name="email_change_success">Ha actualizado su dirección de correo electrónico con éxito</string>
     <string name="password_change_success">Ha actualizado su contraseña con éxito</string>
