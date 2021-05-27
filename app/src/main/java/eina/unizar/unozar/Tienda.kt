@@ -70,14 +70,14 @@ class Tienda : AppCompatActivity() {
                         var l = 1
                         for (i in btn.indices) {
                             when {
-                                i < 3 && j in response.body()?.unlockedAvatars!!.indices -> {
-                                    if (items[i] == (response.body()?.unlockedAvatars?.get(j) ?: 10)) {
+                                i < 3 -> {
+                                    if (items[i] == response.body()?.unlockedAvatars?.get(j) ?: 10) {
                                         btn[i].visibility = GONE
                                         txt[i].text = getString(R.string.already_purchased)
                                         j++
                                     }
                                 }
-                                i < 5 && k in response.body()?.unlockedBoards!!.indices -> {
+                                i < 5 -> {
                                     if (items[i] == response.body()?.unlockedBoards?.get(k) ?: 10) {
                                         btn[i].visibility = GONE
                                         txt[i].text = getString(R.string.already_purchased)
@@ -85,7 +85,7 @@ class Tienda : AppCompatActivity() {
                                     }
                                 }
                                 else -> {
-                                    if (l in response.body()?.unlockedCards!!.indices && items[i] == response.body()?.unlockedCards?.get(l) ?: 10) {
+                                    if (items[i] == response.body()?.unlockedCards?.get(l) ?: 10) {
                                         btn[i].visibility = GONE
                                         txt[i].text = getString(R.string.already_purchased)
                                         l++
