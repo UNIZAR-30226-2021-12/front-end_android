@@ -262,6 +262,13 @@ class TableroActivity : AppCompatActivity() {
         }
     }
 
+    private fun sePuedePoner (carta: String) :Boolean {
+        if (cimaActual[0].isDigit() && cimaActual[0] == carta[0]) return true
+        else if ((cimaActual[1] != 'X' && cimaActual[1] == carta[1]) || carta[1] == 'X') return true
+        else if (cimaActual[2] != 'X' && cimaActual[2] == carta[2]) return true
+        return false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tablero)
@@ -283,31 +290,39 @@ class TableroActivity : AppCompatActivity() {
         buttonPoner.setOnClickListener {
             pause = false
             if(miTurno && !cartaPuesta) {
-                if (cimaActual[0].isDigit() && cimaActual[0] == nombreRecordado[0])
+                if (sePuedePoner(nombreRecordado)) {
+                    cartaPuesta = true
                     ponerCarta()
-                else if ((cimaActual[1] != 'X' && cimaActual[1] == nombreRecordado[1]) || nombreRecordado[1] == 'X')
-                    ponerCarta()
-                else if (cimaActual[2] != 'X' && cimaActual[2] == nombreRecordado[2])
-                    ponerCarta()
+                }
                 else
                     Toast.makeText(applicationContext, getString(R.string.cant_play), Toast.LENGTH_SHORT).show()
             }
         }
         buttonPedirUno.setOnClickListener{
-            if(miTurno) {
-                if (manoActual.size == 2) {
+            if(miTurno && !cartaPuesta) {
+                if (haDichoUnozar)
+                    Toast.makeText(applicationContext, "Ya lo has pulsado", Toast.LENGTH_SHORT).show()
+                else if (manoActual.size == 2) {
                     haDichoUnozar = true
                     Toast.makeText(applicationContext, "UNOZAR", Toast.LENGTH_SHORT).show()
-                    buttonPedirUno.setTextColor(0xFFFFFFF)
-                    buttonPedirUno.setBackgroundColor(0x4C4845)
+                    buttonPedirUno.setBackgroundColor(resources.getColor(R.color.unozar_pressed))
                 } else
                     Toast.makeText(applicationContext, "No puedes", Toast.LENGTH_SHORT).show()
             }
         }
         buttonRobarCarta.setOnClickListener{
             if(miTurno && !robadaCarta) {
-                pedirRobada = true
-                pause = false
+                var robar = true
+                var i = 0
+                while (robar && i in manoActual.indices) {
+                    robar = sePuedePoner(manoActual[i])
+                    i++
+                }
+                if (robar) {
+                    pedirRobada = true
+                    pause = false
+                } else
+                    Toast.makeText(applicationContext, "No puedes", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -442,8 +457,7 @@ class TableroActivity : AppCompatActivity() {
                                     done = true
                                     if (haDichoUnozar) {
                                         haDichoUnozar = false
-                                        buttonPedirUno.setTextColor(0x000000)
-                                        buttonPedirUno.setBackgroundColor(0xFF7D55)
+                                        buttonPedirUno.setBackgroundColor(resources.getColor(R.color.unozar_button))
                                     }
                                 } else {
                                     Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
@@ -464,8 +478,7 @@ class TableroActivity : AppCompatActivity() {
                                     session = response.body()?.token.toString()
                                     if (haDichoUnozar) {
                                         haDichoUnozar = false
-                                        buttonPedirUno.setTextColor(0x000000)
-                                        buttonPedirUno.setBackgroundColor(0xFF7D55)
+                                        buttonPedirUno.setBackgroundColor(resources.getColor(R.color.unozar_button))
                                     }
                                     nombreRecordado = ""
                                     record = 0
@@ -607,7 +620,13 @@ class TableroActivity : AppCompatActivity() {
         popup.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.pause-> if(miTurno) pause = true
-                R.id.exit-> quit = true
+                R.id.exit-> {
+                    val builder = AlertDialog.Builder(this@TableroActivity)
+                    builder.setTitle("¿Desea salir de la partida?")
+                    builder.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int -> quit = true }
+                    builder.setNegativeButton(getString(R.string.alert_negative_button)) {_: DialogInterface, _: Int -> }
+                    builder.show()
+                }
             }
             true
         }

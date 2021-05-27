@@ -96,7 +96,10 @@
             android:gravity="center"
             android:onClick="goToChangeEmail"
             android:text="@string/change_email"
-            android:textColor="#000000" />
+            android:backgroundTint="#2196F3"
+            android:backgroundTintMode="src_over"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/change_password"
@@ -108,7 +111,10 @@
             android:gravity="center"
             android:onClick="goToChangePassword"
             android:text="@string/change_password"
-            android:textColor="#000000" />
+            android:backgroundTint="#2196F3"
+            android:backgroundTintMode="src_over"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/change_avatar"
@@ -120,7 +126,10 @@
             android:gravity="center"
             android:onClick="goToChangeAvatar"
             android:text="@string/change_avatar"
-            android:textColor="#000000" />
+            android:backgroundTint="#2196F3"
+            android:backgroundTintMode="src_over"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/show1"
@@ -275,7 +284,11 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="deleteAccount"
-            android:text="@string/delete_account" />
+            android:text="@string/delete_account"
+            android:backgroundTint="#FF0000"
+            android:backgroundTintMode="src_over"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
     </LinearLayout>
 </ScrollView>

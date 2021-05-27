@@ -198,8 +198,13 @@
             style="@android:style/Widget.Holo.Button"
             android:layout_width="128dp"
             android:layout_height="50dp"
-            android:layout_weight="1"
             android:layout_marginBottom="4dp"
-            android:text="@string/go_back" />
+            android:layout_weight="1"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#2196F3"
+            android:backgroundTintMode="src_over"
+            android:text="@string/go_back"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
     </LinearLayout>
 </ScrollView>

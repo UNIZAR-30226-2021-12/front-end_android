@@ -62,22 +62,26 @@ class Principal : AppCompatActivity() {
                                     } override fun onResponse(call: Call<RoomInfoResponse>, response1: Response<RoomInfoResponse>) {
                                         if (response1.code() == 200) {
                                             session = response1.body()?.token.toString()
-                                            for (i in response1.body()!!.playersIds.indices) {
-                                                if (response1.body()!!.playersIds[i].equals(session.substring(0, 32))) myPos = i
-                                                if(!(response1.body()!!.playersIds[i].equals("EMPTY"))) {
-                                                    actualizarJugador(response1.body()!!.playersIds[i], i)
+                                            if (response1.body()!!.gameStarted) {
+                                                for (i in response1.body()!!.playersIds.indices) {
+                                                    if (response1.body()!!.playersIds[i].equals(session.substring(0, 32))) myPos = i
+                                                    if(!(response1.body()!!.playersIds[i].equals("EMPTY"))) {
+                                                        actualizarJugador(response1.body()!!.playersIds[i], i)
+                                                    }
                                                 }
+                                                val intent =
+                                                    Intent(this@Principal, TableroActivity::class.java)
+                                                intent.putExtra("session", response1.body()!!.token)
+                                                intent.putExtra("ids", ids.toTypedArray())
+                                                intent.putExtra("myPosition", myPos)
+                                                intent.putExtra("avatars", avatarIds.values.map { it.toString() }.toTypedArray())
+                                                intent.putExtra("names", names.values.toTypedArray())
+                                                intent.putExtra("board", response.body()!!.boardId)
+                                                intent.putExtra("card", response.body()!!.cardId)
+                                                startActivityForResult(intent, normalCode)
+                                            } else {
+
                                             }
-                                            val intent =
-                                                Intent(this@Principal, TableroActivity::class.java)
-                                            intent.putExtra("session", response1.body()!!.token)
-                                            intent.putExtra("ids", ids.toTypedArray())
-                                            intent.putExtra("myPosition", myPos)
-                                            intent.putExtra("avatars", avatarIds.values.map { it.toString() }.toTypedArray())
-                                            intent.putExtra("names", names.values.toTypedArray())
-                                            intent.putExtra("board", response.body()!!.boardId)
-                                            intent.putExtra("card", response.body()!!.cardId)
-                                            startActivityForResult(intent, normalCode)
                                         } else {
                                             Toast.makeText(applicationContext, response1.code(), Toast.LENGTH_SHORT).show()
                                         }
