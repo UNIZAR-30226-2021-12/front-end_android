@@ -62,10 +62,8 @@ class Principal : AppCompatActivity() {
                                             session = response1.body()?.token.toString()
                                             if (response1.body()!!.gameStarted) {
                                                 for (i in response1.body()!!.playersIds.indices) {
+                                                    actualizarJugador(response1.body()!!.playersIds[i], i)
                                                     if (response1.body()!!.playersIds[i].equals(session.substring(0, 32))) myPos = i
-                                                    if(!(response1.body()!!.playersIds[i].equals("EMPTY"))) {
-                                                        actualizarJugador(response1.body()!!.playersIds[i], i)
-                                                    }
                                                 }
                                                 val intent =
                                                     Intent(this@Principal, TableroActivity::class.java)
@@ -113,6 +111,7 @@ class Principal : AppCompatActivity() {
     }
 
     private fun actualizarJugador(id: String, pos: Int) {
+        ids.add(id)
         if (id.equals("BOT")) {
             avatarIds = avatarIds + Pair(pos, 1)
             names = names + Pair(pos, "BOT")

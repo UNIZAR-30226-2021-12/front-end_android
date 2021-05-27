@@ -290,10 +290,11 @@ class TableroActivity : AppCompatActivity() {
 
         buttonPoner.setOnClickListener {
             paused = false
-            if(miTurno && !cartaPuesta) {
+            if(miTurno) {
                 if (sePuedePoner(nombreRecordado)) {
-                    cartaPuesta = true
-                    Toast.makeText(applicationContext, getString(R.string.wrong_time), Toast.LENGTH_SHORT).show()
+                    if (haDichoUnozar && manoActual.size > 2) {
+                        Toast.makeText(applicationContext, getString(R.string.wrong_time), Toast.LENGTH_SHORT).show()
+                    }
                     ponerCarta()
                 }
                 else
@@ -301,13 +302,12 @@ class TableroActivity : AppCompatActivity() {
             }
         }
         buttonPedirUno.setOnClickListener{
-            if(miTurno && !cartaPuesta) {
+            if(miTurno) {
                 when {
                     haDichoUnozar -> Toast.makeText(applicationContext, getString(R.string.already_pressed), Toast.LENGTH_SHORT).show()
                     else -> {
                         haDichoUnozar = true
                         Toast.makeText(applicationContext, getString(R.string.app_name), Toast.LENGTH_SHORT).show()
-                        buttonPedirUno.setBackgroundColor(resources.getColor(R.color.unozar_pressed))
                     }
                 }
             }
@@ -320,6 +320,7 @@ class TableroActivity : AppCompatActivity() {
                     draw = !sePuedePoner(manoActual[i])
                     i++
                 }
+                if (cimaActual[2] == '2' || cimaActual[2] == '4') draw = true
                 if (draw) {
                     pedirRobada = true
                     paused = false
@@ -332,8 +333,6 @@ class TableroActivity : AppCompatActivity() {
     private var haDichoUnozar = false
 
     private var pedirRobada = false
-
-    private var cartaPuesta = false
 
     private lateinit var colorSelected: String
     private fun ponerCarta() {
@@ -459,7 +458,6 @@ class TableroActivity : AppCompatActivity() {
                                     done = true
                                     if (haDichoUnozar) {
                                         haDichoUnozar = false
-                                        buttonPedirUno.setBackgroundColor(resources.getColor(R.color.unozar_button))
                                     }
                                 } else if (response.code() == 410) {
                                     Toast.makeText(applicationContext, getString(R.string.kicked), Toast.LENGTH_SHORT).show()
@@ -469,6 +467,10 @@ class TableroActivity : AppCompatActivity() {
                                     }
                                     setResult(Activity.RESULT_OK, intent)
                                     finish()
+                                } else  if (response.code() == 405) {
+                                    Toast.makeText(applicationContext, getString(R.string.can_play), Toast.LENGTH_SHORT).show()
+                                    robadaCarta = true
+                                    done = true
                                 } else {
                                     Toast.makeText(applicationContext, getString(R.string.login_detected_on_another_device), Toast.LENGTH_SHORT).show()
                                     val intent = Intent().apply {
@@ -492,10 +494,8 @@ class TableroActivity : AppCompatActivity() {
                                 when {
                                     response.code() == 200 -> {
                                         session = response.body()?.token.toString()
-                                        cartaPuesta = false
                                         if (haDichoUnozar) {
                                             haDichoUnozar = false
-                                            buttonPedirUno.setBackgroundColor(resources.getColor(R.color.unozar_button))
                                         }
                                         nombreRecordado = ""
                                         record = 0
