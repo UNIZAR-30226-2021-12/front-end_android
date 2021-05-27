@@ -50,7 +50,7 @@ class PasswordChange : AppCompatActivity() {
                     })
             }
         }
-        check.setNegativeButton("No") { _: DialogInterface, _: Int -> }
+        check.setNegativeButton(getString(R.string.alert_negative_button)) { _: DialogInterface, _: Int -> }
         check.show()
     }
 

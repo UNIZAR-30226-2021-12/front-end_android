@@ -46,14 +46,12 @@ class Principal : AppCompatActivity() {
         ids = ArrayList()
         avatarIds = mapOf()
         names = mapOf()
-        d("token", session.substring(0,32))
         RetrofitClient.instance.readPlayer(IdRequest(session.substring(0, 32)))
             .enqueue(object : Callback<PlayerInfo> {
                 override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                     if (response.code() == 200) {
-                        d("gameId :", response.body()!!.gameId)
                         if(!(response.body()!!.gameId.equals("NONE"))) {
                             RetrofitClient.instance.readRoom(TokenRequest(session))
                                 .enqueue(object : Callback<RoomInfoResponse> {
@@ -80,7 +78,18 @@ class Principal : AppCompatActivity() {
                                                 intent.putExtra("card", response.body()!!.cardId)
                                                 startActivityForResult(intent, normalCode)
                                             } else {
-
+                                                RetrofitClient.instance.quitMatch(TokenRequest(session))
+                                                    .enqueue(object : Callback<TokenResponse> {
+                                                        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                                                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                                                        } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                                                            if (response.code() == 200) {
+                                                                session = response.body()!!.token
+                                                            } else {
+                                                                Toast.makeText(applicationContext, getString(R.string.bad_quit_response), Toast.LENGTH_LONG).show()
+                                                            }
+                                                        }
+                                                    })
                                             }
                                         } else {
                                             Toast.makeText(applicationContext, response1.code(), Toast.LENGTH_SHORT).show()
@@ -88,9 +97,6 @@ class Principal : AppCompatActivity() {
                                     }
                                 })
                         }
-                    } else {
-                        //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                     }
                 }
             })
@@ -113,7 +119,7 @@ class Principal : AppCompatActivity() {
         }
         else {
             avatarIds = avatarIds + Pair(pos, 0)
-            names = names + Pair(pos, "Yo")
+            names = names + Pair(pos, getString(R.string.img))
             RetrofitClient.instance.readPlayer(IdRequest(id))
                 .enqueue(object : Callback<PlayerInfo> {
                     override fun onFailure(call: Call<PlayerInfo>, t: Throwable) {
@@ -122,8 +128,6 @@ class Principal : AppCompatActivity() {
                         if (response.code() == 200) {
                             avatarIds = avatarIds + Pair(pos, response.body()!!.avatarId)
                             names = names + Pair(pos, response.body()!!.alias)
-                        } else {
-                            Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_SHORT).show()
                         }
                     }
                 })
@@ -154,9 +158,6 @@ class Principal : AppCompatActivity() {
                                 intent.putExtra("friend_matches", response.body()?.privateTotal.toString())
                                 intent.putExtra("friend_wins", response.body()?.privateWins.toString())
                                 startActivityForResult(intent, normalCode)
-                            } else {
-                                //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
-                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                             }
                         }
                     })
@@ -172,8 +173,6 @@ class Principal : AppCompatActivity() {
                                 intent.putExtra("session", session)
                                 intent.putExtra("owned", response.body()!!.boardId)
                                 startActivityForResult(intent, normalCode)
-                            } else {
-                                Toast.makeText(applicationContext, getString(R.string.bad_quit_response), Toast.LENGTH_LONG).show()
                             }
                         }
                     })
@@ -189,16 +188,11 @@ class Principal : AppCompatActivity() {
                                 intent.putExtra("session", session)
                                 intent.putExtra("owned", response.body()!!.cardId)
                                 startActivityForResult(intent, normalCode)
-                            } else {
-                                Toast.makeText(applicationContext, getString(R.string.bad_quit_response), Toast.LENGTH_LONG).show()
                             }
                         }
                     })
             }
-            R.id.action_logout -> {
-                val intent = Intent(this, Login::class.java)
-                startActivity(intent)
-            }
+            R.id.action_logout -> { finish() }
             R.id.action_friends -> {
                 val intent = Intent(this, Friends::class.java)
                 intent.putExtra("session", session)
@@ -212,14 +206,13 @@ class Principal : AppCompatActivity() {
                         } override fun onResponse(call: Call<GiftResponse>, response: Response<GiftResponse>) {
                             if (response.code() == 200) {
                                 session = response.body()?.token.toString()
-                                val premio = response.body()!!.gift.toString()
                                 val builder = AlertDialog.Builder(this@Principal)
                                 with(builder)
                                 {
-                                    setTitle("¡Enhorabuena!")
-                                    setMessage("Ha ganado $premio monedas")
+                                    setTitle(getString(R.string.congratulations))
+                                    setMessage(getString(R.string.price_message, response.body()!!.gift.toString()))
                                     val neutralButtonClick = null
-                                    setPositiveButton("OK",neutralButtonClick)
+                                    setPositiveButton(getString(R.string.go_back),neutralButtonClick)
                                     show()
                                 }
                                 this@Principal.updateMoney()
@@ -235,6 +228,7 @@ class Principal : AppCompatActivity() {
                 intent.putExtra("money", myMoney)
                 startActivityForResult(intent, normalCode)
             }
+            /** BORRAR **/
             R.id.action_delete_game -> {
                 RetrofitClient.instance.quitMatch(TokenRequest(session))
                     .enqueue(object : Callback<TokenResponse> {
@@ -250,6 +244,7 @@ class Principal : AppCompatActivity() {
                         }
                     })
             }
+            /** BORRAR **/
             R.id.add_money -> {
                 RetrofitClient.instance.addMoney(TokenRequest(session))
                     .enqueue(object : Callback<Void> {
@@ -258,8 +253,6 @@ class Principal : AppCompatActivity() {
                         } override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.code() == 200) {
                                 updateMoney()
-                            } else {
-                                Toast.makeText(applicationContext, getString(R.string.bad_quit_response), Toast.LENGTH_LONG).show()
                             }
                         }
                     })
@@ -271,7 +264,7 @@ class Principal : AppCompatActivity() {
     private fun createMatch() {
         val choose = AlertDialog.Builder(this)
         choose.setTitle(getString(R.string.choose))
-        choose.setMessage(getString(R.string.private_match_dialog))
+        choose.setMessage(getString(R.string.create_match_dialog))
         choose.setPositiveButton(getString(R.string.pub)) { _: DialogInterface, _: Int ->
             val numP = AlertDialog.Builder(this)
             val numPlayers = arrayOf("2", "3", "4")
@@ -281,18 +274,16 @@ class Principal : AppCompatActivity() {
                 val code = AlertDialog.Builder(this)
                 val customLayout: View = layoutInflater.inflate(R.layout.custom_alertdialog, null)
                 code.setView(customLayout)
-                code.setTitle("Determine la apuesta")
+                code.setTitle(getString(R.string.set_initial_bet))
                 code.setPositiveButton(getString(R.string.create_button)) { _: DialogInterface, _: Int ->
                     val myBet = customLayout.inputCode.text.toString().trim().toInt()
                     if (myBet <= myMoney) {
                         RetrofitClient.instance.createMatch(CreateMatchRequest(false, n, 0, myBet, session))
                             .enqueue(object : Callback<TokenResponse> {
                                 override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                                    //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                                 } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                     if (response.code() == 200) {
-                                        Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
                                         val intent = Intent(this@Principal, MatchRoom::class.java)
                                         intent.putExtra("numPlayers", n)
                                         intent.putExtra("numBots", 0)
@@ -300,9 +291,6 @@ class Principal : AppCompatActivity() {
                                         intent.putExtra("public", true)
                                         intent.putExtra("bet", myBet)
                                         startActivityForResult(intent, normalCode)
-                                    } else {
-                                        //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                                     }
                                 }
                             })
@@ -333,20 +321,15 @@ class Principal : AppCompatActivity() {
                     RetrofitClient.instance.createMatch(CreateMatchRequest(true, n, b, 0, session))
                         .enqueue(object : Callback<TokenResponse> {
                             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                                //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                                Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                 if (response.code() == 200) {
-                                    Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
                                     val intent = Intent(this@Principal, MatchRoom::class.java)
                                     intent.putExtra("numPlayers", n)
                                     intent.putExtra("numBots", b)
                                     intent.putExtra("session", response.body()?.token)
                                     intent.putExtra("public", false)
                                     startActivityForResult(intent, normalCode)
-                                } else {
-                                    //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                                    Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
                                 }
                             }
                         })
@@ -372,15 +355,12 @@ class Principal : AppCompatActivity() {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                     } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                         if (response.code() == 200) {
-                            Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
                             val intent = Intent(this@Principal, MatchRoom::class.java)
                             intent.putExtra("numPlayers", n)
                             intent.putExtra("numBots", 0)
                             intent.putExtra("session", response.body()?.token)
                             intent.putExtra("public", true)
                             startActivityForResult(intent, normalCode)
-                        } else {
-                            Toast.makeText(applicationContext, getString(R.string.bad_creation_response), Toast.LENGTH_LONG).show()
                         }
                     }
                 })
@@ -388,7 +368,7 @@ class Principal : AppCompatActivity() {
         numP.show()
     }
 
-    fun joinWithCode() {
+    private fun joinWithCode() {
         val code = AlertDialog.Builder(this)
         val customLayout: View = layoutInflater.inflate(R.layout.custom_alertdialog, null)
         code.setView(customLayout)
@@ -397,18 +377,15 @@ class Principal : AppCompatActivity() {
             RetrofitClient.instance.joinPrivate(JoinPrivateRequest(customLayout.inputCode.text.toString().trim(), session))
                 .enqueue(object : Callback<TokenResponse> {
                     override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                        //Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                     } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                         if (response.code() == 200) {
-                            Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
                             val intent = Intent(this@Principal, MatchRoom::class.java)
                             intent.putExtra("session", response.body()?.token)
                             intent.putExtra("public", false)
                             startActivityForResult(intent, normalCode)
                         } else {
-                            //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                            Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, getString(R.string.cant_join), Toast.LENGTH_LONG).show()
                         }
                     }
                 })
@@ -427,10 +404,6 @@ class Principal : AppCompatActivity() {
                         money.text = response.body()?.money.toString()
                         myMoney = response.body()!!.money
                     }
-                    else {
-                        //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                    }
                 }
             })
     }
@@ -438,6 +411,9 @@ class Principal : AppCompatActivity() {
     override fun onActivityResult (requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == normalCode) {
             session = data!!.getStringExtra("session").toString()
+            if (data.getBooleanExtra("logout", false)) {
+                finish()
+            }
             updateMoney()
         } else { super.onActivityResult(requestCode, resultCode, data) }
     }

@@ -120,8 +120,8 @@ class Friends : AppCompatActivity() {
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View?, menuInfo: ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
-        menu.add(Menu.NONE, profile, Menu.NONE, "Ver perfil")
-        menu.add(Menu.NONE, delete, Menu.NONE, "Eliminar")
+        menu.add(Menu.NONE, profile, Menu.NONE, getString(R.string.see_profile))
+        menu.add(Menu.NONE, delete, Menu.NONE, getString(R.string.delete_friend))
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {

@@ -63,6 +63,7 @@ class TableroActivity : AppCompatActivity() {
     private var gone = false
     private var done = true
     private var pause = false
+    private var paused = false
     private var quit = false
     private var kicked = false
     private var ponerCarta = false
@@ -288,10 +289,11 @@ class TableroActivity : AppCompatActivity() {
         actualizar()
 
         buttonPoner.setOnClickListener {
-            pause = false
+            paused = false
             if(miTurno && !cartaPuesta) {
                 if (sePuedePoner(nombreRecordado)) {
                     cartaPuesta = true
+                    Toast.makeText(applicationContext, getString(R.string.wrong_time), Toast.LENGTH_SHORT).show()
                     ponerCarta()
                 }
                 else
@@ -300,29 +302,29 @@ class TableroActivity : AppCompatActivity() {
         }
         buttonPedirUno.setOnClickListener{
             if(miTurno && !cartaPuesta) {
-                if (haDichoUnozar)
-                    Toast.makeText(applicationContext, "Ya lo has pulsado", Toast.LENGTH_SHORT).show()
-                else if (manoActual.size == 2) {
-                    haDichoUnozar = true
-                    Toast.makeText(applicationContext, "UNOZAR", Toast.LENGTH_SHORT).show()
-                    buttonPedirUno.setBackgroundColor(resources.getColor(R.color.unozar_pressed))
-                } else
-                    Toast.makeText(applicationContext, "No puedes", Toast.LENGTH_SHORT).show()
+                when {
+                    haDichoUnozar -> Toast.makeText(applicationContext, getString(R.string.already_pressed), Toast.LENGTH_SHORT).show()
+                    else -> {
+                        haDichoUnozar = true
+                        Toast.makeText(applicationContext, getString(R.string.app_name), Toast.LENGTH_SHORT).show()
+                        buttonPedirUno.setBackgroundColor(resources.getColor(R.color.unozar_pressed))
+                    }
+                }
             }
         }
         buttonRobarCarta.setOnClickListener{
             if(miTurno && !robadaCarta) {
-                var robar = true
+                var draw = true
                 var i = 0
-                while (robar && i in manoActual.indices) {
-                    robar = sePuedePoner(manoActual[i])
+                while (draw && i in manoActual.indices) {
+                    draw = !sePuedePoner(manoActual[i])
                     i++
                 }
-                if (robar) {
+                if (draw) {
                     pedirRobada = true
-                    pause = false
+                    paused = false
                 } else
-                    Toast.makeText(applicationContext, "No puedes", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, getString(R.string.can_play), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -354,25 +356,25 @@ class TableroActivity : AppCompatActivity() {
                         nombreRecordado = "XRC"
                         colorSelected = "R"
                         ponerCarta = true
-                        pause = false
+                        paused = false
                     }
                     else if(items[which].equals(getString(R.string.green)) && nombreRecordado == "XXC") {
                         nombreRecordado = "XGC"
                         colorSelected = "G"
                         ponerCarta = true
-                        pause = false
+                        paused = false
                     }
                     else if(items[which].equals(getString(R.string.blue)) && nombreRecordado == "XXC") {
                         nombreRecordado = "XBC"
                         colorSelected = "B"
                         ponerCarta = true
-                        pause = false
+                        paused = false
                     }
                     else if(items[which].equals(getString(R.string.yellow)) && nombreRecordado == "XXC") {
                         nombreRecordado = "XYC"
                         colorSelected = "Y"
                         ponerCarta = true
-                        pause = false
+                        paused = false
                     }
                     else if(items[which].equals(getString(R.string.red)) && nombreRecordado == "XX4") {
                         nombreRecordado = "XR4"
@@ -382,19 +384,19 @@ class TableroActivity : AppCompatActivity() {
                         nombreRecordado = "XG4"
                         colorSelected = "G"
                         ponerCarta = true
-                        pause = false
+                        paused = false
                     }
                     else if(items[which].equals(getString(R.string.blue)) && nombreRecordado == "XX4") {
                         nombreRecordado = "XB4"
                         colorSelected = "B"
                         ponerCarta = true
-                        pause = false
+                        paused = false
                     }
                     else if(items[which].equals(getString(R.string.yellow)) && nombreRecordado == "XX4") {
                         nombreRecordado = "XY4"
                         colorSelected = "Y"
                         ponerCarta = true
-                        pause = false
+                        paused = false
                     }
                 }
                 show()
@@ -402,7 +404,7 @@ class TableroActivity : AppCompatActivity() {
         }
         else {
             ponerCarta = true
-            pause = false
+            paused = false
         }
     }
 
@@ -459,9 +461,22 @@ class TableroActivity : AppCompatActivity() {
                                         haDichoUnozar = false
                                         buttonPedirUno.setBackgroundColor(resources.getColor(R.color.unozar_button))
                                     }
+                                } else if (response.code() == 410) {
+                                    Toast.makeText(applicationContext, getString(R.string.kicked), Toast.LENGTH_SHORT).show()
+                                    val intent = Intent().apply {
+                                        putExtra("session", session)
+                                        putExtra("logout", false)
+                                    }
+                                    setResult(Activity.RESULT_OK, intent)
+                                    finish()
                                 } else {
-                                    Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
-                                    done = true
+                                    Toast.makeText(applicationContext, getString(R.string.login_detected_on_another_device), Toast.LENGTH_SHORT).show()
+                                    val intent = Intent().apply {
+                                        putExtra("session", session)
+                                        putExtra("logout", true)
+                                    }
+                                    setResult(Activity.RESULT_OK, intent)
+                                    finish()
                                 }
                             }
                         })
@@ -474,37 +489,73 @@ class TableroActivity : AppCompatActivity() {
                             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                                 Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_SHORT).show()
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-                                if (response.code() == 200) {
-                                    session = response.body()?.token.toString()
-                                    if (haDichoUnozar) {
-                                        haDichoUnozar = false
-                                        buttonPedirUno.setBackgroundColor(resources.getColor(R.color.unozar_button))
+                                when {
+                                    response.code() == 200 -> {
+                                        session = response.body()?.token.toString()
+                                        cartaPuesta = false
+                                        if (haDichoUnozar) {
+                                            haDichoUnozar = false
+                                            buttonPedirUno.setBackgroundColor(resources.getColor(R.color.unozar_button))
+                                        }
+                                        nombreRecordado = ""
+                                        record = 0
+                                        recordCambiado = true
+                                        done = true
                                     }
-                                    nombreRecordado = ""
-                                    record = 0
-                                    recordCambiado = true
-                                    done = true
-                                } else {
-                                    Toast.makeText(applicationContext, "Quizás se haya caido el servidor", Toast.LENGTH_SHORT).show()
-                                    done = true
+                                    response.code() == 410 -> {
+                                        Toast.makeText(applicationContext, getString(R.string.kicked), Toast.LENGTH_SHORT).show()
+                                        val intent = Intent().apply {
+                                            putExtra("session", session)
+                                            putExtra("logout", false)
+                                        }
+                                        setResult(Activity.RESULT_OK, intent)
+                                        finish()
+                                    }
+                                    else -> {
+                                        Toast.makeText(applicationContext, getString(R.string.login_detected_on_another_device), Toast.LENGTH_SHORT).show()
+                                        val intent = Intent().apply {
+                                            putExtra("session", session)
+                                            putExtra("logout", true)
+                                        }
+                                        setResult(Activity.RESULT_OK, intent)
+                                        finish()
+                                    }
                                 }
                             }
                         })
                 } else if(pause && done) {
                     done = false
+                    pause = false
                     //Pedir robar carta al servidor
                     RetrofitClient.instance.pause(TokenRequest(session))
                         .enqueue(object : Callback<TokenResponse> {
                             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                                 Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-                                if (response.code() == 200) {
-                                    session = response.body()?.token.toString()
-                                    Toast.makeText(applicationContext, "Pausa", Toast.LENGTH_SHORT).show()
-                                    done = true
-                                } else {
-                                    Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
-                                    done = true
+                                when {
+                                    response.code() == 200 -> {
+                                        session = response.body()?.token.toString()
+                                        Toast.makeText(applicationContext, "Pausa", Toast.LENGTH_SHORT).show()
+                                        done = true
+                                    }
+                                    response.code() == 410 -> {
+                                        Toast.makeText(applicationContext, getString(R.string.kicked), Toast.LENGTH_SHORT).show()
+                                        val intent = Intent().apply {
+                                            putExtra("session", session)
+                                            putExtra("logout", false)
+                                        }
+                                        setResult(Activity.RESULT_OK, intent)
+                                        finish()
+                                    }
+                                    else -> {
+                                        Toast.makeText(applicationContext, getString(R.string.login_detected_on_another_device), Toast.LENGTH_SHORT).show()
+                                        val intent = Intent().apply {
+                                            putExtra("session", session)
+                                            putExtra("logout", true)
+                                        }
+                                        setResult(Activity.RESULT_OK, intent)
+                                        finish()
+                                    }
                                 }
                             }
                         })
@@ -518,92 +569,135 @@ class TableroActivity : AppCompatActivity() {
                             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                                 Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-                                if (response.code() == 200) {
-                                    session = response.body()?.token.toString()
-                                    val intent = Intent().apply { putExtra("session", response.body()!!.token) }
-                                    setResult(Activity.RESULT_OK, intent)
-                                    finish()
-                                } else {
-                                    Toast.makeText(applicationContext, getString(R.string.bad_quit_response), Toast.LENGTH_SHORT).show()
-                                    done = true
+                                when {
+                                    response.code() == 200 -> {
+                                        session = response.body()?.token.toString()
+                                        val intent = Intent().apply {
+                                            putExtra("session", response.body()!!.token)
+                                            putExtra("logout", false)
+                                        }
+                                        setResult(Activity.RESULT_OK, intent)
+                                        finish()
+                                    }
+                                    response.code() == 410 -> {
+                                        Toast.makeText(applicationContext, getString(R.string.kicked), Toast.LENGTH_SHORT).show()
+                                        val intent = Intent().apply {
+                                            putExtra("session", session)
+                                            putExtra("logout", false)
+                                        }
+                                        setResult(Activity.RESULT_OK, intent)
+                                        finish()
+                                    }
+                                    else -> {
+                                        Toast.makeText(applicationContext, getString(R.string.login_detected_on_another_device), Toast.LENGTH_SHORT).show()
+                                        val intent = Intent().apply {
+                                            putExtra("session", session)
+                                            putExtra("logout", true)
+                                        }
+                                        setResult(Activity.RESULT_OK, intent)
+                                        finish()
+                                    }
                                 }
                             }
                         })
-                } else if(done && !pause) {
+                } else if(done && !paused) {
                     done = false
                     RetrofitClient.instance.readGame(TokenRequest(session))
                         .enqueue(object : Callback<GameInfoResponse> {
                             override fun onFailure(call: Call<GameInfoResponse>, t: Throwable) {
                                 Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                             } override fun onResponse(call: Call<GameInfoResponse>, response: Response<GameInfoResponse>) {
-                                if (response.code() == 200) {
-                                    session = response.body()?.token.toString()
-                                    for (i in response.body()!!.playersNumCards.indices) {
-                                        if (response.body()!!.playersNumCards[i] == 0) {
-                                            finished = true
-                                            gone = true
-                                            winner = i
-                                            val builder = AlertDialog.Builder(this@TableroActivity)
-                                            var mensaje = "DERROTA"
-                                            if (winner == myPos) mensaje = "¡¡VICTORIA!!"
-                                            builder.setTitle(mensaje)
-                                            builder.setPositiveButton("Volver") { _: DialogInterface, _: Int ->
-                                                val intent = Intent().apply { putExtra("session", session) }
-                                                setResult(Activity.RESULT_OK, intent)
-                                                finish()
+                                when {
+                                    response.code() == 200 -> {
+                                        session = response.body()?.token.toString()
+                                        for (i in response.body()!!.playersNumCards.indices) {
+                                            if (response.body()!!.playersNumCards[i] == 0) {
+                                                finished = true
+                                                gone = true
+                                                winner = i
+                                                val builder = AlertDialog.Builder(this@TableroActivity)
+                                                var mensaje = "DERROTA"
+                                                if (winner == myPos) mensaje = "¡¡VICTORIA!!"
+                                                builder.setTitle(mensaje)
+                                                builder.setPositiveButton("Volver") { _: DialogInterface, _: Int ->
+                                                    val intent =
+                                                        Intent().apply { putExtra("session", session) }
+                                                    setResult(Activity.RESULT_OK, intent)
+                                                    finish()
+                                                }
+                                                builder.show()
                                             }
-                                            builder.show()
                                         }
-                                    }
-                                    turn = response.body()!!.turn
-                                    /*** Players info ***/
-                                    miTurno = response.body()!!.turn == myPos
+                                        turn = response.body()!!.turn
 
-                                    if (miTurno) {
-                                        runOnUiThread { your_turn.text = getString(R.string.your_turn) }
-                                    } else {
-                                        runOnUiThread { your_turn.text = getString(R.string.not_your_turn) }
-                                        //Reiniciar variables porque ya no es tu turno
-                                        robadaCarta = false
-                                    }
+                                        /*** Players info ***/
+                                        miTurno = response.body()!!.turn == myPos
 
-                                    manoNueva = response.body()!!.playerCards
-                                    comprobarManoNueva()
-                                    if (manoCambiada) {
-                                        cambiarMano()
-                                        your_cards.text =getString(R.string.your_cards, manoActual.size.toString())
-                                        runOnUiThread { anyadirCartas() }
-                                        manoCambiada = false
-                                    }
+                                        if (miTurno) {
+                                            runOnUiThread {
+                                                your_turn.text = getString(R.string.your_turn)
+                                            }
+                                        } else {
+                                            runOnUiThread {
+                                                your_turn.text = getString(R.string.not_your_turn)
+                                            }
+                                            //Reiniciar variables porque ya no es tu turno
+                                            robadaCarta = false
+                                        }
 
-                                    idJugadoresNuevos = response.body()!!.playersIds
-                                    numCartasJugadoresNuevos = response.body()!!.playersNumCards
-                                    comprobarIdsJugadores()
-                                    comprobarCartasJugadores()
-                                    if (jugadoresCambiados || numCartasJugadoresCambiados) {
-                                        cambiarJugadoresYCartas()
-                                        runOnUiThread { anyadirGamers() }
-                                        jugadoresCambiados = false
-                                        numCartasJugadoresCambiados = false
-                                    }
+                                        manoNueva = response.body()!!.playerCards
+                                        comprobarManoNueva()
+                                        if (manoCambiada) {
+                                            cambiarMano()
+                                            your_cards.text = getString(
+                                                R.string.your_cards,
+                                                manoActual.size.toString()
+                                            )
+                                            runOnUiThread { anyadirCartas() }
+                                            manoCambiada = false
+                                        }
 
-                                    cimaNueva = response.body()!!.topDiscard
-                                    comprobarCima()
-                                    if (cimaCambiada) {
-                                        runOnUiThread { cambiarCima() }
-                                        cimaCambiada = false
+                                        idJugadoresNuevos = response.body()!!.playersIds
+                                        numCartasJugadoresNuevos = response.body()!!.playersNumCards
+                                        comprobarIdsJugadores()
+                                        comprobarCartasJugadores()
+                                        if (jugadoresCambiados || numCartasJugadoresCambiados) {
+                                            cambiarJugadoresYCartas()
+                                            runOnUiThread { anyadirGamers() }
+                                            jugadoresCambiados = false
+                                            numCartasJugadoresCambiados = false
+                                        }
+
+                                        cimaNueva = response.body()!!.topDiscard
+                                        comprobarCima()
+                                        if (cimaCambiada) {
+                                            runOnUiThread { cambiarCima() }
+                                            cimaCambiada = false
+                                        }
+                                        if (recordCambiado) {
+                                            runOnUiThread { image_record.setImageResource(record) }
+                                            recordCambiado = false
+                                        }
+                                        done = true
                                     }
-                                    if (recordCambiado) {
-                                        runOnUiThread { image_record.setImageResource(record) }
-                                        recordCambiado = false
+                                    response.code() == 410 -> {
+                                        Toast.makeText(applicationContext, getString(R.string.kicked), Toast.LENGTH_SHORT).show()
+                                        val intent = Intent().apply {
+                                            putExtra("session", session)
+                                            putExtra("logout", false)
+                                        }
+                                        setResult(Activity.RESULT_OK, intent)
+                                        finish()
                                     }
-                                    done = true
-                                } else {
-                                    Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
-                                    kicked = true
-                                    gone = true
-                                    done = true
-                                    finish()
+                                    else -> {
+                                        Toast.makeText(applicationContext, getString(R.string.login_detected_on_another_device), Toast.LENGTH_SHORT).show()
+                                        val intent = Intent().apply {
+                                            putExtra("session", session)
+                                            putExtra("logout", true)
+                                        }
+                                        setResult(Activity.RESULT_OK, intent)
+                                        finish()
+                                    }
                                 }
                             }
                         })
@@ -619,7 +713,10 @@ class TableroActivity : AppCompatActivity() {
         inflater.inflate(R.menu.game_menu, popup.menu)
         popup.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
-                R.id.pause-> if(miTurno) pause = true
+                R.id.pause-> if(miTurno && !paused) {
+                    paused = true
+                    pause = true
+                }
                 R.id.exit-> {
                     val builder = AlertDialog.Builder(this@TableroActivity)
                     builder.setTitle("¿Desea salir de la partida?")
@@ -631,12 +728,6 @@ class TableroActivity : AppCompatActivity() {
             true
         }
         popup.show()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        val intent = Intent().apply { putExtra("session", session) }
-        setResult(Activity.RESULT_OK, intent)
     }
 
     override fun onBackPressed() {

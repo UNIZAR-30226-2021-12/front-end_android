@@ -43,7 +43,7 @@ class Profile : AppCompatActivity() {
         total_wins.text = intent.getStringExtra("total_wins")
         private_played.text = intent.getStringExtra("friend_matches")
         private_wins.text = intent.getStringExtra("friend_wins")
-        avatar.setImageResource(avatars[intent.getIntExtra("avatar", 0)])
+        my_avatar.setImageResource(avatars[intent.getIntExtra("avatar", 0)])
         edit_alias.setOnClickListener { changeAlias() }
     }
 
@@ -60,10 +60,7 @@ class Profile : AppCompatActivity() {
                         total_wins.text = (response.body()!!.publicWins + response.body()!!.privateWins).toString()
                         private_played.text = response.body()?.privateTotal.toString()
                         private_wins.text = response.body()?.privateWins.toString()
-                        avatar.setImageResource(avatars[response.body()!!.avatarId])
-                    } else {
-                        //Toast.makeText(applicationContext, getString(R.string.bad_read_response), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                        my_avatar.setImageResource(avatars[response.body()!!.avatarId])
                     }
                 }
             })
@@ -89,7 +86,7 @@ class Profile : AppCompatActivity() {
         startActivityForResult(intent, normalCode)
     }
 
-    fun changeAlias() {
+    private fun changeAlias() {
         edit_alias.setImageResource(R.drawable.save_icon)
         my_alias.isFocusable = true
         my_alias.setSelection(0)

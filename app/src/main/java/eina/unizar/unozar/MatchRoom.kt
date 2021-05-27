@@ -89,6 +89,7 @@ class MatchRoom : AppCompatActivity() {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                 } override fun onResponse(call: Call<RoomInfoResponse>, response: Response<RoomInfoResponse>) {
                     if (response.code() == 200) {
+                        d("gameId :", response.body()!!.gameId)
                         players = response.body()!!.maxPlayers
                         players_ready.text = getString(R.string.players_ready, (bots+1).toString(), players.toString())
                         if (players > 2) avatar_three.visibility = VISIBLE
@@ -111,11 +112,10 @@ class MatchRoom : AppCompatActivity() {
             })
         create.setOnClickListener {
             if (owner) {
-                d("Test", "listos: " + ids.size.toString() + ". Capacidad: " + players.toString())
                 if (ids.size == players)
                     start = true
                 else
-                    Toast.makeText(applicationContext, "Faltan jugadores", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, getString(R.string.not_enough_players), Toast.LENGTH_SHORT).show()
             }
             else
                 Toast.makeText(applicationContext, getString(R.string.not_owner), Toast.LENGTH_SHORT).show()
@@ -196,7 +196,6 @@ class MatchRoom : AppCompatActivity() {
                                 if (response.code() == 200) {
                                     session = response.body()?.token.toString()
                                     gone = true
-                                    Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_SHORT).show()
                                     val intent = Intent().apply { putExtra("session", response.body()!!.token) }
                                     setResult(Activity.RESULT_OK, intent)
                                     finish()
@@ -285,7 +284,7 @@ class MatchRoom : AppCompatActivity() {
 
     override fun onBackPressed() {
         val builder = AlertDialog.Builder(this@MatchRoom)
-        builder.setTitle("¿Desea abandonar la sala?")
+        builder.setTitle(getString(R.string.exit_room_message))
         builder.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int -> quit = true }
         builder.setNegativeButton(getString(R.string.alert_negative_button)) { _: DialogInterface, _: Int -> }
         builder.show()

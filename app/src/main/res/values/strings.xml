@@ -20,6 +20,7 @@
     <string name="your_turn">Su turno</string>
     <string name="not_your_turn">No es su turno</string>
     <string name="not_owner">No es el dueño de la sala</string>
+    <string name="not_enough_players">Faltan jugadores</string>
     <string name="avatar_in_use">Ya está usando ese avatar</string>
     <string name="your_cards">%1$s Cartas</string>
     <string name="time_left">Tiempo restante: %1$s</string>
@@ -31,8 +32,13 @@
     <string name="won">Ganadas: </string>
     <string name="kicked">Ha sido expulsado de la partida por inactividad</string>
     <string name="cant_play">No puede jugar esa carta</string>
+    <string name="already_pressed">Ya lo ha pulsado</string>
+    <!-- <string name="wrong_time">No es el momento</string> -->
+    <string name="wrong_time">No es el momento, va a ser penalizado</string>
+    <string name="can_play">Tiene cartas que puede poner</string>
     <string name="error_happened">Ha ocurrido un error</string>
     <string name="not_enough_money">No puede permitírselo</string>
+    <string name="already_purchased">Comprado</string>
     <string name="game_full">La sala está llena</string>
     <string name="avatars">Avatares</string>
     <string name="boards">Tableros</string>
@@ -51,6 +57,8 @@
     <string name="exit">Salir</string>
     <string name="logout">Cerrar sesión</string>
     <string name="invite_friend">Invitar amigo</string>
+    <string name="see_profile">Ver perfil</string>
+    <string name="delete_friend">Eliminar</string>
     <!-- BUTTON TEXT -->
     <string name="login">Iniciar Sesión</string>
     <string name="register">Registrarse</string>
@@ -69,20 +77,23 @@
     <string name="create_match">Crear partida</string>
     <string name="search_public">Buscar partida pública</string>
     <!-- DIALOG TEXT -->
-    <string name="alert">¡Cuidado!</string>
+    <string name="alert">¡Cuidado!</string>exit_room_message
+    <string name="congratulations">¡Enhorabuena!</string>
+    <string name="price_message">Ha ganado %1$s monedas</string>
     <string name="choose">Elija</string>
-    <string name="code">Escriba aquí el código de la partida</string>
+    <string name="code">Escriba aquí el código de la partida a la que desea unirse</string>
+    <string name="set_initial_bet">Apuesta de la partida</string>
     <string name="add_friend_message">Escriba aquí el email de su amigo</string>
     <string name="add_to_game">¿Quiere invitar a %1$s a la partida?</string>
     <string name="delete_friend_message">¿Quiere eliminar a este jugador de su lista de amigos? </string>
+    <string name="exit_room_message">¿Quiere abandonar la sala? </string>
     <string name="delete_account_alert_message">Está a punto de eliminar su cuenta de forma permanente, ¿desea continuar?</string>
     <string name="email_change_alert_message">Está a punto de cambiar el correo electrónico asociado a su cuenta, ¿desea continuar?</string>
     <string name="password_change_alert_message">Está a punto de cambiar la contraseña de su cuenta, ¿desea continuar?</string>
     <string name="avatar_change_alert_message">Está a punto de cambiar el avatar de su cuenta, ¿desea continuar?</string>
     <string name="board_change_alert_message">Está a punto de cambiar el tablero de la partida, ¿desea continuar?</string>
     <string name="cards_change_alert_message">Está a punto de cambiar el reverso de las cartas en la partida, ¿desea continuar?</string>
-    <string name="public_match_dialog">¿Quiere crear una nueva partida pública o unirse a una ya creada?</string>
-    <string name="private_match_dialog">¿Quiere crear una nueva partida privada o unirse a una ya creada?</string>
+    <string name="create_match_dialog">¿Quiere crear una partida privada o pública?</string>
     <string name="number_of_players">Número de jugadores</string>
     <string name="number_of_bots">Número de bots</string>
     <!-- DIALOG BUTTONS -->
@@ -98,12 +109,13 @@
     <string name="blue">Azul</string>
     <!-- INPUT ERRORS -->
     <string name="alias_format_error">Escriba un alias válido</string>
+    <string name="alias_size_error">El alias debe tener como máxino 15 caracteres</string>
     <string name="email_format_error">Escriba un email válido</string>
     <string name="password_format_error">Escriba una contraseña válida</string>
     <string name="different_passwords">Las contraseñas no coinciden</string>
     <!-- SERVER CALL ERRORS -->
     <string name="no_response">El servidor no responde</string>
-    <string name="bad_register_response">Quizás se haya caido el servidor</string>
+    <string name="bad_register_response">Ese email ya está asociado a otra cuenta</string>
     <string name="bad_delete_response">Error! No se pudo eliminar su cuenta</string>
     <string name="bad_update_response">Error! No se pudo realizar el cambio</string>
     <string name="bad_login_response">Error! Revise los datos introducidos</string>
@@ -116,6 +128,8 @@
     <string name="bad_friend_add_response">Error al añadir amigo</string>
     <string name="bad_delete_friend_response">Error al eliminar amigo</string>
     <string name="bad_friend_profile_response">Error al acceder al perfil de su amigo</string>
+    <string name="login_detected_on_another_device">Se ha detectado un inicio de sesión en su cuenta desde otro dispositivo</string>
+    <string name="cant_join">La sala está llena o no existe</string>
     <!-- SERVER CALL SUCCESS -->
     <string name="email_change_success">Ha actualizado su dirección de correo electrónico con éxito</string>
     <string name="password_change_success">Ha actualizado su contraseña con éxito</string>
@@ -123,6 +137,9 @@
     <string name="board_change_success">Ha actualizado su tablero de juego con éxito</string>
     <string name="cards_change_success">Ha actualizado el reverso de sus cartas con éxito</string>
     <string name="alias_change_success">Ha actualizado su alias con éxito</string>
+    <string name="avatar_purchase_response">Avatar comprado</string>
+    <string name="board_purchase_response">Tablero comprado</string>
+    <string name="card_purchase_response">Reverso comprado</string>
     <string name="refresh_success">Sesión actualizada</string>
     <string name="quit_game_success">Ha salido de la partida</string>
     <!-- INVITE EMAIL -->

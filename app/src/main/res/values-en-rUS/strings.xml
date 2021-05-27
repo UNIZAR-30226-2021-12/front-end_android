@@ -21,6 +21,7 @@
     <string name="your_turn">Your turn</string>
     <string name="not_your_turn">It\'s not your turn</string>
     <string name="not_owner">You are not the room owner</string>
+    <string name="not_enough_players">Not Enough players</string>
     <string name="avatar_in_use">This avatar is already in use</string>
     <string name="your_cards">%1$s Cards</string>
     <string name="time_left">Time left: %1$s</string>
@@ -32,8 +33,13 @@
     <string name="won">Wins: </string>
     <string name="kicked">You were kicked due to inactivity</string>
     <string name="cant_play">You can\'t play that card</string>
+    <string name="already_pressed">Already pressed</string>
+    <!-- <string name="wrong_time">Not the right time</string> -->
+    <string name="wrong_time">Not the right time, you will be penalized</string>
+    <string name="can_play">You have playable cards</string>
     <string name="error_happened">An error occurred</string>
     <string name="not_enough_money">You can\'t afford this</string>
+    <string name="already_purchased">Purchased</string>
     <string name="game_full">The room is full</string>
     <string name="buy">Buy</string>
     <string name="avatars">Avatars</string>
@@ -52,6 +58,8 @@
     <string name="exit">Exit</string>
     <string name="logout">Logout</string>
     <string name="invite_friend">Invite friend</string>
+    <string name="see_profile">See profile</string>
+    <string name="delete_friend">Delete</string>
     <!-- BUTTON TEXT -->
     <string name="login">Login</string>
     <string name="register">Sign in</string>
@@ -71,24 +79,27 @@
     <string name="search_public">Search for public match</string>
     <!-- DIALOG TEXT -->
     <string name="alert">Careful! </string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="price_message">You won %1$s coins</string>
     <string name="choose">Choose</string>
-    <string name="code">Write here the code of the match</string>
+    <string name="code">Write here the code of the match you want to join</string>
+    <string name="set_initial_bet">Match\'s bet</string>
     <string name="add_friend_message">Do you want to add him/her as your friend? </string>
-    <string name="add_to_game">¿Do you want to invite %1$s to your game?</string>
+    <string name="add_to_game">Do you want to invite %1$s to your game?</string>
     <string name="delete_friend_message">Do you want to delete this player from your friends list? </string>
+    <string name="exit_room_message">Do you want to leave the room? </string>
     <string name="delete_account_alert_message">You are permanently deleting your account, do you want to continue? </string>
     <string name="email_change_alert_message">You are going to change the email associated with your account, do you want to continue? </string>
     <string name="password_change_alert_message">You are going to change your account\'s password, do you want to continue? </string>
     <string name="avatar_change_alert_message">You are about to change your account\'s avatar, do you want to continue?</string>
     <string name="board_change_alert_message">You are about to change your match board\'s appearance, do you want to continue?</string>
     <string name="cards_change_alert_message">You are about to change your card\'s reverse appearance, do you want to continue?</string>
-    <string name="public_match_dialog">Do you want to create a new public game or join one already created? </string>
-    <string name="private_match_dialog">Do you want to create a new private game or join one already created? </string>
+    <string name="create_match_dialog">Do you want to create a private or public match? </string>
     <string name="number_of_players">Number of players </string>
     <string name="number_of_bots">Number of bots </string>
     <!-- DIALOG BUTTONS -->
     <string name="alert_possitive_button">Yes</string>
-    <string name="alert_negative_button">Not</string>
+    <string name="alert_negative_button">No</string>
     <string name="add_button">Add</string>
     <string name="create_button">Create</string>
     <string name="join_button">Join</string>
@@ -98,13 +109,14 @@
     <string name="yellow">Yellow</string>
     <string name="blue">Blue</string>
     <!-- INPUT ERRORS -->
-    <string name="email_format_error">Write a valid email </string>
-    <string name="alias_format_error">Please write a valid alias</string>
-    <string name="password_format_error">Please enter a valid password </string>
+    <string name="email_format_error">Please, write a valid email </string>
+    <string name="alias_size_error">Alias must not be longer that 15 characters</string>
+    <string name="alias_format_error">Please, write a valid alias</string>
+    <string name="password_format_error">Please, enter a valid password </string>
     <string name="different_passwords">Passwords do not match </string>
     <!-- SERVER CALL ERRORS -->
     <string name="no_response">The server does not respond</string>
-    <string name="bad_register_response">The server might be down</string>
+    <string name="bad_register_response">Email already associated with another account</string>
     <string name="bad_delete_response">Error! Could not delete your account</string>
     <string name="bad_update_response">Error! The change could not be made </string>
     <string name="bad_login_response">Error! Check the data entered </string>
@@ -117,6 +129,8 @@
     <string name="bad_friend_add_response">Failed to add friend</string>
     <string name="bad_delete_friend_response">Failed to delete friend</string>
     <string name="bad_friend_profile_response">Failed to access your friend\'s profile</string>
+    <string name="login_detected_on_another_device">Login detected on this account from another device</string>
+    <string name="cant_join">The room is full or doensn\'t exist</string>
     <!-- SERVER CALL SUCCESS -->
     <string name="email_change_success">Email address updated successfully</string>
     <string name="password_change_success">Password updated successfully</string>
@@ -124,6 +138,9 @@
     <string name="board_change_success">Board\'s appearance updated successfully</string>
     <string name="cards_change_success">Card\'s reverse appearance updated successfully</string>
     <string name="alias_change_success">Alias updated successfully</string>
+    <string name="avatar_purchase_response">Avatar purchased</string>
+    <string name="board_purchase_response">Board purchased</string>
+    <string name="card_purchase_response">Reverse purchased</string>
     <string name="refresh_success">Updated session </string>
     <string name="quit_game_success">You left the game</string>
     <!-- INVITE EMAIL -->

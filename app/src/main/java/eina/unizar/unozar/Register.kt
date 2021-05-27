@@ -41,36 +41,15 @@ class Register : AppCompatActivity() {
                                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                                     } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                         if (response.code() == 200) {
-                                            val intent = Intent(this@Register, Principal::class.java)
+                                            val intent =
+                                                Intent(this@Register, Principal::class.java)
                                             intent.putExtra("session", response.body()?.token)
                                             startActivity(intent)
-                                        } else {
-                                            Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                                            //Toast.makeText(applicationContext, getString(R.string.bad_login_response), Toast.LENGTH_LONG).show()
                                         }
                                     }
                                 })
-                            /*startActivity(intent)
-                            val intent = Intent(this@Register, Principal::class.java)
-                            intent.putExtra("session", response.body()?.id)
-                            val bots = AlertDialog.Builder(this@Register)
-                            var numBots:Array<String>
-                            numBots = arrayOf(response.body()?.id.toString(),
-                                response.body()?.email.toString(),
-                                response.body()?.alias.toString(),
-                                response.body()?.gameId.toString(),
-                                response.body()?.privateWins.toString(),
-                                response.body()?.privateTotal.toString(),
-                                response.body()?.publicWins.toString(),
-                                response.body()?.publicTotal.toString())
-                            bots.setTitle(getString(R.string.number_of_bots))
-                            bots.setItems(numBots) { _: DialogInterface, j: Int ->
-                                startActivity(intent)
-                            }
-                            bots.show()*/
                         } else {
-                            Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
-                            //Toast.makeText(applicationContext, getString(R.string.bad_register_response), Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, getString(R.string.bad_register_response), Toast.LENGTH_LONG).show()
                         }
                     }
                 })
@@ -87,8 +66,13 @@ class Register : AppCompatActivity() {
     }
 
     private fun validateInput (alias: String, email:String, password:String, password_repeat:String) : Boolean {
-        if(alias.isEmpty()) register_alias.error = getString(R.string.alias_format_error)
-        else if(email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if(alias.isEmpty()) {
+            register_alias.error = getString(R.string.alias_format_error)
+            register_alias.requestFocus()
+        } else if(alias.length > 15){
+            register_alias.error = getString(R.string.alias_size_error)
+            register_alias.requestFocus()
+        } else if(email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             register_email.error = getString(R.string.email_format_error)
             register_email.requestFocus()
         } else if(password.isEmpty()){
