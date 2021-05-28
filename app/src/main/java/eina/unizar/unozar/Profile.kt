@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.custom_alertdialog.*
 import kotlinx.android.synthetic.main.custom_alertdialog.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,6 +37,7 @@ class Profile : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
         session = intent.getStringExtra("session").toString()
         my_alias.text = intent.getStringExtra("alias")
+        my_id.text = getString(R.string.my_id, intent.getStringExtra("id"))
         my_email.text = intent.getStringExtra("email")
         total_played.text = intent.getStringExtra("total_matches")
         total_wins.text = intent.getStringExtra("total_wins")
@@ -78,6 +78,7 @@ class Profile : AppCompatActivity() {
                 } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                     if (response.code() == 200) {
                         my_alias.text = response.body()?.alias
+                        my_id.text = getString(R.string.my_id, response.body()?.id)
                         my_email.text = response.body()?.email
                         total_played.text = response.body()!!.publicTotal.toString()
                         total_wins.text = response.body()!!.publicWins.toString()

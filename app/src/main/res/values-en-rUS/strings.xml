@@ -28,6 +28,7 @@
     <string name="time_left">Time left: %1$s</string>
     <string name="players_ready">Players %1$s/%2$s</string>
     <string name="bet">Bet %1$s</string>
+    <string name="my_id">Id: %1$s</string>
     <string name="public_matches">Public matches</string>
     <string name="private_matches">Private matches</string>
     <string name="played">Played: </string>

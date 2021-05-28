@@ -153,6 +153,7 @@ class Principal : AppCompatActivity() {
                                 intent.putExtra("session", session)
                                 intent.putExtra("avatar", response.body()!!.avatarId)
                                 intent.putExtra("alias", response.body()!!.alias)
+                                intent.putExtra("id", response.body()!!.id)
                                 intent.putExtra("email", response.body()!!.email)
                                 intent.putExtra("total_matches", response.body()!!.publicTotal.toString())
                                 intent.putExtra("total_wins", response.body()!!.publicWins.toString())
@@ -277,7 +278,10 @@ class Principal : AppCompatActivity() {
                 code.setView(customLayout)
                 code.setTitle(getString(R.string.set_initial_bet))
                 code.setPositiveButton(getString(R.string.create_button)) { _: DialogInterface, _: Int ->
-                    val myBet = customLayout.input_bet.text.toString().trim().toInt()
+                    var myBet = 0
+                    if (!(customLayout.input_bet.text.toString().isEmpty())) {
+                        myBet = customLayout.input_bet.text.toString().toInt()
+                    }
                     if (myBet <= myMoney) {
                         RetrofitClient.instance.createMatch(CreateMatchRequest(false, n, 0, myBet, session))
                             .enqueue(object : Callback<TokenResponse> {

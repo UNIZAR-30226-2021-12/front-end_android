@@ -425,9 +425,12 @@ class TableroActivity : AppCompatActivity() {
             var turno = ""
             if (!(idJugadoresActuales[i].equals(session.substring(0,32)))) {
                 if (i == turn) turno = getString(R.string.your_turn)
-                gamers.add(Gamer(i.toLong(), avatars[avatarIds[i].toInt()], jugadoresActuales[i], turno, getString(R.string.your_cards, numCartasJugadoresActuales[i].toString())))
+                if(jugadoresActuales[i].equals("BOT")) {
+                    gamers.add(Gamer(i.toLong(), avatars[1], jugadoresActuales[i], turno, getString(R.string.your_cards, numCartasJugadoresActuales[i].toString())))
+                } else {
+                    gamers.add(Gamer(i.toLong(), avatars[avatarIds[i].toInt()], jugadoresActuales[i], turno, getString(R.string.your_cards, numCartasJugadoresActuales[i].toString())))
+                }
             }
-
         }
         rvGamer.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val adapter = GamerAdapter(gamers)

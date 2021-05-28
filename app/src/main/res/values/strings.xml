@@ -27,6 +27,7 @@
     <string name="time_left">Tiempo restante: %1$s</string>
     <string name="players_ready">Jugadores %1$s/%2$s</string>
     <string name="bet">Apuesta %1$s</string>
+    <string name="my_id">Id: %1$s</string>
     <string name="public_matches">Partidas públicas</string>
     <string name="private_matches">Partidas privadas</string>
     <string name="played">Jugadas: </string>
