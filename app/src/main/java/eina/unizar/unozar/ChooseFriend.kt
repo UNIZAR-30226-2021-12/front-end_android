@@ -66,7 +66,6 @@ class ChooseFriend : AppCompatActivity() {
                         var i = 0
                         session = response.body()?.token.toString()
                         while (i < response.body()!!.avatarIds?.size!!) {
-                            Toast.makeText(applicationContext, "Éxito", Toast.LENGTH_LONG).show()
                             friends.add(FriendInfo(
                                 response.body()!!.friendIds?.get(i),
                                 response.body()!!.alias?.get(i),
@@ -78,8 +77,7 @@ class ChooseFriend : AppCompatActivity() {
                         adapter = FriendsListAdapter(this@ChooseFriend, friends)
                         add_friend_list.adapter = adapter
                     } else {
-                        //Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, getString(R.string.bad_creation_response) + response.code(), Toast.LENGTH_LONG).show()
                     }
                 }
             })

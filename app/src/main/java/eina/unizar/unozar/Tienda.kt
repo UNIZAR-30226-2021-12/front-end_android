@@ -26,6 +26,7 @@ class Tienda : AppCompatActivity() {
     private lateinit var session: String
     private lateinit var btn: ArrayList<Button>
     private lateinit var txt: ArrayList<TextView>
+    private var purchasing = false
     private val items = arrayListOf(2, 3, 4, 1, 2, 1, 2, 3, 4)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,31 +66,48 @@ class Tienda : AppCompatActivity() {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                 } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                     if (response.code() == 200) {
-                        var j = 1
-                        var k = 1
-                        var l = 1
-                        for (i in btn.indices) {
-                            when {
-                                i < 3 && j in response.body()?.unlockedAvatars!!.indices -> {
-                                    if (items[i] == (response.body()?.unlockedAvatars?.get(j) ?: 10)) {
-                                        btn[i].visibility = GONE
-                                        txt[i].text = getString(R.string.already_purchased)
-                                        j++
-                                    }
+                        for (i in response.body()!!.unlockedAvatars.indices) {
+                            when (response.body()!!.unlockedAvatars[i]) {
+                                2 -> {
+                                    comprar1.visibility = GONE
+                                    compra_text1.text = getString(R.string.already_purchased)
                                 }
-                                i < 5 && k in response.body()?.unlockedBoards!!.indices -> {
-                                    if (items[i] == response.body()?.unlockedBoards?.get(k) ?: 10) {
-                                        btn[i].visibility = GONE
-                                        txt[i].text = getString(R.string.already_purchased)
-                                        k++
-                                    }
+                                3 -> {
+                                    comprar2.visibility = GONE
+                                    compra_text2.text = getString(R.string.already_purchased)
                                 }
-                                else -> {
-                                    if (l in response.body()?.unlockedCards!!.indices && items[i] == response.body()?.unlockedCards?.get(l) ?: 10) {
-                                        btn[i].visibility = GONE
-                                        txt[i].text = getString(R.string.already_purchased)
-                                        l++
-                                    }
+                                4 -> {
+                                    comprar3.visibility = GONE
+                                    compra_text3.text = getString(R.string.already_purchased)
+                                }
+                            }
+                        }
+                        for (i in response.body()!!.unlockedBoards.indices) {
+                            if (response.body()!!.unlockedBoards[i] == 1) {
+                                comprar4.visibility = GONE
+                                compra_text4.text = getString(R.string.already_purchased)
+                            } else if (response.body()!!.unlockedBoards[i] == 2) {
+                                comprar5.visibility = GONE
+                                compra_text5.text = getString(R.string.already_purchased)
+                            }
+                        }
+                        for (i in response.body()!!.unlockedCards.indices) {
+                            when (response.body()!!.unlockedCards[i]) {
+                                1 -> {
+                                    comprar6.visibility = GONE
+                                    compra_text6.text = getString(R.string.already_purchased)
+                                }
+                                2 -> {
+                                    comprar7.visibility = GONE
+                                    compra_text7.text = getString(R.string.already_purchased)
+                                }
+                                3 -> {
+                                    comprar8.visibility = GONE
+                                    compra_text8.text = getString(R.string.already_purchased)
+                                }
+                                4 -> {
+                                    comprar9.visibility = GONE
+                                    compra_text9.text = getString(R.string.already_purchased)
                                 }
                             }
                         }
@@ -100,41 +118,48 @@ class Tienda : AppCompatActivity() {
             when {
                 i < 3 -> {
                     btn[i].setOnClickListener {
-                        purchaseAvatar(items[i])
-                        btn[i].visibility = GONE
-                        txt[i].text = getString(R.string.already_purchased)
+                        if(!purchasing) {
+                            purchasing = true
+                            purchaseAvatar(i)
+                        } else
+                            Toast.makeText(applicationContext, getString(R.string.purchase_in_progress), Toast.LENGTH_LONG).show()
                     }
                 }
                 i < 5 -> {
                     btn[i].setOnClickListener {
-                        purchaseBoard(items[i])
-                        btn[i].visibility = GONE
-                        txt[i].text = getString(R.string.already_purchased)
+                        if(!purchasing) {
+                            purchasing = true
+                            purchaseBoard(i)
+                        } else
+                            Toast.makeText(applicationContext, getString(R.string.purchase_in_progress), Toast.LENGTH_LONG).show()
                     }
                 }
                 else -> {
                     btn[i].setOnClickListener {
-                        purchaseCard(items[i])
-                        btn[i].visibility = GONE
-                        txt[i].text = getString(R.string.already_purchased)
+                        if(!purchasing) {
+                            purchasing = true
+                            purchaseCard(i)
+                        } else
+                            Toast.makeText(applicationContext, getString(R.string.purchase_in_progress), Toast.LENGTH_LONG).show()
                     }
                 }
             }
         }
     }
 
-    private fun purchaseAvatar(id: Int) {
+    private fun purchaseAvatar(i: Int) {
         if(myMoney >= avatarPrice){
-            RetrofitClient.instance.unlockAvatar(UnlockRequest(id, session))
+            RetrofitClient.instance.unlockAvatar(UnlockRequest(items[i], session))
                 .enqueue(object : Callback<TokenResponse> {
                     override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                     } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                         if (response.code() == 200) {
-                            val intent = Intent().apply { putExtra("session", response.body()!!.token) }
+                            session = response.body()!!.token
+                            purchasing = false
+                            btn[i].visibility = GONE
+                            txt[i].text = getString(R.string.already_purchased)
                             money.text = (myMoney - avatarPrice).toString()
-                            setResult(Activity.RESULT_OK, intent)
-                            Toast.makeText(applicationContext, getString(R.string.avatar_purchase_response), Toast.LENGTH_LONG).show()
                         } else {
                             Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()
                         }
@@ -146,18 +171,19 @@ class Tienda : AppCompatActivity() {
         }
     }
 
-    private fun purchaseBoard(id: Int) {
+    private fun purchaseBoard(i: Int) {
         if(myMoney >= boardPrice){
-            RetrofitClient.instance.unlockBoard(UnlockRequest(id, session))
+            RetrofitClient.instance.unlockBoard(UnlockRequest(items[i], session))
                 .enqueue(object : Callback<TokenResponse> {
                     override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                     } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                         if (response.code() == 200) {
-                            val intent = Intent().apply { putExtra("session", response.body()!!.token) }
+                            session = response.body()!!.token
+                            purchasing = false
+                            btn[i].visibility = GONE
+                            txt[i].text = getString(R.string.already_purchased)
                             money.text = (myMoney - boardPrice).toString()
-                            setResult(Activity.RESULT_OK, intent)
-                            Toast.makeText(applicationContext, getString(R.string.board_purchase_response), Toast.LENGTH_LONG).show()
                         } else {
                             Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()
                         }
@@ -169,18 +195,19 @@ class Tienda : AppCompatActivity() {
         }
     }
 
-    private fun purchaseCard(id: Int) {
+    private fun purchaseCard(i: Int) {
         if(myMoney >= cardPrice){
-            RetrofitClient.instance.unlockCard(UnlockRequest(id, session))
+            RetrofitClient.instance.unlockCard(UnlockRequest(items[i], session))
                 .enqueue(object : Callback<TokenResponse> {
                     override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                     } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                         if (response.code() == 200) {
-                            val intent = Intent().apply { putExtra("session", response.body()!!.token) }
+                            session = response.body()!!.token
+                            purchasing = false
+                            btn[i].visibility = GONE
+                            txt[i].text = getString(R.string.already_purchased)
                             money.text = (myMoney - cardPrice).toString()
-                            setResult(Activity.RESULT_OK, intent)
-                            Toast.makeText(applicationContext, getString(R.string.card_purchase_response), Toast.LENGTH_LONG).show()
                         } else {
                             Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()
                         }

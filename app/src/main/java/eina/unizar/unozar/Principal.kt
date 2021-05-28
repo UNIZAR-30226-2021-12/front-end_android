@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_principal.*
 import kotlinx.android.synthetic.main.custom_alertdialog.*
 import kotlinx.android.synthetic.main.custom_alertdialog.view.*
+import kotlinx.android.synthetic.main.custom_bet_dialog.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -52,6 +53,7 @@ class Principal : AppCompatActivity() {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                     if (response.code() == 200) {
+                        d("playerId", response.body()!!.id.substring(0,32))
                         if(!(response.body()!!.gameId.equals("NONE"))) {
                             RetrofitClient.instance.readRoom(TokenRequest(session))
                                 .enqueue(object : Callback<RoomInfoResponse> {
@@ -152,10 +154,10 @@ class Principal : AppCompatActivity() {
                                 intent.putExtra("avatar", response.body()!!.avatarId)
                                 intent.putExtra("alias", response.body()!!.alias)
                                 intent.putExtra("email", response.body()!!.email)
-                                intent.putExtra("total_matches", (response.body()!!.publicTotal + response.body()!!.privateTotal).toString())
-                                intent.putExtra("total_wins", (response.body()!!.publicWins + response.body()!!.privateWins).toString())
-                                intent.putExtra("friend_matches", response.body()?.privateTotal.toString())
-                                intent.putExtra("friend_wins", response.body()?.privateWins.toString())
+                                intent.putExtra("total_matches", response.body()!!.publicTotal.toString())
+                                intent.putExtra("total_wins", response.body()!!.publicWins.toString())
+                                intent.putExtra("friend_matches", response.body()!!.privateTotal.toString())
+                                intent.putExtra("friend_wins", response.body()!!.privateWins.toString())
                                 startActivityForResult(intent, normalCode)
                             }
                         }
@@ -271,11 +273,11 @@ class Principal : AppCompatActivity() {
             numP.setItems(numPlayers) { _: DialogInterface, i: Int ->
                 n = numPlayers[i].toInt()
                 val code = AlertDialog.Builder(this)
-                val customLayout: View = layoutInflater.inflate(R.layout.custom_alertdialog, null)
+                val customLayout: View = layoutInflater.inflate(R.layout.custom_bet_dialog, null)
                 code.setView(customLayout)
                 code.setTitle(getString(R.string.set_initial_bet))
                 code.setPositiveButton(getString(R.string.create_button)) { _: DialogInterface, _: Int ->
-                    val myBet = customLayout.inputCode.text.toString().trim().toInt()
+                    val myBet = customLayout.input_bet.text.toString().trim().toInt()
                     if (myBet <= myMoney) {
                         RetrofitClient.instance.createMatch(CreateMatchRequest(false, n, 0, myBet, session))
                             .enqueue(object : Callback<TokenResponse> {
@@ -409,10 +411,11 @@ class Principal : AppCompatActivity() {
 
     override fun onActivityResult (requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == normalCode) {
-            session = data!!.getStringExtra("session").toString()
-            if (data.getBooleanExtra("logout", false)) {
+            if (data!!.getBooleanExtra("logout", false) ||
+                data.getBooleanExtra("delete", false)) {
                 finish()
             }
+            session = data.getStringExtra("session").toString()
             updateMoney()
         } else { super.onActivityResult(requestCode, resultCode, data) }
     }

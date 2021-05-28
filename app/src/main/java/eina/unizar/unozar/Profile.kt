@@ -6,12 +6,12 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_change_email.*
 import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.custom_alertdialog.*
+import kotlinx.android.synthetic.main.custom_alertdialog.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,14 +37,37 @@ class Profile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         session = intent.getStringExtra("session").toString()
-        my_alias.setText(intent.getStringExtra("alias"), TextView.BufferType.EDITABLE)
+        my_alias.text = intent.getStringExtra("alias")
         my_email.text = intent.getStringExtra("email")
         total_played.text = intent.getStringExtra("total_matches")
         total_wins.text = intent.getStringExtra("total_wins")
         private_played.text = intent.getStringExtra("friend_matches")
         private_wins.text = intent.getStringExtra("friend_wins")
         my_avatar.setImageResource(avatars[intent.getIntExtra("avatar", 0)])
-        edit_alias.setOnClickListener { changeAlias() }
+        edit_alias.setOnClickListener {
+            val code = AlertDialog.Builder(this)
+            val customLayout: View = layoutInflater.inflate(R.layout.custom_alertdialog, null)
+            code.setView(customLayout)
+            code.setTitle(getString(R.string.new_alias))
+            code.setPositiveButton(getString(R.string.change)) { _: DialogInterface, _: Int ->
+                RetrofitClient.instance.updatePlayer(UpdateRequest(10, null, customLayout.inputCode.text.toString().trim(), null, session, 10, 10))
+                    .enqueue(object : Callback<TokenResponse> {
+                        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                            Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
+                        } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                            if (response.code() == 200) {
+                                session = response.body()!!.token
+                                Toast.makeText(applicationContext, getString(R.string.alias_change_success), Toast.LENGTH_LONG).show()
+                                my_alias.text = customLayout.inputCode.text.toString().trim()
+                            } else {
+                                Toast.makeText(applicationContext, getString(R.string.bad_update_response) + response.code(), Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    })
+            }
+            code.setNegativeButton(getString(R.string.cancel)) {_, _ ->}
+            code.show()
+        }
     }
 
     private fun updateInfo() {
@@ -54,10 +77,10 @@ class Profile : AppCompatActivity() {
                     Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                 } override fun onResponse(call: Call<PlayerInfo>, response: Response<PlayerInfo>) {
                     if (response.code() == 200) {
-                        my_alias.setText(response.body()?.alias, TextView.BufferType.EDITABLE)
+                        my_alias.text = response.body()?.alias
                         my_email.text = response.body()?.email
-                        total_played.text = (response.body()!!.publicTotal + response.body()!!.privateTotal).toString()
-                        total_wins.text = (response.body()!!.publicWins + response.body()!!.privateWins).toString()
+                        total_played.text = response.body()!!.publicTotal.toString()
+                        total_wins.text = response.body()!!.publicWins.toString()
                         private_played.text = response.body()?.privateTotal.toString()
                         private_wins.text = response.body()?.privateWins.toString()
                         my_avatar.setImageResource(avatars[response.body()!!.avatarId])
@@ -86,30 +109,6 @@ class Profile : AppCompatActivity() {
         startActivityForResult(intent, normalCode)
     }
 
-    private fun changeAlias() {
-        edit_alias.setImageResource(R.drawable.save_icon)
-        my_alias.isFocusable = true
-        my_alias.setSelection(0)
-        edit_alias.setOnClickListener {
-            RetrofitClient.instance.updatePlayer(UpdateRequest(10, null, my_alias.text.toString().trim(), null, session, 10, 10))
-                .enqueue(object : Callback<TokenResponse> {
-                    override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                        Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                    } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-                        if (response.code() == 200) {
-                            session = response.body()!!.token
-                            Toast.makeText(applicationContext, getString(R.string.alias_change_success), Toast.LENGTH_LONG).show()
-                            edit_alias.setImageResource(R.drawable.edit_alias)
-                            my_alias.isFocusable = false
-                        } else {
-                            Toast.makeText(applicationContext, getString(R.string.bad_update_response) + response.code(), Toast.LENGTH_LONG).show()
-                        }
-                    }
-                })
-            edit_alias.setOnClickListener { changeAlias() }
-        }
-    }
-
     fun deleteAccount(@Suppress("UNUSED_PARAMETER") view: View) {
         val check = AlertDialog.Builder(this)
         check.setTitle(getString(R.string.alert))
@@ -121,8 +120,12 @@ class Profile : AppCompatActivity() {
                         Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
                     } override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.code() == 200) {
-                            val intent = Intent(this@Profile, Register::class.java)
-                            startActivity(intent)
+                            val intent = Intent().apply {
+                                putExtra("session", session)
+                                putExtra("delete", true)
+                            }
+                            setResult(Activity.RESULT_OK, intent)
+                            finish()
                         } else {
                             Toast.makeText(applicationContext, getString(R.string.bad_delete_response), Toast.LENGTH_LONG).show()
                         }

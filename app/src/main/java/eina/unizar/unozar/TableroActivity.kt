@@ -231,7 +231,7 @@ class TableroActivity : AppCompatActivity() {
                 jugadoresActuales.add(jugadoresNuevos[i])
             }
             else{
-                jugadoresActuales.add("IA")
+                jugadoresActuales.add("BOT")
             }
         }
         numCartasJugadoresActuales.removeAll(numCartasJugadoresActuales)
@@ -348,7 +348,7 @@ class TableroActivity : AppCompatActivity() {
             )
             with(builder)
             {
-                setTitle("Elija un color")
+                setTitle(getString(R.string.choose_color))
                 setItems(items) { _, which ->
                     //Poner carta
                     if(items[which].equals(getString(R.string.red)) && nombreRecordado == "XXC") {
@@ -424,13 +424,8 @@ class TableroActivity : AppCompatActivity() {
         for(i in idJugadoresActuales.indices) {
             var turno = ""
             if (!(idJugadoresActuales[i].equals(session.substring(0,32)))) {
-                if (i == turn) turno = "Su turno"
-                if((jugadoresActuales[i]).equals("IA")){
-                    gamers.add(Gamer(i.toLong(), avatars[avatarIds[i].toInt()], jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
-                }
-                else{
-                    gamers.add(Gamer(i.toLong(), avatars[avatarIds[i].toInt()], jugadoresActuales[i], turno, numCartasJugadoresActuales[i].toString() + "  Cartas"))
-                }
+                if (i == turn) turno = getString(R.string.your_turn)
+                gamers.add(Gamer(i.toLong(), avatars[avatarIds[i].toInt()], jugadoresActuales[i], turno, getString(R.string.your_cards, numCartasJugadoresActuales[i].toString())))
             }
 
         }
@@ -453,7 +448,7 @@ class TableroActivity : AppCompatActivity() {
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                 if (response.code() == 200) {
                                     session = response.body()?.token.toString()
-                                    Toast.makeText(applicationContext, "Carta robada", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(applicationContext, getString(R.string.draw_card_success), Toast.LENGTH_SHORT).show()
                                     robadaCarta = true
                                     done = true
                                     if (haDichoUnozar) {
@@ -489,7 +484,7 @@ class TableroActivity : AppCompatActivity() {
                     RetrofitClient.instance.playCard(PlayCardRequest(session, posCambiado.toInt(), haDichoUnozar, colorSelected))
                         .enqueue(object : Callback<TokenResponse> {
                             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                                Toast.makeText(applicationContext, "El servidor no responde", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_SHORT).show()
                             } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                                 when {
                                     response.code() == 200 -> {
@@ -535,7 +530,7 @@ class TableroActivity : AppCompatActivity() {
                                 when {
                                     response.code() == 200 -> {
                                         session = response.body()?.token.toString()
-                                        Toast.makeText(applicationContext, "Pausa", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(applicationContext, getString(R.string.pause), Toast.LENGTH_SHORT).show()
                                         done = true
                                     }
                                     response.code() == 410 -> {
@@ -616,10 +611,10 @@ class TableroActivity : AppCompatActivity() {
                                                 gone = true
                                                 winner = i
                                                 val builder = AlertDialog.Builder(this@TableroActivity)
-                                                var mensaje = "DERROTA"
-                                                if (winner == myPos) mensaje = "¡¡VICTORIA!!"
+                                                var mensaje = getString(R.string.defeat)
+                                                if (winner == myPos) mensaje = getString(R.string.victory)
                                                 builder.setTitle(mensaje)
-                                                builder.setPositiveButton("Volver") { _: DialogInterface, _: Int ->
+                                                builder.setPositiveButton(getString(R.string.go_back)) { _: DialogInterface, _: Int ->
                                                     val intent =
                                                         Intent().apply { putExtra("session", session) }
                                                     setResult(Activity.RESULT_OK, intent)
@@ -719,7 +714,7 @@ class TableroActivity : AppCompatActivity() {
                 }
                 R.id.exit-> {
                     val builder = AlertDialog.Builder(this@TableroActivity)
-                    builder.setTitle("¿Desea salir de la partida?")
+                    builder.setTitle(getString(R.string.exit_match_message))
                     builder.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int -> quit = true }
                     builder.setNegativeButton(getString(R.string.alert_negative_button)) {_: DialogInterface, _: Int -> }
                     builder.show()
@@ -732,7 +727,7 @@ class TableroActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val builder = AlertDialog.Builder(this@TableroActivity)
-        builder.setTitle("¿Desea salir de la partida?")
+        builder.setTitle(getString(R.string.exit_match_message))
         builder.setPositiveButton(getString(R.string.alert_possitive_button)) { _: DialogInterface, _: Int -> quit = true }
         builder.setNegativeButton(getString(R.string.alert_negative_button)) {_: DialogInterface, _: Int -> }
         builder.show()

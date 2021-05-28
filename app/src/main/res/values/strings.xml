@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">UNOZAR</string>
     <string name="alias">Alias</string>
     <string name="email">Correo electrónico</string>
@@ -21,20 +21,20 @@
     <string name="not_your_turn">No es su turno</string>
     <string name="not_owner">No es el dueño de la sala</string>
     <string name="not_enough_players">Faltan jugadores</string>
+    <string name="purchase_in_progress">Había una compra en proceso, inténtelo de nuevo</string>
     <string name="avatar_in_use">Ya está usando ese avatar</string>
     <string name="your_cards">%1$s Cartas</string>
     <string name="time_left">Tiempo restante: %1$s</string>
     <string name="players_ready">Jugadores %1$s/%2$s</string>
     <string name="bet">Apuesta %1$s</string>
-    <string name="total_matches">Partidas totales</string>
-    <string name="total_friend_matches">Partidas con amigos</string>
+    <string name="public_matches">Partidas públicas</string>
+    <string name="private_matches">Partidas privadas</string>
     <string name="played">Jugadas: </string>
     <string name="won">Ganadas: </string>
     <string name="kicked">Ha sido expulsado de la partida por inactividad</string>
     <string name="cant_play">No puede jugar esa carta</string>
     <string name="already_pressed">Ya lo ha pulsado</string>
-    <!-- <string name="wrong_time">No es el momento</string> -->
-    <string name="wrong_time">No es el momento, va a ser penalizado</string>
+    <string name="wrong_time" tools:ignore="Typos">No es el momento, va a ser penalizado</string>
     <string name="can_play">Tiene cartas que puede poner</string>
     <string name="error_happened">Ha ocurrido un error</string>
     <string name="not_enough_money">No puede permitírselo</string>
@@ -60,7 +60,7 @@
     <string name="see_profile">Ver perfil</string>
     <string name="delete_friend">Eliminar</string>
     <!-- BUTTON TEXT -->
-    <string name="login">Iniciar Sesión</string>
+    <string name="login">Iniciar sesión</string>
     <string name="register">Registrarse</string>
     <string name="delete_account">Eliminar cuenta</string>
     <string name="play_card">Poner carta</string>
@@ -71,22 +71,31 @@
     <string name="change_email">Cambiar correo electrónico</string>
     <string name="change_password">Cambiar contraseña</string>
     <string name="change_avatar">Cambiar avatar</string>
+    <string name="change_board">Cambiar tablero</string>
+    <string name="change_reverse">Cambiar reverso</string>
+    <string name="daily_price">Regalo diario</string>
+    <string name="shop">Tienda</string>
     <string name="add_friend">Añadir amigo</string>
     <string name="go_back">Volver</string>
     <string name="join_with_code">Unirse con código</string>
     <string name="create_match">Crear partida</string>
     <string name="search_public">Buscar partida pública</string>
     <!-- DIALOG TEXT -->
-    <string name="alert">¡Cuidado!</string>exit_room_message
+    <string name="alert">¡Cuidado!</string>
+    <string name="defeat">DERROTA</string>
+    <string name="victory">¡VICTORIA!</string>
     <string name="congratulations">¡Enhorabuena!</string>
+    <string name="new_alias">Nuevo alias</string>
     <string name="price_message">Ha ganado %1$s monedas</string>
     <string name="choose">Elija</string>
+    <string name="choose_color">Elija un color</string>
     <string name="code">Escriba aquí el código de la partida a la que desea unirse</string>
     <string name="set_initial_bet">Apuesta de la partida</string>
     <string name="add_friend_message">Escriba aquí el email de su amigo</string>
     <string name="add_to_game">¿Quiere invitar a %1$s a la partida?</string>
     <string name="delete_friend_message">¿Quiere eliminar a este jugador de su lista de amigos? </string>
     <string name="exit_room_message">¿Quiere abandonar la sala? </string>
+    <string name="exit_match_message">¿Quiere abandonar la partida? </string>
     <string name="delete_account_alert_message">Está a punto de eliminar su cuenta de forma permanente, ¿desea continuar?</string>
     <string name="email_change_alert_message">Está a punto de cambiar el correo electrónico asociado a su cuenta, ¿desea continuar?</string>
     <string name="password_change_alert_message">Está a punto de cambiar la contraseña de su cuenta, ¿desea continuar?</string>
@@ -140,6 +149,7 @@
     <string name="avatar_purchase_response">Avatar comprado</string>
     <string name="board_purchase_response">Tablero comprado</string>
     <string name="card_purchase_response">Reverso comprado</string>
+    <string name="draw_card_success">Carta robada</string>
     <string name="refresh_success">Sesión actualizada</string>
     <string name="quit_game_success">Ha salido de la partida</string>
     <!-- INVITE EMAIL -->

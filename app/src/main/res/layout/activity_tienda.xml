@@ -628,7 +628,6 @@
                     android:layout_marginStart="49dp"
                     android:textColor="#000000"
                     android:text="@string/buy"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/compra_text9"
                     app:layout_constraintTop_toTopOf="parent" />

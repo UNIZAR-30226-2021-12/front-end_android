@@ -19,20 +19,6 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        RetrofitClient.instance.authentication(LoginUser("735976@unizar.es", "alberto"))
-            .enqueue(object : Callback<TokenResponse> {
-                override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                    Toast.makeText(applicationContext, getString(R.string.no_response), Toast.LENGTH_LONG).show()
-                } override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-                    if (response.code() == 200) {
-                        val intent = Intent(this@Login, Principal::class.java)
-                        intent.putExtra("session", response.body()?.token)
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(applicationContext, getString(R.string.bad_login_response), Toast.LENGTH_LONG).show()
-                    }
-                }
-            })
     }
 
     fun login(@Suppress("UNUSED_PARAMETER")view: View) {

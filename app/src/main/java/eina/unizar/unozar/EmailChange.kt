@@ -44,8 +44,7 @@ import server.response.TokenResponse
                                 Toast.makeText(applicationContext, getString(R.string.email_change_success), Toast.LENGTH_LONG).show()
                                 finish()
                             } else {
-                                //Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()
-                                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_LONG).show()
+                                Toast.makeText(applicationContext, getString(R.string.bad_update_response), Toast.LENGTH_LONG).show()
                             }
                         }
                     })

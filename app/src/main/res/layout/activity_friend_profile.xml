@@ -112,12 +112,12 @@
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/total_matches"
+                android:text="@string/public_matches"
                 android:textColor="#000000"
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -126,7 +126,6 @@
                     android:id="@+id/friend2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="150dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginBottom="5dp"
@@ -140,14 +139,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="150dp"
                     android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     android:text="" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -156,7 +154,6 @@
                     android:id="@+id/friend3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="150dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginBottom="5dp"
@@ -170,7 +167,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="150dp"
                     android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     android:text="" />
@@ -184,12 +180,12 @@
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/total_friend_matches"
+                android:text="@string/private_matches"
                 android:textColor="#000000"
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -198,7 +194,6 @@
                     android:id="@+id/friend5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="150dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginBottom="5dp"
@@ -212,14 +207,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="150dp"
                     android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     android:text="" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -228,7 +222,6 @@
                     android:id="@+id/friend6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="150dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginBottom="5dp"
@@ -242,7 +235,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="150dp"
                     android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     android:text="" />
@@ -252,10 +244,10 @@
             <Button
                 android:id="@+id/return_button"
                 style="@android:style/Widget.Holo.Button"
-                android:layout_width="128dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="4dp"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:backgroundTint="#2196F3"
                 android:backgroundTintMode="src_over"
